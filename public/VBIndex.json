@@ -1,0 +1,18 @@
+[
+  {
+    "id": "cet4",
+    "name": "CET-4",
+    "description": "",
+    "url": "../public/cet4.json",
+    "length": 2607,
+    "language": "en"
+  },
+  {
+    "id": "cet6",
+    "name": "CET-6",
+    "description": "",
+    "url": "../public/cet6.json",
+    "length": 2607,
+    "language": "en"
+  }
+]
