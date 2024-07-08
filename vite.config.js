@@ -16,6 +16,8 @@ export default defineConfig({
         }
     },
     server: {
+        hmr: true, // 热更新Hot Module Replacement，效率更高
+        port: 80,
         proxy: {
             '/bpi': {
                 target: 'http://spark-api.cn-huabei-1.xf-yun.com', // 目标API
