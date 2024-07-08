@@ -1,7 +1,7 @@
 <!--语音转文字-->
 <template>
   <div class="container">
-    <div class="greeting">你好</div>
+    <div class="greeting">欢迎使用语音转文字</div>
     <VoiceTranslate></VoiceTranslate>
   </div>
 </template>

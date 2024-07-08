@@ -1,37 +1,37 @@
 <template>
-  <header>
-    <nav>
-      <RouterLink to="/" class="nav-link">Home</RouterLink>
-      <RouterLink to="/vbIndex" class="nav-link">VBIndex</RouterLink>
-      <RouterLink to="/chatAI" class="nav-link">ChatAI</RouterLink>
-      <RouterLink to="/speechScore" class="nav-link">SpeechScore</RouterLink>
-      <RouterLink to="/speechToWord" class="nav-link">SpeechToWord</RouterLink>
-      <RouterLink to="/speechSynthesis" class="nav-link">SpeechSynthesis</RouterLink>
-      <!-- 父菜单项 -->
-      <div class="nav-item">
-        <div class="nav-link">MyVocBooks</div>
-        <!-- 子菜单 -->
-        <div class="submenu">
-          <RouterLink to="/unKnownWord" class="nav-link">UnKnownWord</RouterLink>
-          <RouterLink to="/masteredWord" class="nav-link">MasteredWord</RouterLink>
-          <RouterLink to="/favoriteWord" class="nav-link">FavoriteWord</RouterLink>
-          <!-- 更多子菜单项 -->
-        </div>
-      </div>
-      <!--  User父菜单    -->
-      <div class="nav-item">
-        <div class="nav-link">User</div>
-        <!-- 子菜单 -->
-        <div class="submenu">
-          <RouterLink to="/userProfile" class="nav-link">userProfile</RouterLink>
-          <RouterLink to="/userFavorites" class="nav-link">userFavorites</RouterLink>
-          <RouterLink to="/userAchievements" class="nav-link">userAchievements</RouterLink>
-          <RouterLink to="/userHelp" class="nav-link">userHelp</RouterLink>
-          <!-- 更多子菜单项 -->
-        </div>
-      </div>
+  <div class="header">
+    <div class="logo">
+      <!-- Logo图片路径根据实际情况替换 -->
+      <img src="@/assets/images/codeofwhite.jpg" alt="Logo" />
+    </div>
+    <nav class="nav">
+      <ul>
+        <li><RouterLink to="/" class="nav-link"><span class="nav-title">首页</span><span class="nav-subtitle">HOME</span></RouterLink></li>
+        <li><RouterLink to="/vbIndex" class="nav-link"><span class="nav-title">单词记忆</span><span class="nav-subtitle">WORD</span></RouterLink></li>
+        <li><RouterLink to="/smartTalk" class="nav-link"><span class="nav-title">智能语音</span><span class="nav-subtitle">SPEECH</span></RouterLink></li>
+        <li><RouterLink to="/userProfile" class="nav-link"><span class="nav-title">个人中心</span><span class="nav-subtitle">CENTER</span></RouterLink></li>
+        <li><RouterLink to="/test" class="nav-link"><span class="nav-title">测试</span><span class="nav-subtitle">CENTER</span></RouterLink></li>
+      </ul>
     </nav>
-  </header>
+    <!-- 父菜单项 -->
+    <div class="nav-item">
+      <div class="nav-link">讯飞</div>
+      <!-- 子菜单 -->
+      <div class="submenu">
+        <RouterLink to="/chatAI" class="nav-link">AI聊天</RouterLink>
+        <RouterLink to="/speechScore" class="nav-link">口语评分</RouterLink>
+        <RouterLink to="/speechToWord" class="nav-link">语音转文字</RouterLink>
+        <RouterLink to="/speechSynthesis" class="nav-link">语音合成</RouterLink>
+        <!-- 更多子菜单项 -->
+      </div>
+    </div>
+    <!-- ...其他代码... -->
+    <div class="user">
+      <RouterLink to="/login" class="user-link">
+        <img src="@/assets/images/codeofwhite.jpg" alt="User" class="user-image" />
+      </RouterLink>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -40,20 +40,95 @@ import {RouterLink} from 'vue-router';
 </script>
 
 <style scoped>
-header {
-  background-color: #333; /* 深色背景 */
-  padding: 10px 0; /* 上下填充 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-nav {
-  position: relative; /* 确保子菜单相对于导航栏定位 */
+body {
+  background-color: #f3f5f7;
+  font-family: Arial, sans-serif;
+}
+
+a {
+  text-decoration: none;
+  color: #1c1919;
+}
+
+/* Header */
+.header {
+  width: 100%;
+  height: 160px;
+  background-color: #f8f9fa;
   display: flex;
-  justify-content: center; /* 水平居中 */
-  align-items: center; /* 垂直居中 */
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.logo img {
+  height: 120px;
+}
+
+/* Navigation */
+.nav {
+  float: left;
+  margin-left: 20px;
+}
+
+.nav ul {
+  list-style: none;
+}
+
+.nav ul li {
+  display: inline-block;
+  margin-right: 20px;
+}
+
+.nav ul li a {
+  display: block;
+  padding: 10px 15px;
+  color: #1c1919;
+  text-transform: uppercase;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.nav ul li a:hover {
+  color: #007bff;
+}
+
+.nav-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.nav-subtitle {
+  font-size: 12px;
+  color: #aeaeae;
+}
+
+/* User section */
+.user {
+  float: right;
+  margin-top: 20px;
+  margin-right: 20px;
+  font-size: 14px;
+  color: #1c1919;
+}
+
+.user img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-right: 10px;
+  vertical-align: middle;
 }
 
 .nav-link {
-  color: #fff; /* 白色文字 */
+  color: #000000; /* 白色文字 */
   text-decoration: none; /* 去除下划线 */
   margin: 0 15px; /* 左右间距 */
   padding: 5px 10px; /* 内填充 */

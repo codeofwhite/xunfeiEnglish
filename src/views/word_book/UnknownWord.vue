@@ -1,3 +1,16 @@
+<template>
+  <div class="word-collection">
+    <h1>我的生词本</h1>
+    <div class="word-list">
+      <div class="word-item" v-for="item in unknownWords" :key="item.word_name">
+        <div class="word">{{ item }}</div>
+        <!--        <div class="meaning">{{ item.meaning }}</div>-->
+      </div>
+    </div>
+    <!-- 添加单词的表单 -->
+  </div>
+</template>
+
 <script setup>
 import {ref, onMounted} from 'vue';
 import axios from 'axios';
@@ -7,7 +20,7 @@ const unknownWords = ref([]);
 // 在组件挂载时调用后端接口
 onMounted(async () => {
   try {
-// 使用POST方法并传入user_email
+    // 使用POST方法并传入user_email
     const response = await axios({
       method: 'post',
       url: '/api/word/selectUnknown',
@@ -22,19 +35,6 @@ onMounted(async () => {
   }
 });
 </script>
-
-<template>
-  <div class="word-collection">
-    <h1>我的生词本</h1>
-    <div class="word-list">
-      <div class="word-item" v-for="item in unknownWords" :key="item.word_name">
-        <div class="word">{{ item }}</div>
-        <!--        <div class="meaning">{{ item.meaning }}</div>-->
-      </div>
-    </div>
-    <!-- 添加单词的表单 -->
-  </div>
-</template>
 
 <style scoped>
 .word-collection {

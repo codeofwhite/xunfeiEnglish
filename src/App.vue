@@ -13,7 +13,7 @@ import NavigationBar from "@/components/NavigationBar.vue";
 
 <style scoped>
 header {
-  background-color: #333; /* 深色背景 */
-  padding: 10px 0; /* 上下填充 */
+  background-color: #ffffff; /* 深色背景 */
+  padding: 5px 0; /* 上下填充 */
 }
 </style>

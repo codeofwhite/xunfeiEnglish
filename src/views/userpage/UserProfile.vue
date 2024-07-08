@@ -22,6 +22,16 @@
     <div class="profile-section">
       <button class="logout-btn" @click="logout">退出登录</button>
     </div>
+    <div class="experience-bar-container">
+      <label class="profile-label">经验值：</label>
+      <div class="experience-bar">
+        <div class="experience-progress" :style="{ width: experiencePercentage + '%' }"></div>
+      </div>
+    </div>
+    <div class="online-days-container">
+      <label class="profile-label">在线天数：</label>
+      <div class="online-days">{{ onlineDays }}</div>
+    </div>
   </div>
 </template>
 
@@ -30,6 +40,8 @@ import { ref } from 'vue';
 const avatarUrl = ref('src/assets/images/codeofwhite.jpg');
 const username = ref('Your Name');
 const account = ref('your.account@example.com');
+const experiencePercentage = ref(50); // 假设经验值为50%
+const onlineDays = ref(120); // 假设在线天数为120天
 
 function changeAvatar(event) {
 // Handle avatar change
@@ -132,5 +144,35 @@ function logout() {
 .profile-info {
   flex-grow: 1;
   color: #5D647B; /* 信息文本颜色 */
+}
+
+.experience-bar-container {
+  margin-bottom: 10px;
+}
+
+.experience-bar {
+  background-color: #e0e0e0;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.experience-progress {
+  height: 20px;
+  background-color: #4caf50;
+  transition: width 0.5s ease;
+}
+
+.online-days-container {
+  display: flex;
+  align-items: center;
+}
+
+.online-days {
+  background-color: #ffd700;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin-left: 10px;
+  font-weight: bold;
 }
 </style>

@@ -29,7 +29,7 @@
   padding: 20px;
   border: 2px solid #ccc;
   border-radius: 10px;
-  background-color: #f7f7f7;
+  background-color: #5eb3ff;
 }
 
 .achievement-badge {
@@ -39,7 +39,13 @@
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
-  background-color: #fff;
+  background-color: #afffdd;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease; /* 添加过渡效果 */
+}
+
+.achievement-badge:hover {
+  transform: scale(1.1); /* 鼠标悬停时放大 */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* 鼠标悬停时增加阴影 */
 }
 </style>
