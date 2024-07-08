@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import '/src/voice-utils/utilJS/crypto-js.js'; //鉴权的引用地址
 import '/src/voice-utils/utilJS/index.umd.js'; // 调用Web Speech API 的依赖，应该是官方的写的工具类
 import {defineEmits} from 'vue';

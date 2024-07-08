@@ -1,7 +1,5 @@
 <!--星火大模型-->
 <template>
-  <SpeechTranslate @recognition-complete="handleRecognitionComplete"></SpeechTranslate>
-  <SpeechSynthesis v-show="false" ref="speechSynthesis"></SpeechSynthesis>
   <div class="chat-container">
     <el-row :gutter="20" class="input-row">
       <el-col :span="24">
@@ -159,6 +157,8 @@ export default {
         this.finalChat.push(contentSomething)
         this.userInput = ''
         this.loading = false
+        // 发射自定义事件，传递结果
+        this.$emit('result-received', contentSomething);
       }
       if (jsonData.header.code !== 0) {
         alert(`提问失败: ${jsonData.header.code}:${jsonData.header.message}`);
@@ -167,18 +167,22 @@ export default {
       }
       if (jsonData.header.code === 0 && jsonData.header.status === 2) {
         // AI回复完毕，将回复内容传递给SpeechSynthesis组件
-        this.$refs.speechSynthesis.play(this.aiContentRequest);
+        // this.$refs.speechSynthesis.play(this.aiContentRequest);
         this.ttsWS.close();
         this.setStatus('init');
       }
     },
-    handleRecognitionComplete(recognizedText) {
-      // 在这里处理识别结果，例如将其存储在data属性中或传递给其他组件
-      console.log('识别的文本:', recognizedText);
-      // 例如，如果您有一个聊天组件，您可以这样做：
-      this.userInput = recognizedText;
-      // 传给AI
-      // this.start();
+    // handleRecognitionComplete(recognizedText) {
+    //   // 在这里处理识别结果，例如将其存储在data属性中或传递给其他组件
+    //   console.log('识别的文本:', recognizedText);
+    //   // 例如，如果您有一个聊天组件，您可以这样做：
+    //   this.userInput = recognizedText;
+    //   // 传给AI
+    //   // this.start();
+    // },
+    startWithText(text) {
+      this.userInput = text;
+      this.start();
     },
   },
 };
