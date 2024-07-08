@@ -18,11 +18,11 @@ const router = createRouter({
             name: 'home',
             component: HomeView
         },
-      {
-        path: '/test',
-        name: 'Test',
-        component: Test
-      },
+        {
+            path: '/test',
+            name: 'Test',
+            component: Test
+        },
     ].concat(userRoutes, smartTalkRoutes, wordRoutes, xunfeiRoutes)
 })
 

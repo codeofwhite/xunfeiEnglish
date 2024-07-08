@@ -1,110 +1,173 @@
 <template>
-  <div class="word-container">
-    <div v-if="wordsList.length > 0">
-      <transition name="slide-fade" mode="out-in">
-        <section class="word-details" :key="currentIndex">
-          <h2>{{ wordsList[currentIndex].name }}</h2>
-          <p class="pronunciation">英式发音: {{ wordsList[currentIndex].ukphone }}</p>
-          <p class="pronunciation">美式发音: {{ wordsList[currentIndex].usphone }}</p>
-          <button @click="playVoice(wordsList[currentIndex].name,'en-GB')">播放英音</button>
-          <button @click="playVoice(wordsList[currentIndex].name,'en-US')">播放美音</button>
-          <ul class="translations">
-            <li v-for="trans in wordsList[currentIndex].trans" :key="trans">
-              {{ trans }}
-            </li>
-          </ul>
-        </section>
-      </transition>
-      <div class="buttons">
-        <button @click="showNextWord">显示下一个</button>
-        <button @click="showForwardWord">显示前一个</button>
-        <button @click="addToUnknown(word)">加入未掌握词库</button>
+  <div class="main-container">
+    <div class="word-container">
+      <div v-if="wordsList.length > 0">
+        <transition name="slide-fade" mode="out-in">
+          <section class="word-details" :key="currentIndex">
+            <h2>{{ wordsList[currentIndex].name }}</h2>
+            <p class="pronunciation">英式发音: {{ wordsList[currentIndex].ukphone }}</p>
+            <p class="pronunciation">美式发音: {{ wordsList[currentIndex].usphone }}</p>
+            <button @click="playVoice(wordsList[currentIndex].name,'en-GB')">播放英音</button>
+            <button @click="playVoice(wordsList[currentIndex].name,'en-US')">播放美音</button>
+            <ul class="translations">
+              <li v-for="trans in wordsList[currentIndex].trans" :key="trans">
+                {{ trans }}
+              </li>
+            </ul>
+          </section>
+        </transition>
+        <div class="buttons">
+          <button @click="showNextWord">显示下一个</button>
+          <button @click="showForwardWord">显示前一个</button>
+          <button @click="addToUnknown(word)">加入未掌握词库</button>
+          <button @click="sendMessage(wordsList[currentIndex].name)">请教AI</button>
+        </div>
+      </div>
+      <div v-else>
+        <p>正在加载单词...</p>
       </div>
     </div>
-    <div v-else>
-      <p>正在加载单词...</p>
+    <div class="chat-container">
+      <!-- AI文字对话窗口的内容 -->
+      <div class="messages-container">
+        <div v-for="message in messages" :key="message.id"
+             class="message">
+          <p>AI词汇解释：{{ message.text }}</p>
+        </div>
+      </div>
     </div>
   </div>
+  <!--  调用AI接口，ref提供给AI的参数，handleResult提供结果返回    -->
+  <FreeTalkAI v-show="false" ref="aiComponent" @result-received="handleResult"></FreeTalkAI>
 </template>
 
-<script setup>
-import {ref} from 'vue';
+<script>
+import {onMounted, ref} from 'vue';
 import {useRoute} from 'vue-router';
 import axios from 'axios';
+import FreeTalkAI from "@/components/FreeTalkAI.vue";
 
-const route = useRoute();
-const wordListId = route.params.wordListId;
-const currentIndex = ref(0);
-const wordsList = ref([]);
-const voices = ref([]);
+export default {
+  components: {
+    FreeTalkAI
+  },
+  setup() {
+    const route = useRoute();
+    const wordListId = route.params.wordListId;
+    const currentIndex = ref(0);
+    const wordsList = ref([]);
+    const voices = ref([]);
+    const synth = window.speechSynthesis;
 
-const synth = window.speechSynthesis;
-
-const fetchWords = async () => {
-  try {
-    const response = await fetch(`../public/book/${wordListId}.json`);
-    wordsList.value = await response.json();
-  } catch (error) {
-    console.error('读取单词文件时出错:', error);
-  }
-};
-
-const showNextWord = () => {
-  if (currentIndex.value < wordsList.value.length - 1) {
-    currentIndex.value++;
-  } else {
-    currentIndex.value = 0; // 如果到达列表末尾，重新开始
-  }
-};
-
-const showForwardWord = () => {
-  if (currentIndex.value <= 0) {
-    currentIndex.value = wordsList.value.length - 1; // 如果到达第一个单词之前，跳转到最后一个单词
-  } else {
-    currentIndex.value--;
-  }
-};
-
-const addToUnknown = async () => {
-  const currentWord = wordsList.value[currentIndex.value];
-  try {
-    // 使用params属性发送Query参数
-    const response = await axios({
-      method: 'post',
-      url: 'http://localhost:8001/word/insertUnknown',
-      params: {
-        user_email: "99gelanjingling@gmail.com",
-        word_name: currentWord.name, // 假设word对象有一个name属性
-        // 添加其他需要的参数
+    const fetchWords = async () => {
+      try {
+        const response = await fetch(`../public/book/${wordListId}.json`);
+        wordsList.value = await response.json();
+      } catch (error) {
+        console.error('读取单词文件时出错:', error);
       }
+    };
+
+    const showNextWord = () => {
+      if (currentIndex.value < wordsList.value.length - 1) {
+        currentIndex.value++;
+      } else {
+        currentIndex.value = 0; // 如果到达列表末尾，重新开始
+      }
+    };
+
+    const showForwardWord = () => {
+      if (currentIndex.value <= 0) {
+        currentIndex.value = wordsList.value.length - 1; // 如果到达第一个单词之前，跳转到最后一个单词
+      } else {
+        currentIndex.value--;
+      }
+    };
+
+    const addToUnknown = async () => {
+      const currentWord = wordsList.value[currentIndex.value];
+      try {
+        const response = await axios.post('http://localhost:8001/word/insertUnknown', null, {
+          params: {
+            user_email: '99gelanjingling@gmail.com',
+            word_name: currentWord.name,
+          }
+        });
+        if (response.data === "success") {
+          console.log('单词已成功加入未掌握词库');
+        } else {
+          console.error('加入未掌握词库失败');
+        }
+      } catch (error) {
+        console.error('请求接口时出错:', error);
+      }
+    };
+
+    const playVoice = (text, lang) => {
+      const msg = new SpeechSynthesisUtterance(text);
+      const voice = voices.value.find(v => v.lang === lang);
+      if (voice) {
+        msg.voice = voice;
+      }
+      msg.volume = 1;
+      msg.rate = 1;
+      msg.pitch = 1;
+      synth.speak(msg);
+    };
+
+    onMounted(() => {
+      fetchWords();
     });
-    if (response.data === "success") {
-      console.log('单词已成功加入未掌握词库');
-      // 这里可以添加其他逻辑，例如清除单词，更新列表等
-    } else {
-      console.error('加入未掌握词库失败');
-    }
-  } catch (error) {
-    console.error('请求接口时出错:', error);
-  }
-};
 
-const playVoice = (text, lang) => {
-  const msg = new SpeechSynthesisUtterance(text); // 传入需要播放的文字
-  const voice = voices.value.find(v => v.lang === lang); // 移除 this 关键字
-  if (voice) {
-    msg.voice = voice; // 设置语音
-  }
-  msg.volume = 1; // 声音音量：1
-  msg.rate = 1; // 语速：1
-  msg.pitch = 1; // 音高：1
-  synth.speak(msg); // 播放
+    return {
+      currentIndex,
+      wordsList,
+      voices,
+      showNextWord,
+      showForwardWord,
+      addToUnknown,
+      playVoice
+    };
+  },
+  data() {
+    return {
+      messages: [
+        {
+          text: '你好呀！'
+        },
+      ], // 显示的消息
+    };
+  },
+  methods: {
+    // 输入用户input
+    sendMessage(text) {
+      // this.$refs.speechSynthesis.play(this.userInput);
+      this.$refs.aiComponent.startWithText(text);
+      // 此处省略AI回复实现代码，可根据实际情况添加
+    },
+    handleResult(result) {
+      // 在这里处理结果，例如将其显示在界面上
+      console.log('AI结果:', result);
+      this.messages.push({
+        id: Date.now(), // 使用时间戳作为唯一ID
+        from: 'ai',
+        text: result.ai // 假设result对象有一个ai属性，包含AI的回复文本
+      });
+    },
+  },
 };
-
-fetchWords();
 </script>
 
 <style scoped>
+.main-container {
+  display: flex; /* 使用flex布局 */
+  flex-direction: row; /* 子元素横向排列 */
+  justify-content: center; /* 水平居中 */
+  align-items: flex-start; /* 子元素顶部对齐 */
+  gap: 20px; /* 子元素之间的间隙 */
+  margin-top: 20px;
+}
+
 .slide-fade-enter-active, .slide-fade-leave-active {
   transition: all 0.5s ease;
 }
@@ -114,23 +177,27 @@ fetchWords();
   opacity: 0;
 }
 
-.word-container {
+.word-container, .chat-container {
+  flex: 1; /* 子容器占据等量空间 */
+  max-width: 50%; /* 子容器最大宽度为父容器的一半 */
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: row; /* 改为横向布局 */
+  justify-content: center;
+  align-items: flex-start; /* 顶部对齐 */
   padding: 20px;
-  background-color: #f0f7ff; /* 浅蓝色背景 */
+  gap: 20px; /* 窗口之间的间隙 */
+  border: 1px solid #ddd;
+  border-radius: 8px;
 }
 
-.word-details {
+.word-container {
+  max-width: 550px;
+}
+
+.word-details, .messages-container {
   width: 100%;
-  max-width: 300px;
-  margin: 10px 0;
-  padding: 20px;
-  border-radius: 10px;
-  background-color: #ffffff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
+  max-width: 300px; /* 控制最大宽度 */
+  /* 其他样式保持不变 */
 }
 
 .word-details h2 {
@@ -157,7 +224,7 @@ fetchWords();
   display: flex;
   justify-content: space-around;
   width: 100%;
-  max-width: 300px;
+  max-width: 400px;
 }
 
 button {
@@ -175,5 +242,29 @@ button {
 button:hover {
   background-color: #1669c7; /* 按钮悬停时的深蓝色 */
   transform: translateY(-2px);
+}
+
+.chat-container {
+  background-color: #f9f9f9;
+  padding: 10px;
+  max-width: 300px;
+}
+
+.messages-container {
+  margin: 0;
+  padding: 0;
+}
+
+.message {
+  list-style: none;
+  margin-bottom: 10px;
+  padding: 5px;
+  border-radius: 4px;
+  font-family: "Times New Roman";
+}
+
+p {
+  margin: 0;
+  padding: 0;
 }
 </style>

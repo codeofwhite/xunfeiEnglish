@@ -1,35 +1,58 @@
 <template>
   <div class="container">
-    <button class="button go-back" @click="goBack">返回</button>
-    <h1 class="title">魔法口语</h1>
-    <button class="button dialog-toggle" @click="showDialog = true">自由对话：每天10分钟，打造流利口语！</button>
+    <nav class="top-nav">
+      <button class="nav-button go-back" @click="goBack">返回</button>
+      <h1 class="title">魔法口语</h1>
+      <button class="nav-button dialog-toggle" @click="changeDialog">自由对话</button>
+    </nav>
 
     <div v-if="showDialog" class="custom-scene">
-      <h2>自定义场景</h2>
+      <h2>创建你的场景</h2>
       <input v-model="scene" placeholder="请输入或生成场景" class="input-scene">
-      <button class="button" @click="generateScene">随机生成</button>
-      <button class="button" @click="submitScene">提交</button>
+      <div class="scene-buttons">
+        <button class="button generate" @click="generateScene">随机生成</button>
+        <button class="button submit" @click="submitScene">开始对话</button>
+      </div>
     </div>
 
     <div class="ai-teacher">
-      <h2>AI老师</h2>
-      <button class="button accent" @click="setAccent('美音')">美音</button>
-      <button class="button accent" @click="setAccent('英音')">英音</button>
+      <h2>选择你的AI教练</h2>
+      <div class="accents">
+        <button class="button accent" @click="setAccent('美音')">美音</button>
+        <button class="button accent" @click="setAccent('英音')">英音</button>
+      </div>
     </div>
 
     <div class="scene-dialogue">
-      <h2>场景对话</h2>
-      <div class="daily-convo">
-        <h3>日常对话</h3>
-        <button v-for="scene in dailyScenes" class="button scene" @click="openSceneDialog(scene)">{{ scene }}</button>
-      </div>
-      <div class="campus-life">
-        <h3>校园生活</h3>
-        <button v-for="scene in schoolScenes" class="button scene" @click="openSceneDialog(scene)">{{ scene }}</button>
-      </div>
-      <div class="travel-talk">
-        <h3>旅游出行</h3>
-        <button v-for="scene in travelScenes" class="button scene" @click="openSceneDialog(scene)">{{ scene }}</button>
+      <h2>选择对话场景</h2>
+      <div class="scenes">
+        <div class="scene-category">
+          <h3>日常对话</h3>
+          <div class="scene-buttons">
+            <button v-for="scene in dailyScenes" class="button scene" @click="openSceneDialog(scene)">{{
+                scene
+              }}
+            </button>
+          </div>
+        </div>
+        <div class="scene-category">
+          <h3>校园生活</h3>
+          <div class="scene-buttons">
+            <button v-for="scene in schoolScenes" class="button scene" @click="openSceneDialog(scene)">{{
+                scene
+              }}
+            </button>
+          </div>
+        </div>
+        <div class="scene-category">
+          <h3>旅游出行</h3>
+          <div class="scene-buttons">
+            <button v-for="scene in travelScenes" class="button scene" @click="openSceneDialog(scene)">{{
+                scene
+              }}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -48,6 +71,9 @@ export default {
     };
   },
   methods: {
+    changeDialog(){
+      this.showDialog = !this.showDialog;
+    },
     goBack() {
       this.$router.push('/'); // 使用Vue Router进行导航
     },
@@ -80,6 +106,8 @@ export default {
   border-radius: 20px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   text-align: center;
+  font-family: 'Roboto', sans-serif; /* 更专业的字体 */
+  color: #333; /* 更柔和的文字颜色 */
 }
 
 .button {
@@ -95,16 +123,36 @@ export default {
   transition: transform 0.3s ease;
 }
 
+.nav-button {
+  background-color: transparent;
+  color: #ffffff;
+  border: 2px solid white;
+  border-radius: 2px;
+  width: 100px;
+  height: 50px;
+  font-size: large;
+}
+
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #00e1ff; /* 深蓝色背景 */
+  color: white;
+  border-radius: 5px;
+}
+
 .button:hover {
   transform: translateY(-3px);
 }
 
 .go-back {
-  background-color: #666;
+  background-color: #6affbe;
 }
 
 .dialog-toggle {
-  background-color: #4CAF50;
+  background-color: #ffce87;
 }
 
 .accent, .scene {
@@ -112,13 +160,23 @@ export default {
 }
 
 .title {
-  color: #E91E63;
-  font-family: 'Comic Sans MS', 'Comic Neue', cursive;
+  color: #ffffff;
   margin-bottom: 20px;
+  font-family: 'Fredoka One', cursive; /* 更有趣的标题字体 */
 }
 
 .custom-scene, .ai-teacher, .scene-dialogue {
+  background-color: white;
+  padding: 20px;
   margin-top: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.scene-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .input-scene {
@@ -142,5 +200,27 @@ export default {
   .title {
     font-size: 24px;
   }
+}
+
+.generate {
+  background-color: #FFCA28; /* 金色按钮 */
+}
+
+.submit {
+  background-color: #66BB6A; /* 绿色按钮 */
+}
+
+.accents {
+  display: flex;
+  justify-content: center;
+}
+
+.scenes {
+  display: flex;
+  flex-direction: column;
+}
+
+.scene-category {
+  margin-bottom: 20px;
 }
 </style>

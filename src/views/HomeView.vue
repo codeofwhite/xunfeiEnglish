@@ -10,9 +10,6 @@
         <p>{{ feature.description }}</p>
       </div>
     </section>
-    <footer class="app-footer">
-      <p>© 2024 English Mastery. All rights reserved.</p>
-    </footer>
   </div>
 </template>
 
@@ -62,15 +59,6 @@ export default {
 
 .feature:hover {
   transform: scale(1.05);
-}
-
-.app-footer {
-  background-color: #333;
-  color: white;
-  padding: 1rem;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
 }
 
 @keyframes fadeInDown {
