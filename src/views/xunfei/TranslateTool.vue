@@ -20,7 +20,7 @@ export default {
     // 改了一下调用的格式，传的是纯文本
     translateText() {
       // 发送请求到Java后端
-      axios.post('http://localhost:8001/xunfei/translate',  this.textToTranslate, {
+      axios.post('http://localhost:8001/xunfei/translate', this.textToTranslate, {
         headers: {
           'Content-Type': 'text/plain' // 确保发送的是纯文本格式
         }

@@ -55,6 +55,7 @@ export default {
     };
   },
   methods: {
+    // 得到认证的东西，官网的基本步骤
     getWebsocketUrl() {
       return new Promise((resolve, reject) => {
         const apiKey = '96b41233a0974ee46f365d13ef6bea09';
@@ -74,9 +75,11 @@ export default {
         resolve(finalUrl);
       });
     },
+    // 设置状态
     setStatus(status) {
       this.status = status;
     },
+    // 创建连接
     connectWebSocket() {
       this.setStatus('ttsing');
       this.getWebsocketUrl().then((url) => {
