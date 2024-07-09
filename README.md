@@ -1,36 +1,9 @@
-# engteach
+# engTeach
+# 软件杯英语学习软件前端
 
-This template should help get you started developing with Vue 3 in Vite.
+## 单字书的索引格式在/public，单字书内容的格式在/public/book
+## assets 存放一些如图片、音频等文件
+## components是vue的组件类，用户放置其他vue会经常使用到的组件
+## views里面是每个页面的内容，按照用图分文件夹名
 
-## Recommended IDE Setup
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and
-disable Vetur).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-npm run test:unit
-```
