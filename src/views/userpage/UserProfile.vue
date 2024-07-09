@@ -36,7 +36,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import {ref} from 'vue';
+
 const avatarUrl = ref('src/assets/images/codeofwhite.jpg');
 const username = ref('Your Name');
 const account = ref('your.account@example.com');

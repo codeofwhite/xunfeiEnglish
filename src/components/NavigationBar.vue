@@ -2,16 +2,34 @@
   <div class="header">
     <div class="logo">
       <!-- Logo图片路径根据实际情况替换 -->
-      <img src="@/assets/images/codeofwhite.jpg" alt="Logo" />
+      <img src="@/assets/images/codeofwhite.jpg" alt="Logo"/>
     </div>
     <nav class="nav">
       <ul>
-        <li><RouterLink to="/" class="nav-link"><span class="nav-title">首页</span><span class="nav-subtitle">HOME</span></RouterLink></li>
-        <li><RouterLink to="/vbIndex" class="nav-link"><span class="nav-title">单词记忆</span><span class="nav-subtitle">WORD</span></RouterLink></li>
-        <li><RouterLink to="/smartTalk" class="nav-link"><span class="nav-title">智能语音</span><span class="nav-subtitle">SPEECH</span></RouterLink></li>
-        <li><RouterLink to="/userProfile" class="nav-link"><span class="nav-title">个人中心</span><span class="nav-subtitle">CENTER</span></RouterLink></li>
-        <li><RouterLink to="/test" class="nav-link"><span class="nav-title">测试</span><span class="nav-subtitle">CENTER</span></RouterLink></li>
-        <li><RouterLink to="/readBook" class="nav-link"><span class="nav-title">有声阅读</span><span class="nav-subtitle">CENTER</span></RouterLink></li>
+        <li>
+          <RouterLink to="/" class="nav-link"><span class="nav-title">首页</span><span class="nav-subtitle">HOME</span>
+          </RouterLink>
+        </li>
+        <li>
+          <RouterLink to="/vbIndex" class="nav-link"><span class="nav-title">单词记忆</span><span class="nav-subtitle">WORD</span>
+          </RouterLink>
+        </li>
+        <li>
+          <RouterLink to="/smartTalk" class="nav-link"><span class="nav-title">智能语音</span><span
+              class="nav-subtitle">SPEECH</span></RouterLink>
+        </li>
+        <li>
+          <RouterLink to="/userProfile" class="nav-link"><span class="nav-title">个人中心</span><span
+              class="nav-subtitle">CENTER</span></RouterLink>
+        </li>
+        <li>
+          <RouterLink to="/test" class="nav-link"><span class="nav-title">测试</span><span
+              class="nav-subtitle">CENTER</span></RouterLink>
+        </li>
+        <li>
+          <RouterLink to="/readBook" class="nav-link"><span class="nav-title">有声阅读</span><span class="nav-subtitle">CENTER</span>
+          </RouterLink>
+        </li>
       </ul>
     </nav>
     <!-- 父菜单项 -->
@@ -23,13 +41,14 @@
         <RouterLink to="/speechScore" class="nav-link">口语评分</RouterLink>
         <RouterLink to="/speechToWord" class="nav-link">语音转文字</RouterLink>
         <RouterLink to="/speechSynthesis" class="nav-link">语音合成</RouterLink>
+        <RouterLink to="/translateTool" class="nav-link">机器翻译</RouterLink>
         <!-- 更多子菜单项 -->
       </div>
     </div>
     <!-- ...其他代码... -->
     <div class="user">
       <RouterLink to="/login" class="user-link">
-        <img src="@/assets/images/codeofwhite.jpg" alt="User" class="user-image" />
+        <img src="@/assets/images/codeofwhite.jpg" alt="User" class="user-image"/>
       </RouterLink>
     </div>
   </div>

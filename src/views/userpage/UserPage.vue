@@ -25,8 +25,7 @@
 <script>
 export default {
   data() {
-    return {
-    };
+    return {};
   }
 };
 </script>

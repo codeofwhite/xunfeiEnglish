@@ -71,7 +71,7 @@ export default {
     };
   },
   methods: {
-    changeDialog(){
+    changeDialog() {
       this.showDialog = !this.showDialog;
     },
     goBack() {

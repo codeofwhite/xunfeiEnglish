@@ -2,6 +2,7 @@ import ChatAI from "@/views/xunfei/ChatAI.vue";
 import SpeechScore from "@/views/xunfei/SpeechScore.vue";
 import VoiceToWord from "@/views/xunfei/SpeechToWord.vue";
 import SpeechSynthesis from "@/views/xunfei/SpeechSynthesis.vue";
+import TranslateTool from "@/views/xunfei/TranslateTool.vue";
 
 export default [
     {
@@ -26,6 +27,12 @@ export default [
         path: '/speechSynthesis',
         name: 'SpeechSynthesis',
         component: SpeechSynthesis,
+        props: true
+    },
+    {
+        path: '/translateTool',
+        name: 'TranslateTool',
+        component: TranslateTool,
         props: true
     },
 ]

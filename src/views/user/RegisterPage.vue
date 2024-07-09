@@ -27,48 +27,50 @@
 </template>
 
 <script setup>
-  import { reactive, ref } from 'vue';
-  import { ElMessage } from 'element-plus';
-  import route from "@/router/index.js";
+import {reactive, ref} from 'vue';
+import {ElMessage} from 'element-plus';
+import route from "@/router/index.js";
 
-  const form = reactive({
+const form = reactive({
   email: '',
   verificationCode: '',
   password: '',
   confirmPassword: ''
 });
 
-  const rules = {
+const rules = {
   email: [
-{ required: true, message: '请输入邮箱地址', trigger: 'blur' },
-{ type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+    {required: true, message: '请输入邮箱地址', trigger: 'blur'},
+    {type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change']}
   ],
   verificationCode: [
-{ required: true, message: '请输入验证码', trigger: 'blur' }
+    {required: true, message: '请输入验证码', trigger: 'blur'}
   ],
   password: [
-{ required: true, message: '请输入密码', trigger: 'blur' },
-{ min: 12, message: '密码长度不能少于12位', trigger: 'blur' }
+    {required: true, message: '请输入密码', trigger: 'blur'},
+    {min: 12, message: '密码长度不能少于12位', trigger: 'blur'}
   ],
   confirmPassword: [
-{ required: true, message: '请再次输入密码', trigger: 'blur' },
-{ validator: (rule, value, callback) => {
-  if (value !== form.password) {
-  callback(new Error('两次输入的密码不一致'));
-} else {
-  callback();
-}
-}, trigger: 'blur' }
+    {required: true, message: '请再次输入密码', trigger: 'blur'},
+    {
+      validator: (rule, value, callback) => {
+        if (value !== form.password) {
+          callback(new Error('两次输入的密码不一致'));
+        } else {
+          callback();
+        }
+      }, trigger: 'blur'
+    }
   ]
 };
 
-  const formRef = ref(null);
+const formRef = ref(null);
 
-  const goBack = () =>{
-    route.push("login");
-  }
+const goBack = () => {
+  route.push("login");
+}
 
-  const sendVerificationCode = () => {
+const sendVerificationCode = () => {
 // 实现发送验证码到邮箱的逻辑
   ElMessage({
     message: '验证码已发送，请检查您的邮箱',
@@ -76,7 +78,7 @@
   });
 };
 
-  const submitForm = () => {
+const submitForm = () => {
   formRef.value.validate((valid) => {
     if (valid) {
       ElMessage({

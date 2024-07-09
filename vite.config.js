@@ -19,15 +19,19 @@ export default defineConfig({
         hmr: true, // 热更新Hot Module Replacement，效率更高
         port: 80,
         proxy: {
+            '/api': {
+                target: 'http://localhost:8001',
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/api/, ''),
+            },
             '/bpi': {
                 target: 'http://spark-api.cn-huabei-1.xf-yun.com', // 目标API
                 changeOrigin: true, // 必须设置为true
                 rewrite: (path) => path.replace(/^\/bpi/, '')
             },
-            '/api': {
-                target: 'http://localhost:8001',
-                changeOrigin: true,
-                rewrite: (path) => path.replace(/^\/api/, ''),
+            '/v2': {
+                target: 'https://itrans.xfyun.cn/', // 目标API
+                changeOrigin: true, // 必须设置为true
             },
         }
     },
