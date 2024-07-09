@@ -1,6 +1,8 @@
 import SmartTalk from '@/views/smartTalk/SmartTalk.vue';
 import ScenarioTalk from "@/views/smartTalk/ScenarioTalk.vue";
 import FreeTalk from "@/views/smartTalk/FreeTalk.vue";
+import ReadBook from "@/views/smartTalk/ReadBook.vue";
+import ReadBookComponent from "@/components/ReadBookComponent.vue";
 
 export default [
     {
@@ -21,5 +23,17 @@ export default [
         component: FreeTalk,
         props: true
     },
-// 其他与智能对话相关的路由...
+    {
+        path: '/readBook',
+        name: 'readBook',
+        component: ReadBook,
+        props: true
+    },
+    {
+        path: '/read-book/:bookId',
+        name: 'ReadBook',
+        component: ReadBookComponent,
+        props: true // 允许将路由参数作为props传递给组件
+    }
+    // 其他与智能对话相关的路由...
 ];

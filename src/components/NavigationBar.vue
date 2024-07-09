@@ -11,6 +11,7 @@
         <li><RouterLink to="/smartTalk" class="nav-link"><span class="nav-title">智能语音</span><span class="nav-subtitle">SPEECH</span></RouterLink></li>
         <li><RouterLink to="/userProfile" class="nav-link"><span class="nav-title">个人中心</span><span class="nav-subtitle">CENTER</span></RouterLink></li>
         <li><RouterLink to="/test" class="nav-link"><span class="nav-title">测试</span><span class="nav-subtitle">CENTER</span></RouterLink></li>
+        <li><RouterLink to="/readBook" class="nav-link"><span class="nav-title">有声阅读</span><span class="nav-subtitle">CENTER</span></RouterLink></li>
       </ul>
     </nav>
     <!-- 父菜单项 -->
