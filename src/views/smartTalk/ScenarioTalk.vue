@@ -1,4 +1,6 @@
 <template>
+  <!-- 语音合成组件  -->
+  <SpeechSynthesis v-show="false" ref="speechSynthesis"></SpeechSynthesis>
   <div class="container">
     <button class="button" @click="goBack">返回</button>
     <h2>{{ selectedScene }}</h2>
@@ -16,16 +18,33 @@
       <p>{{ message.text }}</p>
       <button @click="translate(message.text)">翻译</button>
       <button @click="speak(message.text)">发音</button>
+      <!-- 选择文本按钮 -->
+      <button @click="selectMessageForAI(message.text)">选择</button>
     </div>
-    <button class="button" @click="startSpeechRecognition">说话</button>
-    <button class="button" @click="aiHelp">AI助答</button>
-    <input v-model="userInput" placeholder="输入消息...">
-    <button @click="sendMessage">发送</button>
+    <div class="input-area">
+      <input v-model="userInput" placeholder="输入消息...">
+      <button class="send-button" @click="sendMessage">发送</button>
+      <FreeTalkAI v-show="false" ref="aiComponent"></FreeTalkAI>
+    </div>
+    <div class="footer">
+      <!--      <button class="action-button" @click="startSpeechRecognition">说话</button>-->
+      <!--      -->
+      <SpeechTranslate v-show="true" @recognition-complete="handleRecognitionComplete"></SpeechTranslate>
+      <!--  调用AI接口，ref提供给AI的参数，handleResult提供结果返回    -->
+      <FreeTalkAI v-show="false" ref="aiComponent" @result-received="handleResult"></FreeTalkAI>
+      <button class="ai-button" @result-received="handleResult" @click="aiHelp">AI助答</button>
+    </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+import SpeechSynthesis from "@/views/xunfei/SpeechSynthesis.vue";
+import FreeTalkAI from "@/components/FreeTalkAI.vue";
+import SpeechTranslate from "@/components/SpeechTranslate.vue";
+
 export default {
+  components: {SpeechTranslate, FreeTalkAI, SpeechSynthesis},
   data() {
     return {
       selectedScene: localStorage.getItem('scene') || '默认场景',
@@ -47,25 +66,74 @@ export default {
       // 实现返回逻辑
       this.$router.push('/smartTalk')
     },
-    fetchSceneDetails() {
-      // 实现获取场景详情逻辑
+    handleResult(result) {
+      // 在这里处理结果，例如将其显示在界面上
+      console.log('AI结果:', result);
+      this.messages.push({
+        id: Date.now(), // 使用时间戳作为唯一ID
+        from: 'ai',
+        text: result.ai // 假设result对象有一个ai属性，包含AI的回复文本
+      });
     },
+    // AI 翻译， 7-8还没接入接口
     translate(text) {
-      // 实现翻译逻辑
+      axios.post('YOUR_TRANSLATION_API_ENDPOINT', {text})
+          .then(response => {
+            alert('翻译: ' + response.data.translatedText);
+          })
+          .catch(error => {
+            alert('翻译失败: ' + error);
+          });
     },
+    // AI朗读
     speak(text) {
-      // 实现文本朗读逻辑
+      this.$refs.speechSynthesis.play(text);
     },
-    startSpeechRecognition() {
-      // 实现语音识别逻辑
+    selectMessageForAI(text) {
+      this.userInput = "帮我解释这个句子" + text; // 设置用户输入为选中的消息文本
+      // this.aiHelp();
+    },
+    // 语音识别
+    handleRecognitionComplete(recognizedText) {
+      // 在这里处理识别结果，例如将其存储在data属性中或传递给其他组件
+      console.log('识别的文本:', recognizedText);
+      // 例如，如果您有一个聊天组件，您可以这样做：
+      this.userInput = recognizedText;
+      // 传给AI
+      // this.start();
+    },
+    // 输入给AI场景
+    sceneStart(scene) {
+      this.$refs.aiComponent.startWithText(scene);
     },
     aiHelp() {
-      // 实现AI助答逻辑
+      if (this.userInput.trim()) {
+        this.messages.push({from: 'user', text: this.userInput});
+        // 播放语音
+        // this.$refs.speechSynthesis.play(this.userInput);
+        this.$refs.aiComponent.startWithText(this.userInput);
+        this.userInput = '';
+        // 此处省略AI回复实现代码，可根据实际情况添加
+      } else {
+        alert('请输入消息或说话或选择一条文本');
+      }
     },
+    // 输入用户input
     sendMessage() {
-      // 实现发送消息逻辑
+      if (this.userInput.trim()) {
+        this.messages.push({from: 'user', text: this.userInput});
+        // this.$refs.speechSynthesis.play(this.userInput);
+        this.$refs.aiComponent.startWithText(this.userInput);
+        this.userInput = '';
+        // 此处省略AI回复实现代码，可根据实际情况添加
+      } else {
+        alert('请输入消息或说话');
+      }
+    },
+    fetchSceneDetails() {
+      return null;
     }
-  }
+  },
 };
 </script>
 
@@ -105,6 +173,24 @@ export default {
 }
 
 .button:hover {
+  background-color: #ff85c0; /* 鼠标悬停时的颜色变化 */
+  transform: translateY(-2px); /* 轻微的弹跳效果 */
+}
+
+.send-button, .ai-button {
+  padding: 10px 20px;
+  cursor: pointer;
+  background-color: #ffadd2; /* 粉红色按钮 */
+  border: none;
+  border-radius: 20px; /* 圆润的按钮 */
+  color: white;
+  font-size: 16px;
+  margin: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 按钮阴影 */
+  transition: all 0.3s ease;
+}
+
+.send-button:hover, .ai-button:hover {
   background-color: #ff85c0; /* 鼠标悬停时的颜色变化 */
   transform: translateY(-2px); /* 轻微的弹跳效果 */
 }

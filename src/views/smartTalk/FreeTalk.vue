@@ -48,6 +48,7 @@ export default {
       messages: [], // 显示的消息
       userInput: '',
       aiResponse: '',
+      sceneDetails: null, // 初始化为null
     };
   },
   created() {
@@ -90,7 +91,7 @@ export default {
       this.$refs.speechSynthesis.play(text);
     },
     selectMessageForAI(text) {
-      this.userInput = "帮我解释这个句子" + text; // 设置用户输入为选中的消息文本
+      this.userInput = "帮我解释这个句子：" + text; // 设置用户输入为选中的消息文本
       // this.aiHelp();
     },
     aiHelp() {

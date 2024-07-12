@@ -1,6 +1,6 @@
 <template>
   <div class="word-collection">
-    <h1>我的生词本</h1>
+    <h1>已掌握的单词</h1>
     <!-- 添加单词的表单 -->
   </div>
 </template>

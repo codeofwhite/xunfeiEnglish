@@ -1,6 +1,6 @@
 <template>
   <div class="word-collection">
-    <h1>我的生词本</h1>
+    <h1>不认识的单词</h1>
     <div class="word-list">
       <div class="word-item" v-for="item in unknownWords" :key="item.word_name">
         <div class="word">{{ item }}</div>

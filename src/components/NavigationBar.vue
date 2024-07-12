@@ -23,12 +23,12 @@
               class="nav-subtitle">CENTER</span></RouterLink>
         </li>
         <li>
-          <RouterLink to="/test" class="nav-link"><span class="nav-title">测试</span><span
-              class="nav-subtitle">CENTER</span></RouterLink>
-        </li>
-        <li>
           <RouterLink to="/readBook" class="nav-link"><span class="nav-title">有声阅读</span><span class="nav-subtitle">CENTER</span>
           </RouterLink>
+        </li>
+        <li>
+          <RouterLink to="/test" class="nav-link"><span class="nav-title">测试</span><span
+              class="nav-subtitle">CENTER</span></RouterLink>
         </li>
       </ul>
     </nav>

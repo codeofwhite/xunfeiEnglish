@@ -20,7 +20,7 @@
     </div>
     <hr class="profile-divider">
     <div class="profile-section">
-      <button class="logout-btn" @click="logout">退出登录</button>
+      <button class="logout-btn" @click="onLogout">退出登录</button>
     </div>
     <div class="experience-bar-container">
       <label class="profile-label">经验值：</label>
@@ -36,7 +36,8 @@
 </template>
 
 <script setup>
-import {ref} from 'vue';
+import {computed, ref} from 'vue';
+import {useStore} from "vuex";
 
 const avatarUrl = ref('src/assets/images/codeofwhite.jpg');
 const username = ref('Your Name');
@@ -47,6 +48,25 @@ const onlineDays = ref(120); // 假设在线天数为120天
 function changeAvatar(event) {
 // Handle avatar change
 }
+
+const store = useStore();
+const isLoggedIn = computed(() => store.state.isLoggedIn);
+const userEmail = computed(() => store.state.uemail);
+
+// 登出操作
+const onLogout = () => {
+  // 清除 localStorage 或 sessionStorage 中的登录信息
+  localStorage.removeItem('isLoggedIn');
+  localStorage.removeItem('uemail');
+  sessionStorage.removeItem('isLoggedIn');
+  sessionStorage.removeItem('uemail');
+
+  // 更新 Vuex 状态
+  store.commit('setLoggedIn', false);
+  store.commit('setUserEmail', null);
+
+  // 可以重定向到登录页面或其他操作
+};
 
 function changeUsername() {
 // Handle username change

@@ -54,7 +54,7 @@ export default {
         {
           id: 1,
           title: 'Book 1',
-          bookContent: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt. Ut labore et dolore magna aliqua.'
+          bookContent: 'what can i say? man! mamba out. I out, you out, we out!'
         },
         {
           id: 2,

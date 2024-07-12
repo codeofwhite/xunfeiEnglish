@@ -32,7 +32,7 @@ export default {
           .catch(error => {
             console.error('翻译错误: ', error);
           });
-    }
+    },
   }
 };
 </script>

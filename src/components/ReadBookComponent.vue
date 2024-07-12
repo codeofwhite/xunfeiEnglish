@@ -16,14 +16,14 @@
         <p>倒计时: {{ countdown }} 秒</p>
         <button @click="stopRecording" class="stop-button">停止录音</button>
       </div>
-      <div v-for="(sentence, index) in sentences" :key="index" class="sentence-container">
-        <p class="sentence">{{ sentence }}</p>
+      <div v-for="(sentence, index) in sentences" :key="index">
+        <p :class="{'highlight': index === currentSentenceIndex}">{{ sentence }}</p>
         <div class="sentence-controls">
           <button @click="playSentence(index)" class="play-sentence">播放</button>
           <button @click="translateSentence(index)" class="translate-sentence">翻译</button>
           <button @click="followReadSentence(index)" class="follow-read">跟读</button>
         </div>
-        <p class="translation" v-if="translations[index]">{{ translations[index] }}</p>
+        <p class="translation" v-if="translations[index]">翻译：{{ translations[index] }}</p>
       </div>
     </div>
   </div>
@@ -31,6 +31,7 @@
 
 <script>
 import SpeechSynthesis from "@/views/xunfei/SpeechSynthesis.vue";
+import axios from "axios";
 
 function loadBookContentById(id) {
   // 从服务器加载书籍内容
@@ -39,13 +40,12 @@ function loadBookContentById(id) {
     1: {
       id: 1,
       title: 'Book 1',
-      bookContent: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt. Ut labore et dolore magna aliqua.'
+      bookContent: 'what can i say? man! mamba out. I out, you out, we out!'
     },
     2: {
       id: 2,
       title: 'Book 2',
       bookContent: '这是第二本书的第一句. 这是第二本书的第二句. 这是第二本书的第三句. 这是第二本书的第四句. 这是第二本书的第五句. 这是第二本书的第六句. 这是第二本书的第七句. 这是第二本书的第八句.'
-
     }
     // ...可以添加更多书籍数据
   };
@@ -76,10 +76,31 @@ export default {
       mediaRecorder: null, // MediaRecorder实例
       audioChunks: [], // 录音数据块数组
       translations: [], // 存储翻译结果的数组
+      currentSentenceIndex: 0, // 当前播放的句子索引
     };
   },
   methods: {
+    // 改了一下调用的格式，传的是纯文本
+    translateText(text, index) {
+      // 发送请求到Java后端
+      axios.post('http://localhost:8001/xunfei/translate', text, {
+        headers: {
+          'Content-Type': 'text/plain' // 确保发送的是纯文本格式
+        }
+      })
+          .then(response => {
+            // 处理响应
+            this.translations[index] = response.data;
+          })
+          .catch(error => {
+            console.error('翻译错误: ', error);
+          });
+    },
     // ... 现有的方法 ...
+    updateProgress(index) {
+      this.currentSentenceIndex = index;
+      this.playbackProgress = index;
+    },
     loadBook() {
       const bookId = this.getBookId; // 从导航栏获取到查看的是哪本书籍 （bookId）
       this.book = loadBookContentById(bookId);
@@ -104,15 +125,23 @@ export default {
       // 播放句子的逻辑，实现playText函数
       // this.playText(this.sentences[index]);
       this.$refs.speechSynthesis.play(this.sentences[index]);
+      this.updateProgress(index);
     },
     // 播放所有句子
     playAllText() {
       // 播放所有句子的逻辑
-      this.$refs.speechSynthesis.play(this.sentences.join('. '));
+      // this.$refs.speechSynthesis.play(this.sentences.join('. '));
+      // 跟随进度条
+      this.sentences.forEach((sentence, index) => {
+        setTimeout(() => {
+          this.$refs.speechSynthesis.play(sentence);
+          this.updateProgress(index);
+        }, index * 2000); // 假设每个句子播放时间为2秒
+      });
     },
     translateSentence(index) {
       // 翻译句子的逻辑
-      this.translateText(this.sentences[index]);
+      this.translateText(this.sentences[index], index);
     },
     // 跟读句子的逻辑，包括录音和评分
     followReadSentence(index) {
@@ -260,14 +289,6 @@ export default {
   background-color: #449d44;
 }
 
-.sentence-container {
-  padding: 10px;
-  background: #fff;
-  border-radius: 5px;
-  margin-bottom: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
 .sentence-controls {
   display: flex;
   justify-content: flex-end;
@@ -278,5 +299,20 @@ export default {
 .translation {
   color: #888;
   font-style: italic;
+}
+
+.highlight {
+  animation: highlightAnimation 1s infinite alternate;
+}
+
+@keyframes highlightAnimation {
+  0% {
+    color: #000;
+    transform: scale(1);
+  }
+  100% {
+    color: #ff6347;
+    transform: scale(1.1);
+  }
 }
 </style>

@@ -1,129 +1,218 @@
+<!--登录界面-->
 <template>
-  <div class="container">
-    <div class="login-wrapper">
-      <div class="header">登录</div>
-      <div class="form-wrapper">
-        <input type="text" name="邮箱" placeholder="邮箱" class="input-item">
-        <input type="password" name="密码" placeholder="密码" class="input-item">
-        <div class="msg">
-          忘记密码？ <a href="forgot-password.html">点击这里</a>
-        </div>
-        <button class="btn">登录</button>
-        <button class="register-btn" @click="goToRegister">注册</button>
-      </div>
+  <div v-if="!isLoggedIn" class="login-body">
+    <div class="login-panel">
+      <div class="login-title">用户登录</div>
+      <el-form :model="formData" ref="loginForm">
+        <!-- 账号输入框 -->
+        <el-form-item label="" prop="account"
+                      :rules="[
+          { required: true, message: '请输入账号', trigger: 'blur' },
+          /*email格式检查*/
+          { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+          ]">
+          <el-input placeholder="请输入账号" v-model="formData.account"></el-input>
+        </el-form-item>
+        <!-- 密码输入框 -->
+        <el-form-item label="" prop="password"
+                      :rules="[{ required: true, message: '请输入密码', trigger: 'blur' }]">
+          <el-input placeholder="请输入密码" type="password" v-model="formData.password"></el-input>
+        </el-form-item>
+        <!-- 记住我复选框 -->
+        <el-form-item label="">
+          <el-checkbox v-model="formData.rememberMe">记住登录状态</el-checkbox>
+        </el-form-item>
+        <!-- 验证码按钮 -->
+        <el-form-item label="">
+          <el-button type="primary" @click="onShow">开始验证</el-button>
+          <Vcode :show="isShow" @success="onSuccess" @close="onClose"/>
+        </el-form-item>
+        <!-- 登录按钮 -->
+        <el-form-item label="">
+          <el-button type="primary" style="width:100%" @click="onLogin">登录</el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="text" @click="onRegister">没有账号？注册一个！</el-button>
+        </el-form-item>
+      </el-form>
     </div>
+  </div>
+  <div v-else>
+    <UserProfile></UserProfile>
   </div>
 </template>
 
+<!--这个不加setup，上面的找不到formData-->
 <script setup>
+import {computed, reactive, ref} from "vue"
+import {useStore} from 'vuex';
+import Vcode from "vue3-puzzle-vcode";
+import axios from 'axios'; // 引入axios
+import router from '@/router/index.js'
+import {ElMessage} from 'element-plus';
+import UserProfile from "@/views/userpage/UserProfile.vue";
 
-import router from "@/router/index.js";
+// 用户资料
+const formData = reactive({
+  account: '',
+  password: '',
+  rememberMe: false
+});
 
-function goToRegister() {
-  router.push('/register')
-}
+const isShow = ref(false);
+const isVerified = ref(false); // 验证码验证状态
+const loginForm = ref(null);
+const isLoggedIn = computed(() => store.state.isLoggedIn);
+// 状态管理
+const store = useStore();
 
+// 调整注册操作页面
+const onRegister = () => {
+// 重定向到注册页面
+  router.push({name: "Register"});
+};
+
+const onShow = () => {
+  isShow.value = true;
+};
+
+// 关闭验证码
+const onClose = () => {
+  isShow.value = false;
+};
+
+// 验证码状态
+const onSuccess = () => {
+  isVerified.value = true; // 设置验证码验证状态为成功
+  onClose(); // 验证成功，需要手动关闭模态框
+};
+
+const onLogin = async () => {
+  loginForm.value.validate(async (valid) => {
+    if (valid && isVerified.value) {
+      // 构建登录请求的数据
+      const loginData = {
+        userEmail: formData.account,
+        userPassword: formData.password,
+      };
+
+      try {
+        // 发送登录请求到后端
+        const response = await axios({
+          method: 'post',
+          url: 'http://localhost:8002/user/login',
+          data: loginData,
+          headers: {'Content-Type': 'application/json'}
+        });
+        // 检查后端返回的是否成功标识
+        if (response.data.success) {
+          // 登录成功
+          // 如果用户选择了“记住我”，则将登录状态保存到 localStorage
+          if (formData.rememberMe) {
+            localStorage.setItem('isLoggedIn', true);
+            localStorage.setItem('uemail', response.data.uemail);
+          } else {
+            sessionStorage.setItem('isLoggedIn', true);
+            sessionStorage.setItem('uemail', response.data.uemail);
+          }
+          // 更新 Vuex 状态
+          store.commit('setLoggedIn', true);
+          store.commit('setUserEmail', response.data.uemail);
+          console.log('登录成功', response);
+          ElMessage({
+            message: '登录成功！欢迎回来。',
+            type: 'success',
+            duration: 3000 // 消息显示时间，单位毫秒
+          });
+          // 刷新
+          // location.reload();
+          // 登录成功后的操作，比如页面跳转
+          // 重定向到主页或其他页面
+          await router.push({name: 'home'});
+        } else {
+          // 登录失败处理
+          alert('登录失败，请检查账号密码是否正确');
+        }
+      } catch (error) {
+        // 网络错误处理
+        if (!error.response) {
+          // 网络错误（服务宕机或无法连接到服务器）
+          alert('无法连接到服务器，请稍后再试');
+        } else {
+          // 登录失败处理
+          console.error('登录失败', error);
+          alert('登录失败，请检查账号密码是否正确');
+        }
+      }
+    } else {
+      // 验证失败处理
+      if (!isVerified.value) {
+        alert('请先完成验证码验证');
+      }
+    }
+  });
+};
+
+// 在 Vue 实例创建时检查存储的登录状态
+const checkLoginStatus = () => {
+  const isLoggedIn = localStorage.getItem('isLoggedIn') || sessionStorage.getItem('isLoggedIn');
+  const uemail = localStorage.getItem('uemail') || sessionStorage.getItem('uemail');
+  if (isLoggedIn) {
+    store.commit('setLoggedIn', true);
+    store.commit('setUserEmail', uemail);
+  }
+};
+
+// 调用 checkLoginStatus 函数来初始化登录状态
+checkLoginStatus();
 </script>
 
-<style scoped>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html, body {
-  height: 100%;
-  font-family: 'Arial', sans-serif;
-  background-image: linear-gradient(to right, #fbc2eb, #a6c1ee);
+<style lang="scss" scoped>
+.login-body {
   display: flex;
-  justify-content: center;
   align-items: center;
-  margin: 0;
-  padding: 0;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient(to right, #83a4d4, #b6fbff);
 }
 
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background-image: linear-gradient(to right, #fbc2eb, #a6c1ee);
-}
-
-.login-wrapper {
-  background-color: #fff;
-  padding: 2rem;
+.login-panel {
+  padding: 40px;
+  width: 400px;
+  background: rgba(255, 255, 255, 0.8);
   border-radius: 10px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-  width: auto;
-  max-width: 400px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 1s ease-in-out;
 }
 
-.header {
-  font-size: 2rem;
+.login-title {
+  font-size: 24px;
   color: #333;
-  margin-bottom: 1.5rem;
+  margin-bottom: 30px;
   text-align: center;
 }
 
-.input-item {
-  width: calc(100% - 2rem);
-  margin-bottom: 1rem;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 1rem;
+.el-form-item {
+  margin-bottom: 20px;
 }
 
-.btn {
-  width: calc(100% - 2rem);
-  padding: 0.5rem;
-  margin-top: 1rem;
-  background-color: #a6c1ee;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: all 0.3s ease;
+.el-button {
+  transition: background-color 0.3s, transform 0.3s;
 }
 
-.btn:hover {
-  background-color: #fbc2eb;
+.el-button:hover {
+  transform: translateY(-2px);
+  background-color: #5c6bc0;
 }
 
-.msg {
-  font-size: 0.9rem;
-  margin-top: 1rem;
-}
-
-.msg a {
-  color: #a6c1ee;
-  text-decoration: underline;
-}
-
-.register-btn {
-  display: block;
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
-  background-color: #fff;
-  color: #a6c1ee;
-  border: 2px solid #a6c1ee;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: all 0.3s ease;
-  text-align: center;
-  text-decoration: none;
-}
-
-.register-btn:hover {
-  background-color: #a6c1ee;
-  color: #fff;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>
