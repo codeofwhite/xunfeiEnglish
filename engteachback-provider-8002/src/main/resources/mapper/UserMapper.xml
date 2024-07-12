@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="engteach.user.mapper.UserMapper">
+    <insert id="register">
+        insert into user_info(user_email, user_name, user_password)
+        values (#{userEmail}, #{userName}, #{userPassword});
+    </insert>
+    <select id="validateUser" resultType="engteach.user.entity.User">
+        select *
+        from user_info
+        where user_email = #{userEmail}
+    </select>
+</mapper>

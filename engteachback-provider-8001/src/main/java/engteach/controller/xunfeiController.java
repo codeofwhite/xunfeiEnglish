@@ -2,6 +2,7 @@ package engteach.controller;
 
 
 // 导入相关类
+
 import engteach.api.iflytek.MachineTranslationMain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

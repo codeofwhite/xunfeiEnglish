@@ -10,6 +10,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>engteachback-provider-8001</module>
+        <module>engteachback-provider-8002</module>
     </modules>
 
     <properties>
