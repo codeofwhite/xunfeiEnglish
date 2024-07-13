@@ -21,8 +21,12 @@
         <div class="sentence-controls">
           <button @click="playSentence(index)" class="play-sentence">播放</button>
           <button @click="translateSentence(index)" class="translate-sentence">翻译</button>
-          <button @click="followReadSentence(index)" class="follow-read">跟读</button>
         </div>
+        <button @click="toggleAIScore(index)" class="toggle-aiscore">
+          {{ showAIScore[index] ? '收起朗读' : '展开朗读' }}
+        </button>
+        <BookReadAIScore :sentence="sentences[index]" v-if="showAIScore[index]" @click="followReadSentence(index)"
+                         class="follow-read"></BookReadAIScore>
         <p class="translation" v-if="translations[index]">翻译：{{ translations[index] }}</p>
       </div>
     </div>
@@ -32,6 +36,7 @@
 <script>
 import SpeechSynthesis from "@/views/xunfei/SpeechSynthesis.vue";
 import axios from "axios";
+import BookReadAIScore from "@/components/BookReadAIScore.vue";
 
 function loadBookContentById(id) {
   // 从服务器加载书籍内容
@@ -54,7 +59,7 @@ function loadBookContentById(id) {
 }
 
 export default {
-  components: {SpeechSynthesis},
+  components: {BookReadAIScore, SpeechSynthesis},
   computed: {
     // 使用计算属性来基于bookId计算其他数据
     getBookId() {
@@ -77,9 +82,13 @@ export default {
       audioChunks: [], // 录音数据块数组
       translations: [], // 存储翻译结果的数组
       currentSentenceIndex: 0, // 当前播放的句子索引
+      showAIScore: [],    // 新增一个数组来存储每个句子的评分显示状态
     };
   },
   methods: {
+    toggleAIScore(index) {
+      this.showAIScore[index] = !this.showAIScore[index];
+    },
     // 改了一下调用的格式，传的是纯文本
     translateText(text, index) {
       // 发送请求到Java后端
@@ -290,6 +299,21 @@ export default {
 .translate-sentence:hover,
 .follow-read:hover {
   background-color: #449d44;
+}
+
+.follow-read {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  background-color: #ffffff;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 1em;
+}
+
+.follow-read:hover {
+  background-color: #ffffff;
 }
 
 .sentence-controls {

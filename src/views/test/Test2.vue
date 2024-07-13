@@ -13,7 +13,41 @@
     </div>
     <!-- 新增返回数据显示 -->
     <div class="result-data">
-      返回数据：{{ resultText }}
+      <h3>评分结果</h3>
+      <table>
+        <tr>
+          <th>评分项</th>
+          <th>分数</th>
+        </tr>
+        <tr>
+          <td>Accuracy Score</td>
+          <td>{{ resultData.AccuracyScore }}</td>
+        </tr>
+        <tr>
+          <td>Fluency Score</td>
+          <td>{{ resultData.FluencyScore }}</td>
+        </tr>
+        <tr>
+          <td>Integrity Score</td>
+          <td>{{ resultData.IntegrityScore }}</td>
+        </tr>
+        <tr>
+          <td>Phone Score</td>
+          <td>{{ resultData.PhoneScore }}</td>
+        </tr>
+        <tr>
+          <td>Tone Score</td>
+          <td>{{ resultData.ToneScore }}</td>
+        </tr>
+        <tr>
+          <td>Emotion Score</td>
+          <td>{{ resultData.EmotionScore }}</td>
+        </tr>
+        <tr>
+          <td>Total Score</td>
+          <td>{{ resultData.TotalScore }}</td>
+        </tr>
+      </table>
     </div>
   </div>
 </template>
@@ -38,10 +72,11 @@ let iatWS; //监听录音的变量
 let resultText = ref(''); // 识别结果
 let resultTextTemp = ref('');
 let countdownInterval;
-let audioContext =  ref('');
-let mediaRecorder =  ref('');
-let audioChunks =  ref([]);
-let audioBlob =  ref('');
+let audioContext = ref('');
+let mediaRecorder = ref('');
+let audioChunks = ref([]);
+let audioBlob = ref('');
+let resultData = ref({}); // 新增一个对象来存储返回的数据
 
 // 生成 WebSocket URL 生成规则由平台决定
 function getWebSocketUrl() {
@@ -237,7 +272,7 @@ const startRecording = () => {
 }
 
 async function startRecordingPcm() {
-  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  const stream = await navigator.mediaDevices.getUserMedia({audio: true});
   audioContext.value = new (window.AudioContext || window.webkitAudioContext)();
   const source = audioContext.value.createMediaStreamSource(stream);
   const processor = audioContext.value.createScriptProcessor(4096, 1, 1);
@@ -263,7 +298,7 @@ async function startRecordingPcm() {
 function stopRecordingPcm() {
   recorder.value.disconnect();
   audioContext.value.close();
-  const audioBuffer = new Blob(audioChunks.value, { type: 'audio/pcm' });
+  const audioBuffer = new Blob(audioChunks.value, {type: 'audio/pcm'});
   audioBlob.value = audioBuffer;
   audioChunks.value = [];
   // changeStatus("CLOSED");
@@ -292,12 +327,7 @@ async function uploadAudio() {
     });
     console.log('上传结果:', response.data);
     // 解析返回的数据
-    const resultData = response.data;
-    // 将返回的数据存储在一个变量中
-    resultText.value = `Accuracy Score: ${resultData.AccuracyScore}, Fluency Score: ${resultData.FluencyScore},
-    Integrity Score: ${resultData.IntegrityScore}, Phone Score: ${resultData.PhoneScore},
-    Tone Score: ${resultData.ToneScore}, Emotion Score: ${resultData.EmotionScore},
-    Total Score: ${resultData.TotalScore}`;
+    resultData.value = response.data; // 将返回的数据存储在resultData对象中
   } catch (error) {
     console.error('上传失败:', error);
   }
@@ -347,5 +377,28 @@ async function uploadAudio() {
   font-size: 18px;
   color: #333;
   text-align: center;
+}
+
+/* 新增返回数据显示样式 */
+.result-data {
+  margin-top: 20px;
+  font-size: 18px;
+  color: #333;
+  text-align: center;
+}
+
+.result-data table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.result-data th, .result-data td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.result-data th {
+  background-color: #f2f2f2;
+  text-align: left;
 }
 </style>

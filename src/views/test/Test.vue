@@ -20,7 +20,7 @@ export default {
   },
   methods: {
     async startRecording() {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const stream = await navigator.mediaDevices.getUserMedia({audio: true});
       this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
       const source = this.audioContext.createMediaStreamSource(stream);
       const processor = this.audioContext.createScriptProcessor(4096, 1, 1);
@@ -44,7 +44,7 @@ export default {
     stopRecording() {
       this.mediaRecorder.disconnect();
       this.audioContext.close();
-      const audioBuffer = new Blob(this.audioChunks, { type: 'audio/pcm' });
+      const audioBuffer = new Blob(this.audioChunks, {type: 'audio/pcm'});
       this.audioBlob = audioBuffer;
       this.audioChunks = [];
     },

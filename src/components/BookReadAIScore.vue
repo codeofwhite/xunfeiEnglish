@@ -1,17 +1,13 @@
 <!--语音转文字组件-->
 <template>
   <div class="container">
-    <button class="record-btn" @click="startRecording">
-      {{ btnText }}
-    </button>
+    <button class="record-btn" @click="startRecording">{{ btnText }}</button>
     <div class="result-text">实时识别结果：{{ resultText }}</div>
-    <!-- 新增识别记录列表 -->
     <div class="recognition-list">
       <div v-for="(record, index) in recognitionRecords" :key="index">
         {{ index + 1 }}. {{ record }}
       </div>
     </div>
-    <!-- 新增返回数据显示 -->
     <div class="result-data">
       <h3>评分结果</h3>
       <table>
@@ -49,9 +45,17 @@ import '/src/voice-utils/utilJS/crypto-js.js'; //鉴权的引用地址
 import '/src/voice-utils/utilJS/index.umd.js'; // 调用Web Speech API 的依赖，应该是官方的写的工具类
 import {defineEmits} from 'vue';
 import axios from "axios";
+import {defineProps} from 'vue';
 
 const recognitionRecords = ref([]); // 新增一个数组来存储识别记录
 const emit = defineEmits(['recognition-complete']);
+
+const props = defineProps({
+  sentence: {
+    type: String,
+    required: true
+  }
+});
 
 const btnText = ref("开始录音");
 const btnStatus = ref("UNDEFINED"); // "UNDEFINED" "CONNECTING" "OPEN" "CLOSING" "CLOSED"
@@ -64,7 +68,6 @@ let resultText = ref(''); // 识别结果
 let resultTextTemp = ref('');
 let countdownInterval;
 let audioContext = ref('');
-let mediaRecorder = ref('');
 let audioChunks = ref([]);
 let audioBlob = ref('');
 let resultData = ref({}); // 新增一个对象来存储返回的数据
@@ -310,7 +313,7 @@ function saveAudioPcm() {
 async function uploadAudio() {
   const formData = new FormData();
   formData.append('audioFile', audioBlob.value, 'audio.pcm');
-  formData.append('text', resultText.value);
+  formData.append('text', props.sentence);
   try {
     const response = await axios.post('http://localhost:8001/xunfei/score', formData, {
       headers: {
@@ -349,16 +352,15 @@ let averageScore = ref(0); // 新增一个变量来存储平均分
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; /* 更紧凑的布局 */
-  padding: 10px; /* 减少留白 */
+  padding: 10px;
 }
 
 .record-btn {
-  padding: 8px 16px; /* 按钮更紧凑 */
-  margin-bottom: 8px; /* 减少按钮和结果文本之间的空间 */
-  font-size: 14px; /* 调整字体大小 */
+  padding: 8px 16px;
+  margin-bottom: 8px;
+  font-size: 14px;
   color: #fff;
-  background-color: #007BFF; /* SmarkEng风格的蓝色 */
+  background-color: #007BFF;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -366,26 +368,27 @@ let averageScore = ref(0); // 新增一个变量来存储平均分
 }
 
 .record-btn:hover {
-  background-color: #0056b3; /* 鼠标悬停时的颜色变化 */
+  background-color: #0056b3;
 }
 
 .result-text {
-  font-size: 16px; /* 调整结果文本的字体大小 */
+  font-size: 16px;
   color: #333;
-  width: 100%; /* 宽度调整为100%，以填充容器 */
-  text-align: center; /* 文本居中 */
+  width: 100%;
+  text-align: center;
+  margin-bottom: 10px;
 }
 
-/*识别记录列表*/
 .recognition-list {
-  margin-top: 10px; /* 减少顶部空间 */
-  font-size: 14px; /* 调整字体大小 */
+  width: 100%;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #555;
 }
 
-/* 新增返回数据显示样式 */
 .result-data {
-  margin-top: 10px; /* 减少顶部空间 */
-  font-size: 16px; /* 调整字体大小 */
+  width: 100%;
+  font-size: 14px;
   color: #333;
   text-align: center;
 }
@@ -393,11 +396,12 @@ let averageScore = ref(0); // 新增一个变量来存储平均分
 .result-data table {
   width: 100%;
   border-collapse: collapse;
+  margin-top: 10px;
 }
 
 .result-data th, .result-data td {
   border: 1px solid #ddd;
-  padding: 6px; /* 减少单元格内边距 */
+  padding: 8px;
 }
 
 .result-data th {
@@ -406,8 +410,8 @@ let averageScore = ref(0); // 新增一个变量来存储平均分
 }
 
 .result-data h4 {
-  margin-top: 10px; /* 减少顶部空间 */
-  font-size: 18px; /* 调整字体大小 */
+  margin-top: 10px;
+  font-size: 16px;
   color: #333;
 }
 </style>
