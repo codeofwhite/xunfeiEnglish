@@ -12,14 +12,20 @@
 
       <footer class="app-footer">
         <p>© 2024 English Mastery. All rights reserved.</p>
+        <router-link to="/aboutPageNav">关于我们</router-link>
       </footer>
     </div>
   </div>
 </template>
 
-<script setup>
-import {RouterView} from 'vue-router'
+<script>
 import NavigationBar from "@/components/NavigationBar.vue";
+import router from "@/router/index.js";
+
+export default {
+  components: {NavigationBar},
+  methods: {}
+}
 </script>
 
 <style scoped>

@@ -5,7 +5,7 @@ import UserProfile from "@/views/userpage/UserProfile.vue";
 import LoginPage from "@/views/user/LoginPage.vue";
 import RegisterPage from "@/views/user/RegisterPage.vue";
 import Test from "@/views/test/Test.vue";
-import UserPage from "@/views/userpage/UserPage.vue";
+import UserPage from "@/views/userpage/UserPageNav.vue";
 
 export default [
     {

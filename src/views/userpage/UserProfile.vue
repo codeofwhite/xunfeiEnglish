@@ -3,7 +3,7 @@
     <h2 class="profile-title">个人资料</h2>
     <div class="profile-section">
       <label for="avatar-upload" class="profile-label">头像：</label>
-      <img :src="avatarUrl" alt="Avatar" class="avatar">
+      <img :src="user.user_avatar" alt="Avatar" class="avatar">
       <input type="file" id="avatar-upload" @change="changeAvatar" class="avatar-upload-input">
       <label for="avatar-upload" class="avatar-upload-btn">
         <i class="fas fa-upload"></i> 更改头像
@@ -11,12 +11,12 @@
     </div>
     <div class="profile-section">
       <label class="profile-label">名称：</label>
-      <span class="profile-info">{{ username }}</span>
+      <span class="profile-info">{{ user.user_name }}</span>
       <button class="btn-primary" @click="changeUsername">修改名称</button>
     </div>
     <div class="profile-section">
       <label class="profile-label">账号：</label>
-      <span class="profile-info">{{ account }}</span>
+      <span class="profile-info">{{ userEmail }}</span>
     </div>
     <hr class="profile-divider">
     <div class="profile-section">
@@ -36,12 +36,11 @@
 </template>
 
 <script setup>
-import {computed, ref} from 'vue';
+import {computed, onMounted, ref} from 'vue';
 import {useStore} from "vuex";
+import axios from "axios";
 
-const avatarUrl = ref('src/assets/images/codeofwhite.jpg');
-const username = ref('Your Name');
-const account = ref('your.account@example.com');
+const user = ref({});
 const experiencePercentage = ref(50); // 假设经验值为50%
 const onlineDays = ref(120); // 假设在线天数为120天
 
@@ -51,15 +50,15 @@ function changeAvatar(event) {
 
 const store = useStore();
 const isLoggedIn = computed(() => store.state.isLoggedIn);
-const userEmail = computed(() => store.state.uemail);
+const userEmail = computed(() => store.state.userEmail);
 
 // 登出操作
 const onLogout = () => {
   // 清除 localStorage 或 sessionStorage 中的登录信息
   localStorage.removeItem('isLoggedIn');
-  localStorage.removeItem('uemail');
+  localStorage.removeItem('userEmail');
   sessionStorage.removeItem('isLoggedIn');
-  sessionStorage.removeItem('uemail');
+  sessionStorage.removeItem('userEmail');
 
   // 更新 Vuex 状态
   store.commit('setLoggedIn', false);
@@ -68,12 +67,25 @@ const onLogout = () => {
   // 可以重定向到登录页面或其他操作
 };
 
+const fetchUserData = async () => {
+  try {
+    const response = await axios.post('http://localhost:8002/user/getUserByEmail', {}, {
+      params: {userEmail: userEmail.value}
+    });
+    // 打印
+    console.log(response.data);
+    user.value = response.data;
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+  }
+};
+
+onMounted(() => {
+  fetchUserData();
+});
+
 function changeUsername() {
 // Handle username change
-}
-
-function logout() {
-// Handle logout
 }
 </script>
 

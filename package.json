@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^1.7.2",
     "base-64": "^1.0.0",
+    "chart.js": "^4.4.3",
     "crypto-js": "^4.2.0",
     "element-plus": "^2.7.6",
     "enc": "^0.4.0",
@@ -19,6 +20,7 @@
     "log4node": "^0.1.6",
     "pinia": "^2.1.7",
     "request": "^2.88.2",
+    "swiper": "^11.1.4",
     "vue": "^3.4.29",
     "vue-router": "^4.3.3",
     "vue3-puzzle-vcode": "^1.1.7",

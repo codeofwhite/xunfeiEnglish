@@ -110,14 +110,14 @@ const onLogin = async () => {
           // 如果用户选择了“记住我”，则将登录状态保存到 localStorage
           if (formData.rememberMe) {
             localStorage.setItem('isLoggedIn', true);
-            localStorage.setItem('uemail', response.data.uemail);
+            localStorage.setItem('userEmail', response.data.userEmail);
           } else {
             sessionStorage.setItem('isLoggedIn', true);
-            sessionStorage.setItem('uemail', response.data.uemail);
+            sessionStorage.setItem('userEmail', response.data.userEmail);
           }
           // 更新 Vuex 状态
           store.commit('setLoggedIn', true);
-          store.commit('setUserEmail', response.data.uemail);
+          store.commit('setUserEmail', response.data.userEmail);
           console.log('登录成功', response);
           ElMessage({
             message: '登录成功！欢迎回来。',
@@ -156,10 +156,10 @@ const onLogin = async () => {
 // 在 Vue 实例创建时检查存储的登录状态
 const checkLoginStatus = () => {
   const isLoggedIn = localStorage.getItem('isLoggedIn') || sessionStorage.getItem('isLoggedIn');
-  const uemail = localStorage.getItem('uemail') || sessionStorage.getItem('uemail');
+  const userEmail = localStorage.getItem('userEmail') || sessionStorage.getItem('userEmail');
   if (isLoggedIn) {
     store.commit('setLoggedIn', true);
-    store.commit('setUserEmail', uemail);
+    store.commit('setUserEmail', userEmail);
   }
 };
 

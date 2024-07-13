@@ -56,7 +56,7 @@
 
 <script setup>
 import {RouterLink} from 'vue-router';
-import UserPage from "@/views/userpage/UserPage.vue";
+import UserPage from "@/views/userpage/UserPageNav.vue";
 
 </script>
 

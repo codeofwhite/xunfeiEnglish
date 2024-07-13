@@ -3,19 +3,13 @@
     <nav class="vertical-nav">
       <ul>
         <li>
-          <router-link to="/vbIndex">背单词</router-link>
+          <router-link to="/contactUs">联系我们</router-link>
         </li>
         <li>
-          <router-link to="/unKnownWord">不认识的单词</router-link>
+          <router-link to="/ourMission">我们的使命</router-link>
         </li>
         <li>
-          <router-link to="/masteredWord">已掌握的单词</router-link>
-        </li>
-        <li>
-          <router-link to="/favoriteWord">我收藏的单词</router-link>
-        </li>
-        <li>
-          <router-link to="/statisticPage">个性化分析</router-link>
+          <router-link to="/teachApproach">教学方法</router-link>
         </li>
       </ul>
     </nav>
