@@ -9,8 +9,9 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-        <module>engteachback-provider-8001</module>
-        <module>engteachback-provider-8002</module>
+        <module>engteachback-provider-8001-xunfei</module>
+        <module>engteachback-provider-8002-User</module>
+        <module>engteachback-provider-8003-WordBook</module>
     </modules>
 
     <properties>
