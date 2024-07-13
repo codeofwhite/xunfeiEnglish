@@ -8,6 +8,7 @@
       </form>
     </header>
     <aside class="sidebar">
+      <button @click="showBooks('')" class="category-button">全部</button>
       <button @click="showBooks('热门推荐')" class="category-button">热门推荐</button>
       <button @click="showBooks('经典名著')" class="category-button">经典名著</button>
       <button @click="showBooks('寓言故事')" class="category-button">寓言故事</button>
@@ -54,27 +55,34 @@ export default {
         {
           id: 1,
           title: 'Book 1',
-          bookContent: 'what can i say? man! mamba out. I out, you out, we out!'
+          author: 'Author A',
+          description: 'Description of Book 1',
+          category: '热门推荐',
+          image: 'src/assets/images/codeofwhite.jpg'
         },
         {
           id: 2,
           title: 'Book 2',
-          bookContent: '这是第二本书的第一句. 这是第二本书的第二句. 这是第二本书的第三句. 这是第二本书的第四句. 这是第二本书的第五句. 这是第二本书的第六句. 这是第二本书的第七句. 这是第二本书的第八句.'
-        }
-      ],
-      // 收藏的书的列表
-      favorites: [
+          author: 'Author B',
+          description: 'Description of Book 2',
+          category: '经典名著',
+          image: 'src/assets/images/codeofwhite.jpg'
+        },
         {
-          id: 2,
-          title: 'Book 2',
-          bookContent: '这是第二本书的第一句. 这是第二本书的第二句. 这是第二本书的第三句. 这是第二本书的第四句. ' +
-              '这是第二本书的第五句. 这是第二本书的第六句. 这是第二本书的第七句. 这是第二本书的第八句.',
+          id: 3,
+          title: 'Book 3',
+          author: 'Author C',
+          description: 'Description of Book 3',
+          category: '寓言故事',
           image: 'src/assets/images/codeofwhite.jpg'
         }
       ],
+      // 收藏的书的列表
+      favorites: [],
       // 搜索
-      searchQuery: ''
-      // ... 其他数据属性 ...
+      searchQuery: '',
+      // 当前选择的分类
+      selectedCategory: ''
     };
   },
   methods: {
@@ -82,39 +90,35 @@ export default {
     goToHome() {
       this.$router.push('/');
     },
-    // 搜索书籍
-    searchBooks() {
-      // 搜索书籍的逻辑
-    },
     // 显示书籍分类的逻辑
     showBooks(category) {
-      // 显示书籍分类的逻辑
+      this.selectedCategory = category;
     },
     // 去到对应书本的阅读页面
     goToBookDetails(bookId) {
-      // 导航至书籍详情页的逻辑
-      // 使用`$router.push`方法导航到ReadBookComponent组件
-      // 并传递bookId作为路由参数
       this.$router.push({name: 'ReadBook', params: {bookId: bookId}});
     },
     // 添加到收藏夹
     addToFavorites(book) {
-      // 添加到收藏夹的逻辑
+      if (!this.favorites.some(favBook => favBook.id === book.id)) {
+        this.favorites.push(book);
+      }
     },
     // 从收藏夹中移除
     removeFromFavorites(favBook) {
-      // 从收藏夹移除的逻辑
+      this.favorites = this.favorites.filter(book => book.id !== favBook.id);
     },
     // 获得书本
     fetchBooks() {
       // 来自 JSON 文件或 API 调用的模拟数据
-      //下面是模拟的固定数据
+      // 这里使用固定数据作为示例
       this.books = [
         {
           id: 1,
           title: 'Book Title 1',
           author: 'Author A',
           description: 'Description of Book 1',
+          category: '热门推荐',
           image: 'src/assets/images/codeofwhite.jpg'
         },
         {
@@ -122,6 +126,7 @@ export default {
           title: 'Book Title 2',
           author: 'Author B',
           description: 'Description of Book 2',
+          category: '经典名著',
           image: 'src/assets/images/codeofwhite.jpg'
         },
         {
@@ -129,33 +134,31 @@ export default {
           title: 'Book Title 3',
           author: 'Author C',
           description: 'Description of Book 3',
+          category: '寓言故事',
           image: 'src/assets/images/codeofwhite.jpg'
-        },
-        // Add more books as needed
+        }
       ];
-    },
-    // ... 其他方法 ...
+    }
   },
   computed: {
+    // 搜索和分类过滤
     filteredBooks() {
-      // 计算过滤后的书籍列表
-      if (this.searchQuery === '') {
-        return this.books;
-      } else {
-        return this.books.filter(book =>
+      return this.books.filter(book => {
+        // 检查书籍是否匹配当前选择的分类
+        const matchesCategory = this.selectedCategory ? book.category === this.selectedCategory : true;
+        const matchesSearch = this.searchQuery ?
             book.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-            book.author.toLowerCase().includes(this.searchQuery.toLowerCase())
-        );
-      }
+            book.author.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+            book.description.toLowerCase().includes(this.searchQuery.toLowerCase()) : true;
+        // 最终返回的是一个包含所有符合条件的书籍对象的数组，而不是布尔值 true
+        return matchesCategory && matchesSearch;
+      });
     }
-    // ... 其他计算属性 ...
   },
   mounted() {
-    // 组件挂载时的逻辑
     // 获取初始图书数据
     this.fetchBooks();
   }
-  // ... 其他选项 ...
 };
 </script>
 

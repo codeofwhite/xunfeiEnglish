@@ -96,7 +96,6 @@ export default {
             console.error('翻译错误: ', error);
           });
     },
-    // ... 现有的方法 ...
     updateProgress(index) {
       this.currentSentenceIndex = index;
       this.playbackProgress = index;
@@ -178,29 +177,37 @@ export default {
   background: #f9f9f9;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-family: 'Arial', sans-serif;
 }
 
 .title {
   color: #333;
   text-align: center;
-  font-family: 'Times New Roman', serif;
+  font-family: 'Georgia', serif;
+  font-size: 2em;
+  margin-bottom: 20px;
 }
 
 .book-title {
   margin-top: 10px;
   color: #555;
   text-align: center;
+  font-size: 1.5em;
 }
 
 .text-box {
-  width: 100%; /* 宽度设置为100% */
-  max-width: 100%; /* 最大宽度设置为100% */
-  box-sizing: border-box; /* 边框和内边距包含在宽度内 */
-  padding: 10px; /* 内边距 */
-  margin: 0; /* 外边距设置为0 */
-  border: 1px solid #ccc; /* 边框 */
-  resize: none; /* 禁止调整大小 */
-  overflow: auto; /* 内容超出时显示滚动条 */
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 15px;
+  margin: 20px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: none;
+  overflow: auto;
+  background-color: #fff;
+  font-size: 1em;
+  line-height: 1.5;
 }
 
 .controls {
@@ -211,29 +218,27 @@ export default {
 }
 
 .progress-bar {
-  -webkit-appearance: none; /* 覆盖默认样式 */
-  width: 100%; /* 进度条宽度 */
-  height: 8px; /* 进度条高度 */
-  border-radius: 5px; /* 圆角 */
-  background: #ddd; /* 背景色 */
-  outline: none; /* 去除轮廓 */
-  opacity: 0.7; /* 透明度 */
-  transition: opacity .2s; /* 过渡效果 */
+  -webkit-appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 5px;
+  background: #ddd;
+  outline: none;
+  opacity: 0.7;
+  transition: opacity .2s;
 }
 
-/* 进度条内部滑块的样式 */
 .progress-bar::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 20px; /* 滑块宽度 */
-  height: 20px; /* 滑块高度 */
-  border-radius: 50%; /* 圆形滑块 */
-  background: #4CAF50; /* 滑块颜色 */
-  cursor: pointer; /* 鼠标样式 */
-  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.2); /* 滑块阴影 */
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #4CAF50;
+  cursor: pointer;
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.2);
 }
 
-/* 进度条内部滑块的样式（兼容Firefox）*/
 .progress-bar::-moz-range-thumb {
   width: 20px;
   height: 20px;
@@ -243,15 +248,13 @@ export default {
   cursor: pointer;
 }
 
-/* 进度条已完成部分的样式 */
 .progress-bar::-webkit-slider-runnable-track {
   width: 100%;
   height: 8px;
-  background: linear-gradient(to right, #82C91E, #12B886); /* 渐变色 */
+  background: linear-gradient(to right, #82C91E, #12B886);
   border-radius: 5px;
 }
 
-/* 进度条已完成部分的样式（兼容Firefox）*/
 .progress-bar::-moz-range-track {
   width: 100%;
   height: 8px;
@@ -259,7 +262,6 @@ export default {
   border-radius: 5px;
 }
 
-/* 当滑块被悬停或聚焦时，改变透明度 */
 .progress-bar:hover,
 .progress-bar:focus {
   opacity: 1;
@@ -278,6 +280,7 @@ export default {
   color: white;
   cursor: pointer;
   transition: background-color 0.3s;
+  font-size: 1em;
 }
 
 .play-button:hover,
@@ -299,6 +302,7 @@ export default {
 .translation {
   color: #888;
   font-style: italic;
+  margin-top: 5px;
 }
 
 .highlight {

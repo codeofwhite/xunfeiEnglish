@@ -11,6 +11,7 @@ import xunfeiRoutes from "@/router/xunfeiRoutes.js";
 import Test from "@/views/test/Test.vue";
 import aboutRoutes from "@/router/aboutRoutes/aboutRoutes.js";
 import statisticRoutes from "@/router/statisticRoutes.js";
+import Test2 from "@/views/test/Test2.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -25,6 +26,11 @@ const router = createRouter({
             name: 'Test',
             component: Test
         },
+        {
+            path: '/test2',
+            name: 'Test2',
+            component: Test2
+        }
     ].concat(userRoutes, smartTalkRoutes, wordRoutes, xunfeiRoutes, aboutRoutes, statisticRoutes)
 })
 

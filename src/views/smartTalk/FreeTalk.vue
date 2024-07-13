@@ -26,7 +26,7 @@
     <div class="footer">
       <!--      <button class="action-button" @click="startSpeechRecognition">说话</button>-->
       <!--      -->
-      <SpeechTranslate v-show="true" @recognition-complete="handleRecognitionComplete"></SpeechTranslate>
+      <FreeTalkSpeechTranslate v-show="true" @recognition-complete="handleRecognitionComplete"></FreeTalkSpeechTranslate>
       <!--  调用AI接口，ref提供给AI的参数，handleResult提供结果返回    -->
       <FreeTalkAI v-show="false" ref="aiComponent" @result-received="handleResult"></FreeTalkAI>
       <button class="action-button" @result-received="handleResult" @click="aiHelp">AI助答</button>
@@ -39,9 +39,10 @@ import axios from 'axios';
 import SpeechSynthesis from "@/views/xunfei/SpeechSynthesis.vue";
 import SpeechTranslate from "@/components/SpeechTranslate.vue";
 import FreeTalkAI from "@/components/FreeTalkAI.vue";
+import FreeTalkSpeechTranslate from "@/components/FreeTalkSpeechTranslate.vue";
 
 export default {
-  components: {FreeTalkAI, SpeechTranslate, SpeechSynthesis},
+  components: {FreeTalkSpeechTranslate, FreeTalkAI, SpeechTranslate, SpeechSynthesis},
   data() {
     return {
       selectedScene: '默认场景',

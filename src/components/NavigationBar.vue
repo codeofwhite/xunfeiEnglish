@@ -29,6 +29,8 @@
         <li>
           <RouterLink to="/test" class="nav-link"><span class="nav-title">测试</span><span
               class="nav-subtitle">CENTER</span></RouterLink>
+          <RouterLink to="/test2" class="nav-link"><span class="nav-title">测试2</span><span
+              class="nav-subtitle">CENTER</span></RouterLink>
         </li>
       </ul>
     </nav>
