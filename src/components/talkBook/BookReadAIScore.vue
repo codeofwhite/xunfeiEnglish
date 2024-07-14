@@ -57,6 +57,10 @@ const props = defineProps({
   }
 });
 
+const accuracyScores = ref([]);
+const fluencyScores = ref([]);
+const integrityScores = ref([]);
+
 const btnText = ref("开始录音");
 const btnStatus = ref("UNDEFINED"); // "UNDEFINED" "CONNECTING" "OPEN" "CLOSING" "CLOSED"
 const recorder = new RecorderManager('/src/voice-utils/dist')
@@ -324,6 +328,9 @@ async function uploadAudio() {
     // 解析返回的数据
     resultData.value = response.data; // 将返回的数据存储在resultData对象中
     const totalScore = parseFloat(response.data.TotalScore); // 确保TotalScore是一个数字
+    accuracyScores.value.push(response.data.AccuracyScore); // 记录Accuracy得分
+    fluencyScores.value.push(response.data.FluencyScore); // 记录Fluency得分
+    integrityScores.value.push(response.data.IntegrityScore); // 记录Integrity得分
     if (!isNaN(totalScore)) {
       scores.value.push(totalScore); // 将每个句子的总分存储在scores数组中
       calculateAverageScore(); // 计算平均分
@@ -344,7 +351,24 @@ function calculateAverageScore() {
   }
 }
 
+
 let averageScore = ref(0); // 新增一个变量来存储平均分
+
+const endConversation = async () => {
+  try {
+    const response = await axios.post('http://localhost:8005/api/bookTalk', {
+      userEmail: 'example@example.com',
+      accuracy: accuracyScores.value,
+      fluency: fluencyScores.value,
+      integrity: integrityScores.value,
+      totalScore: averageScore.value
+      // 其他需要传递的数据
+    });
+    console.log('阅读信息上传成功:', response.data);
+  } catch (error) {
+    console.error('阅读信息上传失败:', error);
+  }
+};
 </script>
 
 <style scoped>

@@ -45,7 +45,7 @@
 import {onMounted, ref} from 'vue';
 import {useRoute} from 'vue-router';
 import axios from 'axios';
-import FreeTalkAI from "@/components/FreeTalkAI.vue";
+import FreeTalkAI from "@/components/freeTalk/FreeTalkAI.vue";
 
 export default {
   components: {

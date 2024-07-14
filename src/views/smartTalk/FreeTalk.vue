@@ -14,7 +14,6 @@
                                  @recognition-complete="handleRecognitionComplete"></FreeTalkSpeechTranslate>
         <FreeTalkAI v-show="false" ref="aiComponent" @result-received="handleResult"></FreeTalkAI>
         <button class="action-button" @result-received="handleResult" @click="aiHelp">AI助答</button>
-        <button class="end-conversation-button" @click="endConversation">结束对话</button>
       </div>
     </div>
     <div class="right-section">
@@ -44,12 +43,11 @@
 <script>
 import axios from 'axios';
 import SpeechSynthesis from "@/views/xunfei/SpeechSynthesis.vue";
-import SpeechTranslate from "@/components/SpeechTranslate.vue";
-import FreeTalkAI from "@/components/FreeTalkAI.vue";
-import FreeTalkSpeechTranslate from "@/components/FreeTalkSpeechTranslate.vue";
+import FreeTalkAI from "@/components/freeTalk/FreeTalkAI.vue";
+import FreeTalkSpeechTranslate from "@/components/freeTalk/FreeTalkSpeechTranslate.vue";
 
 export default {
-  components: {FreeTalkSpeechTranslate, FreeTalkAI, SpeechTranslate, SpeechSynthesis},
+  components: {FreeTalkSpeechTranslate, FreeTalkAI, SpeechSynthesis},
   data() {
     return {
       selectedScene: '默认场景',
@@ -117,23 +115,6 @@ export default {
       console.log('识别的文本:', recognizedText);
       this.userInput = recognizedText;
     },
-    endConversation() {
-      // 调用后端接口存储分数等数据
-      axios.post('YOUR_BACKEND_API_ENDPOINT', {
-        // 假设有一个resultData对象包含需要存储的数据
-        accuracyScore: this.resultData.AccuracyScore,
-        fluencyScore: this.resultData.FluencyScore,
-        integrityScore: this.resultData.IntegrityScore,
-        totalScore: this.resultData.TotalScore
-      })
-          .then(response => {
-            console.log('数据存储成功:', response.data);
-            this.goBack(); // 返回到上一个页面
-          })
-          .catch(error => {
-            console.error('数据存储失败:', error);
-          });
-    }
   }
 };
 </script>
@@ -209,7 +190,7 @@ export default {
   width: 45%;
 }
 
-.action-button, .end-conversation-button {
+.action-button {
   padding: 10px 20px;
   border-radius: 5px;
   border: none;
@@ -221,7 +202,7 @@ export default {
   margin: 0 5px;
 }
 
-.action-button:hover, .end-conversation-button:hover {
+.action-button:hover {
   background-color: #45a049;
 }
 

@@ -3,8 +3,7 @@
     <div class="app-container">
       <header>
         <div class="container">
-          <NavigationBar>
-          </NavigationBar>
+          <NavigationBar></NavigationBar>
         </div>
       </header>
 
@@ -12,20 +11,45 @@
 
       <footer class="app-footer">
         <p>© 2024 English Mastery. All rights reserved.</p>
-        <router-link to="/aboutPageNav">关于我们</router-link>
+        <router-link to="/contactUs">关于我们</router-link>
       </footer>
+
+      <button @click="scrollToTop" class="scroll-to-top" v-show="showScrollButton">⬆️</button>
     </div>
   </div>
 </template>
 
 <script>
 import NavigationBar from "@/components/NavigationBar.vue";
-import router from "@/router/index.js";
+import { ref, onMounted, onUnmounted } from "vue";
 
 export default {
-  components: {NavigationBar},
-  methods: {}
-}
+  components: { NavigationBar },
+  setup() {
+    const showScrollButton = ref(false);
+
+    const handleScroll = () => {
+      showScrollButton.value = window.scrollY > 200;
+    };
+
+    const scrollToTop = () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    onMounted(() => {
+      window.addEventListener("scroll", handleScroll);
+    });
+
+    onUnmounted(() => {
+      window.removeEventListener("scroll", handleScroll);
+    });
+
+    return {
+      showScrollButton,
+      scrollToTop,
+    };
+  },
+};
 </script>
 
 <style scoped>
@@ -49,7 +73,21 @@ header {
   box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.footer {
+.scroll-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s;
+}
 
+.scroll-to-top:hover {
+  background-color: #45a049;
 }
 </style>

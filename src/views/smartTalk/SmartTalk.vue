@@ -129,7 +129,7 @@ export default {
   border: 2px solid white;
   border-radius: 2px;
   width: 100px;
-  height: 50px;
+  height: 80px;
   font-size: large;
 }
 

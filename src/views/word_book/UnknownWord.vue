@@ -2,17 +2,18 @@
   <div class="word-collection">
     <h1>不认识的单词</h1>
     <div class="word-list">
-      <div class="word-item" v-for="item in unknownWords" :key="item.word_name">
-        <div class="word">{{ item }}</div>
-        <!--        <div class="meaning">{{ item.meaning }}</div>-->
+      <div v-for="(words, letter) in sortedWords" :key="letter" class="letter-section">
+        <h2>{{ letter }}</h2>
+        <div class="word-item" v-for="word in words" :key="word">
+          <div class="word">{{ word }}</div>
+        </div>
       </div>
     </div>
-    <!-- 添加单词的表单 -->
   </div>
 </template>
 
 <script setup>
-import {ref, onMounted} from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 
 const unknownWords = ref([]);
@@ -20,7 +21,6 @@ const unknownWords = ref([]);
 // 在组件挂载时调用后端接口
 onMounted(async () => {
   try {
-    // 使用POST方法并传入user_email
     const response = await axios({
       method: 'post',
       url: '/api/word/selectUnknown',
@@ -29,10 +29,26 @@ onMounted(async () => {
       }
     });
     unknownWords.value = response.data; // 假设后端返回的是一个单词数组
-    console.log('调用成功', response)
+    console.log('调用成功', response);
   } catch (error) {
     console.error('获取未掌握单词时出错:', error);
   }
+});
+
+// 按字母顺序排序单词
+const sortedWords = computed(() => {
+  const grouped = unknownWords.value.reduce((acc, word) => {
+    const firstLetter = word[0].toUpperCase();
+    if (!acc[firstLetter]) {
+      acc[firstLetter] = [];
+    }
+    acc[firstLetter].push(word);
+    return acc;
+  }, {});
+  return Object.keys(grouped).sort().reduce((acc, letter) => {
+    acc[letter] = grouped[letter];
+    return acc;
+  }, {});
 });
 </script>
 
@@ -55,6 +71,15 @@ h1 {
   margin-top: 20px;
 }
 
+.letter-section {
+  margin-bottom: 20px;
+}
+
+.letter-section h2 {
+  margin-bottom: 10px;
+  color: #5b8bf7;
+}
+
 .word-item {
   display: flex;
   justify-content: space-between;
@@ -64,34 +89,7 @@ h1 {
   border-radius: 5px;
 }
 
-.word, .meaning {
+.word {
   font-size: 1.1em;
-}
-
-.add-word-form {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-
-.add-word-form input[type="text"] {
-  flex: 1;
-  margin-right: 10px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.add-word-form button {
-  padding: 10px 20px;
-  background-color: #5b8bf7;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.add-word-form button:hover {
-  background-color: #4a7bd7;
 }
 </style>

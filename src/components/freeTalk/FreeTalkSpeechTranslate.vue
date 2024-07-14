@@ -40,6 +40,7 @@
         <h4>平均分: {{ averageScore }}</h4>
       </div>
     </div>
+    <button class="end-btn" @click="endConversation">结束对话</button>
   </div>
 </template>
 
@@ -53,6 +54,10 @@ import axios from "axios";
 const recognitionRecords = ref([]); // 新增一个数组来存储识别记录
 const emit = defineEmits(['recognition-complete']);
 
+const accuracyScores = ref([]);
+const fluencyScores = ref([]);
+const integrityScores = ref([]);
+
 const btnText = ref("开始录音");
 const btnStatus = ref("UNDEFINED"); // "UNDEFINED" "CONNECTING" "OPEN" "CLOSING" "CLOSED"
 const recorder = new RecorderManager('/src/voice-utils/dist')
@@ -64,7 +69,6 @@ let resultText = ref(''); // 识别结果
 let resultTextTemp = ref('');
 let countdownInterval;
 let audioContext = ref('');
-let mediaRecorder = ref('');
 let audioChunks = ref([]);
 let audioBlob = ref('');
 let resultData = ref({}); // 新增一个对象来存储返回的数据
@@ -323,6 +327,9 @@ async function uploadAudio() {
     const totalScore = parseFloat(response.data.TotalScore); // 确保TotalScore是一个数字
     if (!isNaN(totalScore)) {
       scores.value.push(totalScore); // 将每个句子的总分存储在scores数组中
+      accuracyScores.value.push(response.data.AccuracyScore); // 记录Accuracy得分
+      fluencyScores.value.push(response.data.FluencyScore); // 记录Fluency得分
+      integrityScores.value.push(response.data.IntegrityScore); // 记录Integrity得分
       calculateAverageScore(); // 计算平均分
     } else {
       console.error('TotalScore 不是一个有效的数字:', response.data.TotalScore);
@@ -340,6 +347,21 @@ function calculateAverageScore() {
     averageScore.value = 0;
   }
 }
+
+const endConversation = async () => {
+  try {
+    const response = await axios.post('http://localhost:8004/api/talk', {
+      userEmail: 'example@example.com',
+      accuracy: accuracyScores.value,
+      fluency: fluencyScores.value,
+      integrity: integrityScores.value,
+      totalScore: averageScore.value
+    });
+    console.log('对话信息上传成功:', response.data);
+  } catch (error) {
+    console.error('对话信息上传失败:', error);
+  }
+};
 
 let averageScore = ref(0); // 新增一个变量来存储平均分
 </script>
@@ -409,5 +431,21 @@ let averageScore = ref(0); // 新增一个变量来存储平均分
   margin-top: 10px; /* 减少顶部空间 */
   font-size: 18px; /* 调整字体大小 */
   color: #333;
+}
+
+.end-btn {
+  padding: 8px 16px;
+  margin-top: 10px;
+  font-size: 14px;
+  color: #fff;
+  background-color: #28a745;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.end-btn:hover {
+  background-color: #218838;
 }
 </style>

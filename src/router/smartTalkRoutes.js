@@ -1,8 +1,8 @@
 import SmartTalk from '@/views/smartTalk/SmartTalk.vue';
 import ScenarioTalk from "@/views/smartTalk/ScenarioTalk.vue";
 import FreeTalk from "@/views/smartTalk/FreeTalk.vue";
-import ReadBook from "@/views/smartTalk/ReadBook.vue";
-import ReadBookComponent from "@/components/ReadBookComponent.vue";
+import ReadBook from "@/views/bookTalk/ReadBook.vue";
+import ReadBookComponent from "@/components/talkBook/ReadBookComponent.vue";
 
 export default [
     {
