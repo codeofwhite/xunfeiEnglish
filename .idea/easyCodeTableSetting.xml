@@ -123,6 +123,21 @@
             </TableInfoDTO>
           </value>
         </entry>
+        <entry key="engteach.userTalk">
+          <value>
+            <TableInfoDTO>
+              <option name="fullColumn">
+                <list />
+              </option>
+              <option name="name" value="Usertalk" />
+              <option name="preName" value="" />
+              <option name="saveModelName" value="engteachback-provider-8004-Talk" />
+              <option name="savePackageName" value="talk" />
+              <option name="savePath" value="./engteachback-provider-8004-Talk/src/main/java/talk" />
+              <option name="templateGroupName" value="Default" />
+            </TableInfoDTO>
+          </value>
+        </entry>
       </map>
     </option>
   </component>

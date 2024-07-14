@@ -12,6 +12,8 @@
         <module>engteachback-provider-8001-xunfei</module>
         <module>engteachback-provider-8002-User</module>
         <module>engteachback-provider-8003-WordBook</module>
+        <module>engteachback-provider-8004-Talk</module>
+        <module>engteachback-provider-8005-Book</module>
     </modules>
 
     <properties>

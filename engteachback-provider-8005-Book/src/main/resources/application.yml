@@ -1,0 +1,10 @@
+spring:
+  data:
+    mongodb:
+      authentication-database: admin
+      host: localhost
+      port: 27017
+      database: engteach
+
+server:
+  port: 8005
