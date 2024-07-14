@@ -1,18 +1,167 @@
 [
   {
-    "id": "cet4",
-    "name": "CET-4",
-    "description": "",
-    "url": "../public/cet4.json",
-    "length": 2607,
-    "language": "en"
+    "id": 1,
+    "name": "Category 1",
+    "chapters": [
+      {
+        "id": 1,
+        "name": "Chapter 1",
+        "levels": [
+          {
+            "id": 1,
+            "name": "Level 1",
+            "words": [
+              "apple",
+              "banana",
+              "cherry"
+            ]
+          },
+          {
+            "id": 2,
+            "name": "Level 2",
+            "words": [
+              "dog",
+              "elephant",
+              "frog"
+            ]
+          },
+          {
+            "id": 3,
+            "name": "Level 3",
+            "words": [
+              "grape",
+              "honey",
+              "ice"
+            ]
+          },
+          {
+            "id": 4,
+            "name": "Level 4",
+            "words": [
+              "jacket",
+              "kite",
+              "lemon"
+            ]
+          },
+          {
+            "id": 5,
+            "name": "Level 5",
+            "words": [
+              "monkey",
+              "nut",
+              "orange"
+            ]
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "name": "Chapter 2",
+        "levels": [
+          {
+            "id": 1,
+            "name": "Level 1",
+            "words": [
+              "pencil",
+              "queen",
+              "rabbit"
+            ]
+          },
+          {
+            "id": 2,
+            "name": "Level 2",
+            "words": [
+              "snake",
+              "tiger",
+              "umbrella"
+            ]
+          },
+          {
+            "id": 3,
+            "name": "Level 3",
+            "words": [
+              "vase",
+              "whale",
+              "xylophone"
+            ]
+          },
+          {
+            "id": 4,
+            "name": "Level 4",
+            "words": [
+              "yacht",
+              "zebra",
+              "ant"
+            ]
+          },
+          {
+            "id": 5,
+            "name": "Level 5",
+            "words": [
+              "ball",
+              "cat",
+              "dolphin"
+            ]
+          }
+        ]
+      }
+    ]
   },
   {
-    "id": "cet6",
-    "name": "CET-6",
-    "description": "",
-    "url": "../public/cet6.json",
-    "length": 4659,
-    "language": "en"
+    "id": 2,
+    "name": "Category 2",
+    "chapters": [
+      {
+        "id": 1,
+        "name": "Chapter 1",
+        "levels": [
+          {
+            "id": 1,
+            "name": "Level 1",
+            "words": [
+              "apple",
+              "banana",
+              "cherry"
+            ]
+          },
+          {
+            "id": 2,
+            "name": "Level 2",
+            "words": [
+              "dog",
+              "elephant",
+              "frog"
+            ]
+          },
+          {
+            "id": 3,
+            "name": "Level 3",
+            "words": [
+              "grape",
+              "honey",
+              "ice"
+            ]
+          },
+          {
+            "id": 4,
+            "name": "Level 4",
+            "words": [
+              "jacket",
+              "kite",
+              "lemon"
+            ]
+          },
+          {
+            "id": 5,
+            "name": "Level 5",
+            "words": [
+              "monkey",
+              "nut",
+              "orange"
+            ]
+          }
+        ]
+      }
+    ]
   }
 ]

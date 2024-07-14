@@ -27,7 +27,7 @@
         <div class="messages-container">
           <div v-for="message in messages" :key="message.id"
                :class="['message', message.from === 'ai' ? 'ai-message' : 'user-message']">
-            <p>{{message.from === 'ai' ? 'AI：' : 'User：'}}{{ message.text }}</p>
+            <p>{{ message.from === 'ai' ? 'AI：' : 'User：' }}{{ message.text }}</p>
             <div class="message-actions">
               <button @click="translate(message.text)">翻译</button>
               <button @click="speak(message.text)">发音</button>

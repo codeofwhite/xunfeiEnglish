@@ -53,7 +53,7 @@ export default {
   },
   setup() {
     const route = useRoute();
-    const wordListId = route.params.wordListId;
+    const levelId = route.params.levelId;
     const currentIndex = ref(0);
     const wordsList = ref([]);
     const voices = ref([]);
@@ -61,7 +61,7 @@ export default {
 
     const fetchWords = async () => {
       try {
-        const response = await fetch(`../public/book/${wordListId}.json`);
+        const response = await fetch(`/book/${levelId}.json`);
         wordsList.value = await response.json();
       } catch (error) {
         console.error('读取单词文件时出错:', error);
