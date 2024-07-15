@@ -11,7 +11,7 @@
 
       <footer class="app-footer">
         <p>© 2024 English Mastery. All rights reserved.</p>
-        <router-link to="/contactUs">关于我们</router-link>
+        <router-link to="/ourMission">关于我们</router-link>
       </footer>
 
       <button @click="scrollToTop" class="scroll-to-top" v-show="showScrollButton">⬆️</button>

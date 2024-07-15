@@ -6,7 +6,8 @@
     </svg>
     <div class="grid-container">
       <div class="level" v-for="(level, index) in levels" :key="level.id" :class="'level-' + (index % 5)">
-        <router-link :to="{ name: 'WordList', params: { levelId: level.id } }">
+        <router-link :to="{ name: 'WordList', params: { categoryId: route.params.categoryId,
+        chapterId: route.params.chapterId, levelId: level.id } }">
           <div class="circle">
             <div class="title">{{ level.name }}</div>
             <div class="word-count">{{ level.words.length }} words</div>

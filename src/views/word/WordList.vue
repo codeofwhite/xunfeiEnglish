@@ -36,9 +36,18 @@
         </div>
       </div>
     </div>
+    <button @click="completeLevel">完成关卡</button>
   </div>
   <!--  调用AI接口，ref提供给AI的参数，handleResult提供结果返回    -->
   <FreeTalkAI v-show="false" ref="aiComponent" @result-received="handleResult"></FreeTalkAI>
+  <modal class="modal" v-if="showModal" @close="showModal = false">
+    <h3 slot="header">关卡完成</h3>
+    <p slot="body">恭喜你完成了本关卡！</p>
+    <p slot="body">将在 {{ countdown }} 秒后跳转...</p>
+    <div slot="footer">
+      <button @click="goToChapterList">返回章节列表</button>
+    </div>
+  </modal>
 </template>
 
 <script>
@@ -46,6 +55,7 @@ import {onMounted, ref} from 'vue';
 import {useRoute} from 'vue-router';
 import axios from 'axios';
 import FreeTalkAI from "@/components/freeTalk/FreeTalkAI.vue";
+import router from "@/router/index.js";
 
 export default {
   components: {
@@ -59,6 +69,40 @@ export default {
     const voices = ref([]);
     const synth = window.speechSynthesis;
 
+    const showModal = ref(false); // 控制显示完成关卡
+    const countdown = ref(5); // 显示倒计时
+
+    // 点击完成关卡
+    const completeLevel = async () => {
+      showModal.value = true;
+      setTimeout(goToChapterList, 5000); // 5秒后自动跳转
+      startCountdown(); // 开始计时
+    };
+
+    const calculateScore = () => {
+      // 计算分数的逻辑
+      return 100; // 示例分数
+    };
+
+    // 这个之后可能要改路由
+    const goToChapterList = () => {
+      showModal.value = false;
+      router.push(`/category/${route.params.categoryId}/chapter/${route.params.chapterId}`);
+    };
+
+    // modal结束倒计时，跳转
+    const startCountdown = () => {
+      const interval = setInterval(() => {
+        if (countdown.value > 0) {
+          countdown.value--;
+        } else {
+          clearInterval(interval);
+          goToChapterList();
+        }
+      }, 1000);
+    };
+
+    // 得到单词
     const fetchWords = async () => {
       try {
         const response = await fetch(`/book/${levelId}.json`);
@@ -126,7 +170,11 @@ export default {
       showNextWord,
       showForwardWord,
       addToUnknown,
-      playVoice
+      playVoice,
+      showModal,
+      completeLevel,
+      goToChapterList,
+      countdown,
     };
   },
   data() {
@@ -266,5 +314,41 @@ button:hover {
 p {
   margin: 0;
   padding: 0;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.modal h3 {
+  margin-top: 0;
+}
+
+.modal p {
+  margin: 10px 0;
+}
+
+.modal button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  background-color: #1a73e8;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.modal button:hover {
+  background-color: #1669c7;
+  transform: translateY(-2px);
 }
 </style>

@@ -3,13 +3,13 @@
     <nav class="vertical-nav">
       <ul>
         <li>
-          <router-link to="/contactUs">联系我们</router-link>
+          <router-link to="/ourMission" active-class="active-link">我们的使命</router-link>
         </li>
         <li>
-          <router-link to="/ourMission">我们的使命</router-link>
+          <router-link to="/teachApproach" active-class="active-link">教学方法</router-link>
         </li>
         <li>
-          <router-link to="/teachApproach">教学方法</router-link>
+          <router-link to="/contactUs" active-class="active-link">联系我们</router-link>
         </li>
       </ul>
     </nav>
@@ -30,24 +30,21 @@ export default {
 <style scoped>
 .app-container {
   display: flex;
+  min-height: 100vh; /* 确保容器至少占满整个视口高度 */
 }
 
 .vertical-nav {
   width: 200px;
-  height: 105vh;
   background-color: rgba(0, 161, 91, 0.64);
   color: white;
-  position: absolute;
-  left: 1vh;
-  top: 25%;
-  /* 其他样式保持不变 */
+  position: relative; /* 使用相对定位 */
+  flex-shrink: 0; /* 防止导航栏缩小 */
 }
 
 .content-container {
-  margin-left: 200px; /* 与侧边导航栏的宽度相同 */
-  width: calc(100% - 200px); /* 减去侧边导航栏的宽度 */
-  min-height: 100vh;
-  padding: 20px; /* 或者根据您的设计需要调整 */
+  flex: 1; /* 使内容容器占据剩余空间 */
+  padding: 20px;
+  background-color: #f9f9f9;
 }
 
 .vertical-nav ul {
@@ -66,5 +63,10 @@ export default {
 
 .vertical-nav li a:hover {
   background-color: #555;
+}
+
+.active-link {
+  background-color: #333; /* 选中路由的背景颜色 */
+  color: #fff; /* 选中路由的文字颜色 */
 }
 </style>

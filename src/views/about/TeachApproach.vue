@@ -1,26 +1,36 @@
 <template>
-  <div class="teaching-methods">
-    <h1>教学方法</h1>
-    <section>
-      <h2>个性化学习</h2>
-      <p>我们根据每位学习者的需求和水平，提供个性化的学习计划，确保每个人都能在适合自己的节奏中进步。</p>
-    </section>
-    <section>
-      <h2>互动式教学</h2>
-      <p>通过互动式课程和练习，激发学习者的兴趣和参与度，使学习过程更加生动有趣。</p>
-    </section>
-    <section>
-      <h2>多媒体资源</h2>
-      <p>我们提供丰富的多媒体资源，包括视频、音频和图文资料，帮助学习者全面提升听说读写能力。</p>
-    </section>
-    <section>
-      <h2>实时反馈</h2>
-      <p>通过实时反馈和评估，帮助学习者及时了解自己的进步和不足，调整学习策略。</p>
-    </section>
-    <section>
-      <h2>专业指导</h2>
-      <p>我们的教学团队由经验丰富的语言专家组成，提供专业的指导和支持，确保学习效果。</p>
-    </section>
+  <div class="content">
+    <div class="paragraph">
+      <h3>综合技能培养</h3>
+      <div class="content-wrapper">
+        <img src="@/assets/images/about/approach1.png" alt="Image 1" class="left-image">
+        <p>
+          我们注重听、说、读、写全方位的语言技能培养,<br> 帮助用户在各个方面都能够流利表达和理解英语。
+        </p>
+      </div>
+    </div>
+    <hr>
+    <div class="paragraph">
+      <h3>实用场景应用</h3>
+      <div class="content-wrapper">
+        <p>
+          我们强调真实生活中的语言运用场景,通过模拟实际情境的学习内容,<br> 帮助用户在实际交流中更自信和流畅。
+        </p>
+        <img src="@/assets/images/about/approach2.png" alt="Image 2" class="right-image">
+      </div>
+    </div>
+    <hr>
+    <div class="paragraph">
+      <h3>平衡学习</h3>
+      <div class="content-wrapper">
+        <img src="@/assets/images/about/approach3.png" alt="Image 3" class="left-image">
+        <p>
+          对于某些复杂抽象的概念,明确的解释也同时很有帮助。<br>
+          你除了可以在Mynah潜意识学习语言之外,<br> 还可以通过阅读提示学习有用短语以及掌握语法与发音的规则。
+        </p>
+      </div>
+    </div>
+    <hr>
   </div>
 </template>
 
@@ -31,38 +41,5 @@ export default {
 </script>
 
 <style scoped>
-.teaching-methods {
-  max-width: 800px;
-  margin: 20px auto;
-  padding: 20px;
-  background: #f9f9f9;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  font-family: 'Arial', sans-serif;
-}
-
-h1 {
-  color: #333;
-  text-align: center;
-  font-family: 'Georgia', serif;
-  font-size: 2em;
-  margin-bottom: 20px;
-}
-
-h2 {
-  color: #555;
-  font-size: 1.5em;
-  margin-top: 20px;
-}
-
-p {
-  color: #666;
-  line-height: 1.6;
-  margin-bottom: 20px;
-  font-size: 1.1em;
-}
-
-section {
-  margin-bottom: 20px;
-}
+@import url('@/styles/about.css');
 </style>

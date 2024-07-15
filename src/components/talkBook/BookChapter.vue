@@ -29,7 +29,7 @@ export default {
   },
   methods: {
     fetchBookDetails() {
-// 模拟获取书本详情
+      // 模拟获取书本详情
       const books = [
         {
           id: 1,
@@ -56,7 +56,7 @@ export default {
           ]
         }
       ];
-// 找到对应的书本
+      // 找到对应的书本
       this.book = books.find(book => book.id == this.bookId) || {title: '', chapters: []};
     },
     goToChapterDetail(chapterId) {

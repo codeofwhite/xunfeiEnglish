@@ -40,7 +40,7 @@ export default [
             {path: '/', name: 'CategoryList', component: CategoryList},
             {path: '/category/:categoryId', name: 'ChapterList', component: ChapterList},
             {path: '/category/:categoryId/chapter/:chapterId', name: 'LevelList', component: LevelList},
-            {path: '/level/:levelId', name: 'WordList', component: WordList}
+            {path: '/category/:categoryId/chapter/:chapterId/level/:levelId', name: 'WordList', component: WordList}
         ]
     },
 

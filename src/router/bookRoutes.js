@@ -16,7 +16,7 @@ export default [
         props: true // 允许将路由参数作为props传递给组件
     },
     {
-        path: '/read-book/:chapterId',
+        path: '/book-chapter/:bookId/read-book/:chapterId',
         name: 'ReadBookComponent',
         component: ReadBookComponent,
         props: true // 允许将路由参数作为props传递给组件

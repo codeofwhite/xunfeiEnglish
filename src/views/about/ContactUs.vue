@@ -1,18 +1,15 @@
 <template>
-  <div class="about-us">
-    <h1>关于我们</h1>
-    <p>欢迎使用我们的英语教学软件！我们致力于通过先进的讯飞技术，为用户提供高效、互动、有趣的英语学习体验。</p>
-    <h2>我们的使命</h2>
-    <p>我们的使命是帮助每一位学习者提升英语水平，打破语言障碍，开拓更广阔的世界。</p>
-    <h2>我们的团队</h2>
-    <p>我们拥有一支由语言学专家、教育学家和技术开发人员组成的团队，致力于为用户提供最优质的学习资源和服务。</p>
-    <h2>联系我们</h2>
-    <p>如果您有任何问题或建议，请随时通过以下方式联系我们：</p>
-    <ul>
-      <li>邮箱: support@englishlearning.com</li>
-      <li>电话: 123-456-7890</li>
-      <li>地址: 重庆市沙坪坝区</li>
-    </ul>
+  <div class="content">
+    <div class="relation">
+      <h3>联系我们</h3>
+      <p>开发者联系：</p>
+      <div class="emails">
+        <p><a href="mailto:1142013375@qq.com">1142013375@qq.com</a></p>
+        <p><a href="mailto:99gelanjingling@gmail.com">99gelanjingling@gmail.com</a></p>
+        <p><a href="mailto:1792242434@qq.com">1792242434@qq.com</a></p>
+      </div>
+    </div>
+    <hr class="divider">
   </div>
 </template>
 
@@ -23,44 +20,59 @@ export default {
 </script>
 
 <style scoped>
-.about-us {
-  max-width: 800px;
-  margin: 20px auto;
-  padding: 20px;
-  background: #f9f9f9;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  font-family: 'Arial', sans-serif;
+@import url('@/styles/about.css');
+
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+  background: linear-gradient(135deg, #f9f9f9, #e0e0e0);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-h1 {
-  color: #333;
+.relation {
   text-align: center;
-  font-family: 'Georgia', serif;
-  font-size: 2em;
-  margin-bottom: 20px;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
-h2 {
+.relation:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+}
+
+.relation h3 {
+  margin-bottom: 15px;
+  color: #333;
+  font-size: 1.8em;
+}
+
+.relation p {
+  margin: 10px 0;
   color: #555;
-  font-size: 1.5em;
-  margin-top: 20px;
+  font-size: 1.1em;
 }
 
-p {
-  color: #666;
-  line-height: 1.6;
-  margin-bottom: 20px;
+.emails a {
+  color: #1a73e8;
+  text-decoration: none;
+  font-weight: bold;
 }
 
-ul {
-  list-style-type: none;
-  padding: 0;
+.emails a:hover {
+  text-decoration: underline;
+  color: #0f5bb5;
 }
 
-li {
-  color: #666;
-  line-height: 1.6;
-  margin-bottom: 10px;
+.divider {
+  width: 60%;
+  margin-top: 30px;
+  border: none;
+  border-top: 2px solid #ddd;
 }
 </style>
