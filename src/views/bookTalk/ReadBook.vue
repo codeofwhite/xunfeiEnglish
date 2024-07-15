@@ -22,7 +22,7 @@
             <p class="book-author">作者: {{ book.author }}</p>
             <p class="book-description">{{ book.description }}</p>
             <div class="book-actions">
-              <button @click="goToBookDetails(book.id)" class="details-button">查看详情</button>
+              <button @click="goToBookChapter(book.id)" class="details-button">查看详情</button>
               <button @click="addToFavorites(book)" class="favorites-button">添加到收藏夹</button>
             </div>
           </div>
@@ -36,7 +36,7 @@
             <img :src="favBook.image" alt="Book Cover" class="book-image">
             <p class="favorites-book-author">作者: {{ favBook.author }}</p>
             <div class="favorites-actions">
-              <button @click="goToBookDetails(favBook.id)" class="details-button">查看详情</button>
+              <button @click="goToBookChapter(favBook.id)" class="details-button">查看详情</button>
               <button @click="removeFromFavorites(favBook)" class="remove-button">从收藏夹移除</button>
             </div>
           </div>
@@ -51,32 +51,7 @@ export default {
   data() {
     return {
       // 书本信息
-      books: [
-        {
-          id: 1,
-          title: 'Book 1',
-          author: 'Author A',
-          description: 'Description of Book 1',
-          category: '热门推荐',
-          image: 'src/assets/images/codeofwhite.jpg'
-        },
-        {
-          id: 2,
-          title: 'Book 2',
-          author: 'Author B',
-          description: 'Description of Book 2',
-          category: '经典名著',
-          image: 'src/assets/images/codeofwhite.jpg'
-        },
-        {
-          id: 3,
-          title: 'Book 3',
-          author: 'Author C',
-          description: 'Description of Book 3',
-          category: '寓言故事',
-          image: 'src/assets/images/codeofwhite.jpg'
-        }
-      ],
+      books: [],
       // 收藏的书的列表
       favorites: [],
       // 搜索
@@ -96,7 +71,11 @@ export default {
     },
     // 去到对应书本的阅读页面
     goToBookDetails(bookId) {
-      this.$router.push({name: 'ReadBook', params: {bookId: bookId}});
+      this.$router.push({name: 'ReadBookComponent', params: {bookId: bookId}});
+    },
+    // 去到章节页面
+    goToBookChapter(bookId) {
+      this.$router.push({name: 'BookChapter', params: {bookId: bookId}});
     },
     // 添加到收藏夹
     addToFavorites(book) {

@@ -98,13 +98,14 @@ export default {
     // 使用计算属性来基于bookId计算其他数据
     getBookId() {
       // 假设有一个方法可以根据bookId获取书籍详情
-      return this.$route.params.bookId;
+      return this.$route.params.chapterId;
     },
   },
   data() {
     return {
       // ... 现有的数据属性 ...
       bookId: '',
+      chapterId: '',
       book: null,
       bookContent: '', // 书籍内容字符串
       sentences: [], // 分割后的句子数组

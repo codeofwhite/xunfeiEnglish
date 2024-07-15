@@ -21,10 +21,10 @@
 
 <script>
 import NavigationBar from "@/components/NavigationBar.vue";
-import { ref, onMounted, onUnmounted } from "vue";
+import {ref, onMounted, onUnmounted} from "vue";
 
 export default {
-  components: { NavigationBar },
+  components: {NavigationBar},
   setup() {
     const showScrollButton = ref(false);
 
@@ -33,7 +33,7 @@ export default {
     };
 
     const scrollToTop = () => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.scrollTo({top: 0, behavior: "smooth"});
     };
 
     onMounted(() => {

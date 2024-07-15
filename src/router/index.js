@@ -12,6 +12,7 @@ import Test from "@/views/test/Test.vue";
 import aboutRoutes from "@/router/aboutRoutes/aboutRoutes.js";
 import statisticRoutes from "@/router/statisticRoutes.js";
 import Test2 from "@/views/test/Test2.vue";
+import bookRoutes from "@/router/bookRoutes.js";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,7 +32,7 @@ const router = createRouter({
             name: 'Test2',
             component: Test2
         }
-    ].concat(userRoutes, smartTalkRoutes, wordRoutes, xunfeiRoutes, aboutRoutes, statisticRoutes)
+    ].concat(userRoutes, smartTalkRoutes, wordRoutes, xunfeiRoutes, aboutRoutes, statisticRoutes, bookRoutes)
 })
 
 export default router
