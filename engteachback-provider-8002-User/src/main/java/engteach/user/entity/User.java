@@ -35,4 +35,6 @@ public class User implements Serializable {
     private Date updated_time;
 
     private String user_avatar;
+
+    private Date last_username_change; // 新增字段
 }

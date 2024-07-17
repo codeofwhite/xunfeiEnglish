@@ -38,5 +38,9 @@ public class UserGameResource implements Serializable {
     private Date update_time;
 
     private Integer user_level;
+
+    private Integer punch_in_count;
+
+    private Date last_punch;
 }
 

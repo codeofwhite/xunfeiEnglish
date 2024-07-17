@@ -31,4 +31,14 @@ public class UserGameResourceRepositoryImpl implements UserGameResourceRepositor
     public void updateUserGameResource(UserGameResource userGameResource) {
         userGameResourceMapper.updateUserGameResource(userGameResource);
     }
+
+    @Override
+    public void updateUserCoinByEmail(String userEmail, Integer userCoinChange) {
+        userGameResourceMapper.updateUserCoinByEmail(userEmail, userCoinChange);
+    }
+
+    @Override
+    public UserGameResource findByEmail(String userEmail) {
+        return userGameResourceMapper.findByEmail(userEmail);
+    }
 }

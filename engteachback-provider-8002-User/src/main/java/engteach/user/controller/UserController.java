@@ -3,6 +3,7 @@ package engteach.user.controller;
 import engteach.user.email.EmailService;
 import engteach.user.entity.User;
 import engteach.user.repository.UserRepository;
+import engteach.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,9 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/sendVerificationCode")
     public ResponseEntity<Map<String, Object>> sendVerificationCode(@RequestBody Map<String, String> request) {
@@ -56,5 +60,10 @@ public class UserController {
     @PostMapping("/getUserByEmail")
     public User getUserByEmail(@RequestParam String userEmail) {
         return userRepository.validateUser(userEmail, "");
+    }
+
+    @PutMapping("/updateUsername")
+    public String updateUsername(@RequestParam String userEmail, @RequestParam String newUsername) {
+        return userService.updateUsername(userEmail, newUsername);
     }
 }

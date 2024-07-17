@@ -6,31 +6,16 @@
 <mapper namespace="engteach.user.mapper.UserGameResourceMapper">
 
     <select id="getUserGameResourceByEmail" resultType="engteach.user.entity.UserGameResource">
-        SELECT * FROM user_game_resource WHERE user_email = #{userEmail}
+        SELECT *
+        FROM user_game_resource
+        WHERE user_email = #{userEmail}
     </select>
 
     <insert id="insertUserGameResource">
-        INSERT INTO user_game_resource (user_email, user_coin, user_spark, create_time, update_time, user_level)
-        VALUES (#{user_email}, #{user_coin}, #{user_spark}, #{create_time}, #{update_time}, #{user_level})
+        INSERT INTO user_game_resource (user_email, user_coin, user_spark, create_time, update_time, user_level,
+                                        punch_in_count)
+        VALUES (#{user_email}, #{user_coin}, #{user_spark}, #{create_time}, #{update_time}, #{user_level},
+                #{punch_in_count})
     </insert>
-
-    <update id="updateUserGameResource">
-        UPDATE user_game_resource
-        <set>
-            <if test="userCoin != null">
-                user_coin = #{userCoin},
-            </if>
-            <if test="userSpark != null">
-                user_spark = #{userSpark},
-            </if>
-            <if test="updateTime != null">
-                update_time = #{updateTime},
-            </if>
-            <if test="userLevel != null">
-                user_level = #{userLevel},
-            </if>
-        </set>
-        WHERE user_email = #{userEmail}
-    </update>
 
 </mapper>

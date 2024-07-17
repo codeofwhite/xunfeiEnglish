@@ -29,7 +29,7 @@ public class WordBookRepositoryImpl implements WordBookRepository {
 
     @Override
     public void insertMastered(String user_email, String word_name) {
-        wordBookMapper.insertMastered(user_email,word_name);
+        wordBookMapper.insertMastered(user_email, word_name);
     }
 
     @Override

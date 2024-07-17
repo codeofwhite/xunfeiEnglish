@@ -13,4 +13,8 @@ public interface UserGameResourceRepository {
     void insertUserGameResource(UserGameResource userGameResource);
 
     void updateUserGameResource(UserGameResource userGameResource);
+
+    void updateUserCoinByEmail(String userEmail, Integer userCoinChange);
+
+    UserGameResource findByEmail(String userEmail);
 }

@@ -12,5 +12,6 @@ import java.util.List;
  */
 public interface FavoriteBookService extends MongoRepository<FavoriteBook, String> {
     List<FavoriteBook> findByUserEmail(String userEmail);
+
     void deleteByBookIdAndUserEmail(Long bookId, String userEmail);
 }

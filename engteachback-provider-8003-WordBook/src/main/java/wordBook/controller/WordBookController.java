@@ -34,7 +34,7 @@ public class WordBookController {
 
     @PostMapping("/insertMastered")
     public String insertMaster(@RequestParam("user_email") String user_email,
-                                @RequestParam("word_name") String word_name) {
+                               @RequestParam("word_name") String word_name) {
         wordBookService.insertMastered(user_email, word_name);
         return "success";
     }
