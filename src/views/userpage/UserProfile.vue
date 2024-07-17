@@ -3,7 +3,7 @@
     <h2 class="profile-title">个人资料</h2>
     <div class="profile-section">
       <label for="avatar-upload" class="profile-label">头像：</label>
-      <img :src="user.user_avatar" alt="Avatar" class="avatar">
+      <img :src="user.userAvatar" alt="Avatar" class="avatar">
       <input type="file" id="avatar-upload" @change="changeAvatar" class="avatar-upload-input">
       <label for="avatar-upload" class="avatar-upload-btn">
         <i class="fas fa-upload"></i> 更改头像
@@ -17,6 +17,24 @@
     <div class="profile-section">
       <label class="profile-label">账号：</label>
       <span class="profile-info">{{ userEmail }}</span>
+    </div>
+    <div class="profile-section">
+      <label class="profile-label">金币：</label>
+      <span class="profile-info">
+        <i class="fas fa-coins coin-icon">{{ userGame.user_coin }}</i>
+      </span>
+    </div>
+    <div class="profile-section">
+      <label class="profile-label">火花：</label>
+      <span class="profile-info">
+        <i class="fas fa-bolt spark-icon">{{ userGame.user_spark }}</i>
+      </span>
+    </div>
+    <div class="profile-section">
+      <label class="profile-label">等级：</label>
+      <span class="profile-info">
+        <i class="fas fa-level-up-alt level-icon"> {{ userGame.user_level }}</i>
+      </span>
     </div>
     <hr class="profile-divider">
     <div class="profile-section">
@@ -41,6 +59,7 @@ import {useStore} from "vuex";
 import axios from "axios";
 
 const user = ref({});
+const userGame = ref({});
 const experiencePercentage = ref(50); // 假设经验值为50%
 const onlineDays = ref(120); // 假设在线天数为120天
 
@@ -80,12 +99,26 @@ const fetchUserData = async () => {
   }
 };
 
+const fetchUserGameData = async () => {
+  try {
+    const response = await axios.get('http://localhost:8002/userGameResource/get', {
+      params: {userEmail: userEmail.value}
+    });
+    // 打印
+    console.log(response.data);
+    userGame.value = response.data;
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+  }
+};
+
 onMounted(() => {
   fetchUserData();
+  fetchUserGameData();
 });
 
 function changeUsername() {
-// Handle username change
+  // Handle username change
 }
 </script>
 
@@ -177,6 +210,23 @@ function changeUsername() {
 .profile-info {
   flex-grow: 1;
   color: #5D647B; /* 信息文本颜色 */
+  display: flex;
+  align-items: center;
+}
+
+.coin-icon {
+  color: #FFD700; /* 金币颜色 */
+  margin-right: 5px;
+}
+
+.spark-icon {
+  color: #FF4500; /* 火花颜色 */
+  margin-right: 5px;
+}
+
+.level-icon {
+  color: #4B0082; /* 等级颜色 */
+  margin-right: 5px;
 }
 
 .experience-bar-container {

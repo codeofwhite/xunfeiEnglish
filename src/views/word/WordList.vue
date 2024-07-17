@@ -37,12 +37,14 @@
       </div>
     </div>
     <button @click="completeLevel">完成关卡</button>
+    <p>当前分数: {{ score }}</p>
   </div>
   <!--  调用AI接口，ref提供给AI的参数，handleResult提供结果返回    -->
   <FreeTalkAI v-show="false" ref="aiComponent" @result-received="handleResult"></FreeTalkAI>
   <modal class="modal" v-if="showModal" @close="showModal = false">
     <h3 slot="header">关卡完成</h3>
     <p slot="body">恭喜你完成了本关卡！</p>
+    <p slot="body">总得分: {{ score }}</p>
     <p slot="body">将在 {{ countdown }} 秒后跳转...</p>
     <div slot="footer">
       <button @click="goToChapterList">返回章节列表</button>
@@ -72,16 +74,25 @@ export default {
     const showModal = ref(false); // 控制显示完成关卡
     const countdown = ref(5); // 显示倒计时
 
+    // 记分
+    const score = ref(0); // 分数
+    const viewedWords = ref(new Set()); // 记录已查看的单词
+
     // 点击完成关卡
     const completeLevel = async () => {
+      score.value += 50; // 完成关卡奖励分数
+
       showModal.value = true;
       setTimeout(goToChapterList, 5000); // 5秒后自动跳转
       startCountdown(); // 开始计时
     };
 
-    const calculateScore = () => {
-      // 计算分数的逻辑
-      return 100; // 示例分数
+    const updateScore = () => {
+      const currentWord = wordsList.value[currentIndex.value].name;
+      if (!viewedWords.value.has(currentWord)) {
+        viewedWords.value.add(currentWord);
+        score.value += 10; // 每查看一个新单词加10分
+      }
     };
 
     // 这个之后可能要改路由
@@ -118,6 +129,7 @@ export default {
       } else {
         currentIndex.value = 0; // 如果到达列表末尾，重新开始
       }
+      updateScore(); // 每次显示新单词时更新分数
     };
 
     const showForwardWord = () => {
@@ -126,6 +138,7 @@ export default {
       } else {
         currentIndex.value--;
       }
+      updateScore(); // 每次显示新单词时更新分数
     };
 
     const addToUnknown = async () => {
@@ -175,6 +188,7 @@ export default {
       completeLevel,
       goToChapterList,
       countdown,
+      score,
     };
   },
   data() {

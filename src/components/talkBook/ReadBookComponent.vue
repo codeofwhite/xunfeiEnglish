@@ -71,6 +71,7 @@
 import SpeechSynthesis from "@/views/xunfei/SpeechSynthesis.vue";
 import axios from "axios";
 import {ref} from "vue";
+import {useStore} from "vuex";
 
 function loadBookContentById(id) {
   // 从服务器加载书籍内容
@@ -100,6 +101,9 @@ export default {
       // 假设有一个方法可以根据bookId获取书籍详情
       return this.$route.params.chapterId;
     },
+    getUserEmail() {
+      return this.$store.state.userEmail;
+    }
   },
   data() {
     return {
@@ -297,7 +301,7 @@ export default {
     async endConversation() {
       try {
         const response = await axios.post('http://localhost:8005/api/bookTalk', {
-          userEmail: 'example@example.com',
+          userEmail: this.getUserEmail,
           accuracy: this.accuracyScores,
           fluency: this.fluencyScores,
           integrity: this.integrityScores,

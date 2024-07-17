@@ -45,11 +45,12 @@
 </template>
 
 <script setup>
-import {onMounted, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import '/src/voice-utils/utilJS/crypto-js.js'; //鉴权的引用地址
 import '/src/voice-utils/utilJS/index.umd.js'; // 调用Web Speech API 的依赖，应该是官方的写的工具类
 import {defineEmits} from 'vue';
 import axios from "axios";
+import {useStore} from "vuex";
 
 const recognitionRecords = ref([]); // 新增一个数组来存储识别记录
 const emit = defineEmits(['recognition-complete']);
@@ -73,6 +74,11 @@ let audioChunks = ref([]);
 let audioBlob = ref('');
 let resultData = ref({}); // 新增一个对象来存储返回的数据
 let scores = ref([]); // 新增一个数组来存储每个句子的得分
+
+// 使用状态管理
+const store = useStore();
+
+const userEmail = computed(() => store.state.userEmail);
 
 // 生成 WebSocket URL 生成规则由平台决定
 function getWebSocketUrl() {
@@ -351,7 +357,7 @@ function calculateAverageScore() {
 const endConversation = async () => {
   try {
     const response = await axios.post('http://localhost:8004/api/talk', {
-      userEmail: 'example@example.com',
+      userEmail: userEmail.value,
       accuracy: accuracyScores.value,
       fluency: fluencyScores.value,
       integrity: integrityScores.value,

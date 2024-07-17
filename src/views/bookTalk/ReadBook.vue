@@ -30,7 +30,7 @@
       </section>
       <section class="favorites-section">
         <h2 class="favorites-title">书籍收藏夹</h2>
-        <div v-for="favBook in favorites" :key="favBook.id" class="favorites-card">
+        <div v-for="favBook in favoriteBooks" :key="favBook.id" class="favorites-card">
           <div class="book-details">
             <h3 class="favorites-book-title">{{ favBook.title }}</h3>
             <img :src="favBook.image" alt="Book Cover" class="book-image">
@@ -47,6 +47,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
@@ -54,6 +56,8 @@ export default {
       books: [],
       // 收藏的书的列表
       favorites: [],
+      // 显示的收藏的，用于显示
+      favoriteBooks: [],
       // 搜索
       searchQuery: '',
       // 当前选择的分类
@@ -69,23 +73,59 @@ export default {
     showBooks(category) {
       this.selectedCategory = category;
     },
-    // 去到对应书本的阅读页面
-    goToBookDetails(bookId) {
-      this.$router.push({name: 'ReadBookComponent', params: {bookId: bookId}});
-    },
     // 去到章节页面
     goToBookChapter(bookId) {
       this.$router.push({name: 'BookChapter', params: {bookId: bookId}});
     },
-    // 添加到收藏夹
-    addToFavorites(book) {
-      if (!this.favorites.some(favBook => favBook.id === book.id)) {
-        this.favorites.push(book);
+    // 获取收藏夹里面的书
+    async fetchFavorites() {
+      try {
+        const response = await axios.get('http://localhost:8005/favorites/list', {
+          params: {
+            userEmail: 'user@example.com' // 替换为实际用户邮箱
+          }
+        });
+        this.favorites = response.data;
+        this.updateFavoriteBooks();
+      } catch (error) {
+        console.error('获取收藏夹失败:', error);
       }
     },
-    // 从收藏夹中移除
-    removeFromFavorites(favBook) {
-      this.favorites = this.favorites.filter(book => book.id !== favBook.id);
+    // 从fetchBook的结果中显示favorBook
+    updateFavoriteBooks() {
+      this.favoriteBooks = this.books.filter(book =>
+          this.favorites.some(fav => fav.bookId == book.id)
+      );
+    },
+    // 添加到收藏夹
+    async addToFavorites(book) {
+      try {
+        const response = await axios.post('http://localhost:8005/favorites/add', {
+          bookId: book.id,
+          userEmail: 'user@example.com', // 替换为实际用户邮箱
+          createTime: new Date()
+        });
+        if (response.data) {
+          this.favorites.push(book);
+          this.updateFavoriteBooks();
+        }
+      } catch (error) {
+        console.error('添加到收藏夹失败:', error);
+      }
+    },
+    async removeFromFavorites(favBook) {
+      try {
+        await axios.delete('http://localhost:8005/favorites/remove', {
+          params: {
+            bookId: favBook.id,
+            userEmail: 'user@example.com' // 替换为实际用户邮箱
+          }
+        });
+        this.favorites = this.favorites.filter(book => book.id !== favBook.id);
+        this.updateFavoriteBooks();
+      } catch (error) {
+        console.error('从收藏夹移除失败:', error);
+      }
     },
     // 获得书本
     fetchBooks() {
@@ -137,6 +177,7 @@ export default {
   mounted() {
     // 获取初始图书数据
     this.fetchBooks();
+    this.fetchFavorites();
   }
 };
 </script>

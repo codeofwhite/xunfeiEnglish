@@ -15,8 +15,14 @@
 <script setup>
 import {ref, onMounted, computed} from 'vue';
 import axios from 'axios';
+import {useStore} from "vuex";
 
 const unknownWords = ref([]);
+
+// 获取状态
+const store = useStore();
+
+const userEmail = computed(() => store.state.userEmail);
 
 // 在组件挂载时调用后端接口
 onMounted(async () => {
@@ -25,7 +31,7 @@ onMounted(async () => {
       method: 'post',
       url: '/api/word/selectUnknown',
       params: {
-        user_email: '99gelanjingling@gmail.com' // 替换为实际的用户邮箱
+        user_email: userEmail // 替换为实际的用户邮箱
       }
     });
     unknownWords.value = response.data; // 假设后端返回的是一个单词数组
