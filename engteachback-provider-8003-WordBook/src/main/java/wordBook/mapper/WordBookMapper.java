@@ -15,4 +15,8 @@ public interface WordBookMapper {
     public void insertUnknown(@Param("user_email") String user_email, @Param("word_name") String word_name);
 
     public List<String> selectUnknown(@Param("user_email") String user_email);
+
+    public void insertMastered(@Param("user_email") String user_email, @Param("word_name") String word_name);
+
+    public List<String> selectMastered(@Param("user_email") String user_email);
 }

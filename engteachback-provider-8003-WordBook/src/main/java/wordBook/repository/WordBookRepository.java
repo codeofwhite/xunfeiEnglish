@@ -11,4 +11,8 @@ public interface WordBookRepository {
     void insertUnknown(String user_email, String word_name);
 
     List<String> selectUnknown(String user_email);
+
+    void insertMastered(String user_email, String word_name);
+
+    List<String> selectMastered(String user_email);
 }

@@ -26,4 +26,14 @@ public class WordBookRepositoryImpl implements WordBookRepository {
     public List<String> selectUnknown(String user_email) {
         return wordBookMapper.selectUnknown(user_email);
     }
+
+    @Override
+    public void insertMastered(String user_email, String word_name) {
+        wordBookMapper.insertMastered(user_email,word_name);
+    }
+
+    @Override
+    public List<String> selectMastered(String user_email) {
+        return wordBookMapper.selectMastered(user_email);
+    }
 }

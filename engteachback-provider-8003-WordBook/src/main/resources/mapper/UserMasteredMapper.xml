@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="wordBook.mapper.UserMapper">
+<mapper namespace="wordBook.mapper.WordBookMapper">
+    <insert id="insertMastered">
+        INSERT INTO user_mastered(user_email, word_name)
+        VALUES (#{user_email}, #{word_name})
+    </insert>
+    <select id="selectMastered">
+        SELECT word_name
+        FROM user_mastered
+        WHERE user_email = #{user_email}
+    </select>
 </mapper>
 

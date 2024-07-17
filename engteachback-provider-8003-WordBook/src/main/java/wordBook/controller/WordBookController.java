@@ -31,4 +31,17 @@ public class WordBookController {
         List<String> list = wordBookService.selectUnknown(user_email);
         return list;
     }
+
+    @PostMapping("/insertMastered")
+    public String insertMaster(@RequestParam("user_email") String user_email,
+                                @RequestParam("word_name") String word_name) {
+        wordBookService.insertMastered(user_email, word_name);
+        return "success";
+    }
+
+    @PostMapping("/selectMastered")
+    public List<String> selectMaster(@RequestParam("user_email") String user_email) {
+        List<String> list = wordBookService.selectMastered(user_email);
+        return list;
+    }
 }
