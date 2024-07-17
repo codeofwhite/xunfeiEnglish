@@ -42,6 +42,16 @@
     </div>
     <button class="end-btn" @click="endConversation">结束对话</button>
   </div>
+  <!-- Modal -->
+  <div v-if="showModal" class="modal">
+    <div class="modal-content">
+      <h3>对话完成</h3>
+      <p>总分数: {{ averageScore }}</p>
+      <p>获得的金币: {{ coin }}</p>
+      <p>{{ encouragementMessage }}</p>
+      <button @click="closeModal">关闭</button>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -51,9 +61,21 @@ import '/src/voice-utils/utilJS/index.umd.js'; // 调用Web Speech API 的依赖
 import {defineEmits} from 'vue';
 import axios from "axios";
 import {useStore} from "vuex";
+import router from "@/router/index.js";
 
 const recognitionRecords = ref([]); // 新增一个数组来存储识别记录
 const emit = defineEmits(['recognition-complete']);
+
+// 鼓励语句
+const encouragementMessage = ref('');
+// 鼓励语句集合
+const encouragementMessages = [
+  "干得漂亮！",
+  "你真棒！",
+  "继续加油！",
+  "你是最棒的！",
+  "太厉害了！"
+];
 
 const accuracyScores = ref([]);
 const fluencyScores = ref([]);
@@ -79,6 +101,10 @@ let scores = ref([]); // 新增一个数组来存储每个句子的得分
 const store = useStore();
 
 const userEmail = computed(() => store.state.userEmail);
+
+// 结束对话的显示
+const showModal = ref(false);
+const coin = ref(0);
 
 // 生成 WebSocket URL 生成规则由平台决定
 function getWebSocketUrl() {
@@ -273,6 +299,7 @@ const startRecording = () => {
   }
 }
 
+// 开始对话，转为pcm格式的音频文件
 async function startRecordingPcm() {
   const stream = await navigator.mediaDevices.getUserMedia({audio: true});
   audioContext.value = new (window.AudioContext || window.webkitAudioContext)();
@@ -355,6 +382,17 @@ function calculateAverageScore() {
 }
 
 const endConversation = async () => {
+  // 计算用户获取到的coin
+  coin.value = Math.floor(averageScore.value * 100);
+
+  // 调用更新user_coin的接口
+  const response = await axios.put('http://localhost:8002/userGameResource/updateUserCoin', null, {
+    params: {
+      userEmail: userEmail.value,
+      userCoinChange: coin.value
+    }
+  });
+
   try {
     const response = await axios.post('http://localhost:8004/api/talk', {
       userEmail: userEmail.value,
@@ -363,10 +401,20 @@ const endConversation = async () => {
       integrity: integrityScores.value,
       totalScore: averageScore.value
     });
+    // 显示modal
+    encouragementMessage.value = encouragementMessages[Math.floor(Math.random() * encouragementMessages.length)];
+    showModal.value = true;
+    // 5秒后自动关闭modal
+    setTimeout(closeModal, 5000);
     console.log('对话信息上传成功:', response.data);
   } catch (error) {
     console.error('对话信息上传失败:', error);
   }
+};
+
+const closeModal = () => {
+  showModal.value = false;
+  router.push('/smartTalk')
 };
 
 let averageScore = ref(0); // 新增一个变量来存储平均分
@@ -453,5 +501,41 @@ let averageScore = ref(0); // 新增一个变量来存储平均分
 
 .end-btn:hover {
   background-color: #218838;
+}
+
+/*modal样式*/
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  z-index: 1000;
+}
+
+.modal-content {
+  text-align: center;
+}
+
+.modal-content p {
+  margin: 10px 0;
+}
+
+.modal-content button {
+  padding: 8px 16px;
+  font-size: 14px;
+  color: #fff;
+  background-color: #007BFF;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.modal-content button:hover {
+  background-color: #0056b3;
 }
 </style>

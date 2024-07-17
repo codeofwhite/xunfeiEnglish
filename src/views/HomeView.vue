@@ -25,12 +25,20 @@
           <h3>学习资源</h3>
           <p>获取最新的学习资源，帮助你更快掌握英语。</p>
         </div>
+        <!-- 添加签到按钮 -->
+        <div class="sign-in">
+          <button @click="signIn">签到</button>
+        </div>
+        <div class="punch-in-count">
+          <p>连续签到次数: {{ punchInCount }}</p>
+        </div>
       </section>
     </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
 import SwiperComponents from "@/components/SwiperComponents.vue";
 
 export default {
@@ -38,12 +46,38 @@ export default {
   components: {SwiperComponents},
   data() {
     return {
-      features: [
-        {title: 'Interactive Lessons', description: 'Engage with dynamic exercises and games.'},
-        {title: 'Progress Tracking', description: 'Monitor your improvement with our analytics tools.'},
-        {title: 'Community Support', description: 'Join discussions and learn together with peers.'}
-      ]
+      punchInCount: 0,
+      userEmail: 'user@example.com' // 假设用户邮箱是固定的
     };
+  },
+  computed: {
+    getUserEmail() {
+      return this.$store.state.userEmail;
+    }
+  },
+  methods: {
+    async signIn() {
+      try {
+        const response = await axios.post('http://localhost:8002/userGameResource/punchIn',
+            {userEmail: this.getUserEmail});
+        alert(response.data);
+        await this.getPunchInCount();
+      } catch (error) {
+        console.error('签到失败:', error);
+      }
+    },
+    async getPunchInCount() {
+      try {
+        const response = await axios.get('http://localhost:8002/userGameResource/getPunchInCount',
+            {params: {userEmail: this.getUserEmail}});
+        this.punchInCount = response.data.punchInCount;
+      } catch (error) {
+        console.error('获取连续签到次数失败:', error);
+      }
+    }
+  },
+  mounted() {
+    this.getPunchInCount();
   }
 };
 </script>
@@ -135,6 +169,30 @@ export default {
 
 .info-item p {
   color: #555;
+}
+
+.sign-in {
+  margin-top: 20px;
+}
+
+.sign-in button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.sign-in button:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+
+.punch-in-count {
+  margin-top: 20px;
+  color: #333;
 }
 
 @keyframes fadeInDown {

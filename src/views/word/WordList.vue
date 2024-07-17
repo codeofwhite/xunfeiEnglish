@@ -53,11 +53,12 @@
 </template>
 
 <script>
-import {onMounted, ref} from 'vue';
+import {computed, onMounted, ref} from 'vue';
 import {useRoute} from 'vue-router';
 import axios from 'axios';
 import FreeTalkAI from "@/components/freeTalk/FreeTalkAI.vue";
 import router from "@/router/index.js";
+import {useStore} from "vuex";
 
 export default {
   components: {
@@ -70,6 +71,10 @@ export default {
     const wordsList = ref([]);
     const voices = ref([]);
     const synth = window.speechSynthesis;
+
+    const store = useStore();
+
+    const userEmail = computed(() => store.state.userEmail);
 
     const showModal = ref(false); // 控制显示完成关卡
     const countdown = ref(5); // 显示倒计时
@@ -85,7 +90,24 @@ export default {
       showModal.value = true;
       setTimeout(goToChapterList, 5000); // 5秒后自动跳转
       startCountdown(); // 开始计时
+      try {
+        const response = await axios.put('http://localhost:8002/userGameResource/updateUserCoin', null, {
+          params: {
+            userEmail: userEmail.value,
+            userCoinChange: 50 // 这里传递奖励分数
+          }
+        });
+        // alert(response.data);
+      } catch (error) {
+        console.error('Error updating user coin:', error);
+        // alert('更新金币失败');
+      }
+
+      showModal.value = true;
+      setTimeout(goToChapterList, 5000); // 5秒后自动跳转
+      startCountdown(); // 开始计时
     };
+
 
     const updateScore = () => {
       const currentWord = wordsList.value[currentIndex.value].name;
@@ -204,7 +226,7 @@ export default {
     // 输入用户input
     sendMessage(text) {
       // this.$refs.speechSynthesis.play(this.userInput);
-      this.$refs.aiComponent.startWithText(text);
+      this.$refs.aiComponent.startWithText('解释这个单词的意思：' + text);
       // 此处省略AI回复实现代码，可根据实际情况添加
     },
     handleResult(result) {

@@ -120,6 +120,14 @@ const submitForm = async () => {
               message: '注册成功',
               type: 'success'
             });
+            // 调用插入 user_game_resource 的接口
+            await axios.post('http://localhost:8002/userGameResource/insert', {
+              user_email: form.email,
+              user_coin: 0,
+              user_spark: 0,
+              user_level: 1,
+              punch_in_count: 1,
+            });
             router.push("login");
           } else {
             ElMessage.error('注册失败，用户已存在');

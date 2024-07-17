@@ -33,7 +33,7 @@ const router = createRouter({
 })
 
 // 定义白名单
-const whiteList = ['/login', '/', '/readBook', '/vbIndex', '/smartTalk']; // 不需要登录即可访问的路由
+const whiteList = ['/login', '/', '/readBook', '/vbIndex', '/smartTalk', '/register']; // 不需要登录即可访问的路由
 
 // 添加导航守卫
 router.beforeEach((to, from, next) => {

@@ -2,7 +2,9 @@
   <div class="header">
     <div class="logo">
       <!-- Logo图片路径根据实际情况替换 -->
-      <img src="@/assets/images/codeofwhite.jpg" alt="Logo"/>
+      <router-link to="/">
+        <img src="@/assets/images/mynah.jpg" alt="Logo"/>
+      </router-link>
     </div>
     <nav class="nav">
       <ul>
@@ -29,29 +31,19 @@
         <li>
           <RouterLink to="/test" class="nav-link"><span class="nav-title">测试</span><span
               class="nav-subtitle">CENTER</span></RouterLink>
-          <RouterLink to="/test2" class="nav-link"><span class="nav-title">测试2</span><span
-              class="nav-subtitle">CENTER</span></RouterLink>
         </li>
       </ul>
     </nav>
-    <!-- 父菜单项 -->
-    <div class="nav-item">
-      <div class="nav-link">讯飞</div>
-      <!-- 子菜单 -->
-      <div class="submenu">
-        <RouterLink to="/chatAI" class="nav-link">AI聊天</RouterLink>
-        <RouterLink to="/speechScore" class="nav-link">口语评分</RouterLink>
-        <RouterLink to="/speechToWord" class="nav-link">语音转文字</RouterLink>
-        <RouterLink to="/speechSynthesis" class="nav-link">语音合成</RouterLink>
-        <RouterLink to="/translateTool" class="nav-link">机器翻译</RouterLink>
-        <!-- 更多子菜单项 -->
-      </div>
-    </div>
     <!-- ...其他代码... -->
     <div class="user">
       <RouterLink to="/login" class="user-link">
         <img src="@/assets/images/codeofwhite.jpg" alt="User" class="user-image"/>
       </RouterLink>
+      <div class="coin-spark">
+        <span>金币: {{ coin }}</span>
+        <br>
+        <span>火花: {{ spark }}</span>
+      </div>
     </div>
   </div>
 </template>
@@ -59,7 +51,34 @@
 <script setup>
 import {RouterLink} from 'vue-router';
 import UserPage from "@/views/userpage/UserPageNav.vue";
+import {useStore} from "vuex";
+import axios from "axios";
+import {computed, onMounted, ref} from "vue";
 
+const store = useStore();
+
+const userEmail = computed(() => store.state.userEmail);
+
+const coin = ref(0);
+const spark = ref(0);
+
+const fetchUserResources = async () => {
+  try {
+    const response = await axios.get('http://localhost:8002/userGameResource/get', {
+      params: {
+        userEmail: userEmail.value
+      }
+    });
+    coin.value = response.data.user_coin;
+    spark.value = response.data.user_spark;
+  } catch (error) {
+    console.error('获取用户资源失败:', error);
+  }
+};
+
+onMounted(() => {
+  fetchUserResources()
+})
 </script>
 
 <style scoped>
@@ -83,7 +102,7 @@ a {
 .header {
   width: 100%;
   height: 160px;
-  background-color: #f8f9fa;
+  background-color: #ffffff;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -93,6 +112,8 @@ a {
 
 .logo img {
   height: 120px;
+  width: 300px;
+  border-radius: 15px;
 }
 
 /* Navigation */
@@ -140,6 +161,16 @@ a {
   margin-right: 20px;
   font-size: 14px;
   color: #1c1919;
+}
+
+.coin-spark {
+  margin-right: 20px;
+  font-size: 14px;
+  color: #1c1919;
+}
+
+.coin-spark span {
+  margin-right: 10px;
 }
 
 .user img {

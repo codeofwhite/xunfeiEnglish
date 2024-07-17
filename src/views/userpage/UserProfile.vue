@@ -86,6 +86,7 @@ const onLogout = () => {
   // 可以重定向到登录页面或其他操作
 };
 
+// 获取用户的基本资料
 const fetchUserData = async () => {
   try {
     const response = await axios.post('http://localhost:8002/user/getUserByEmail', {}, {
@@ -99,6 +100,7 @@ const fetchUserData = async () => {
   }
 };
 
+// 拿到用户的游戏元素资料
 const fetchUserGameData = async () => {
   try {
     const response = await axios.get('http://localhost:8002/userGameResource/get', {
@@ -117,8 +119,25 @@ onMounted(() => {
   fetchUserGameData();
 });
 
+// 更新用户名
 function changeUsername() {
-  // Handle username change
+  const newUsername = prompt("请输入新的用户名：");
+  if (newUsername) {
+    axios.put('http://localhost:8002/user/updateUsername', null, {
+      params: {
+        userEmail: userEmail.value,
+        newUsername: newUsername
+      }
+    })
+        .then(response => {
+          alert(response.data);
+          fetchUserData(); // 更新用户数据
+        })
+        .catch(error => {
+          console.error('Error updating username:', error);
+          alert('修改用户名失败');
+        });
+  }
 }
 </script>
 

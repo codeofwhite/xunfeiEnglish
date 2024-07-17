@@ -35,6 +35,7 @@
             <h3 class="favorites-book-title">{{ favBook.title }}</h3>
             <img :src="favBook.image" alt="Book Cover" class="book-image">
             <p class="favorites-book-author">作者: {{ favBook.author }}</p>
+            <p class="book-description">{{ favBook.description }}</p>
             <div class="favorites-actions">
               <button @click="goToBookChapter(favBook.id)" class="details-button">查看详情</button>
               <button @click="removeFromFavorites(favBook)" class="remove-button">从收藏夹移除</button>

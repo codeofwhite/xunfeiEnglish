@@ -29,7 +29,7 @@
             <button v-if="recordingIndex === index" @click="stopRecordingPcm" class="stop-button">停止录音</button>
             <button @click="uploadAudio(sentence, index)" class="score-button">音频评分</button>
             <div v-if="recordingIndex === index" class="recording-controls">
-              <p class="countdown">倒计时: {{ countdown }} 秒</p>
+              <p v-if="recording" class="countdown">倒计时: {{ countdown }} 秒</p>
             </div>
           </div>
         </div>
@@ -63,6 +63,15 @@
         </div>
         <p class="translation" v-if="translations[index]">翻译：{{ translations[index] }}</p>
       </div>
+    </div>
+  </div>
+  <!-- Modal -->
+  <div v-if="showModal" class="modal">
+    <div class="modal-content">
+      <h3>对话完成</h3>
+      <p>总分数: {{ averageScore }}</p>
+      <p>获得的金币: {{ coin }}</p>
+      <button @click="closeModal">关闭</button>
     </div>
   </div>
 </template>
@@ -131,7 +140,9 @@ export default {
       scores: [], // 新增一个数组来存储每个句子的得分
       averageScore: 0, // 新增一个变量来存储平均分
       recordingIndex: null, // 当前正在录音的句子索引
-      recordingAreaVisible: [] // 控制录音区域显示的数组
+      recordingAreaVisible: [], // 控制录音区域显示的数组
+      showModal: false,
+      coin: 0,
     };
   },
   methods: {
@@ -248,6 +259,8 @@ export default {
       this.audioBlob = audioBuffer;
       this.audioChunks = [];
       this.recording = false;
+      this.countdown = 0; // 清零计时器
+      this.recordingIndex = null; // 重置recordingIndex
     },
     async uploadAudio(sentence, index) {
       alert('上传音频评分');
@@ -299,6 +312,16 @@ export default {
       }
     },
     async endConversation() {
+      this.coin = Math.floor(this.averageScore * 100);
+
+      // 调用更新user_coin的接口
+      const response = await axios.put('http://localhost:8002/userGameResource/updateUserCoin', null, {
+        params: {
+          userEmail: this.getUserEmail,
+          userCoinChange: this.coin
+        }
+      });
+
       try {
         const response = await axios.post('http://localhost:8005/api/bookTalk', {
           userEmail: this.getUserEmail,
@@ -308,10 +331,18 @@ export default {
           totalScore: this.averageScore
           // 其他需要传递的数据
         });
+        // 显示modal
+        this.showModal = true;
+        // 5秒后自动关闭modal
+        setTimeout(this.closeModal, 5000);
         console.log('阅读信息上传成功:', response.data);
       } catch (error) {
         console.error('阅读信息上传失败:', error);
       }
+    },
+    closeModal() {
+      this.showModal = false;
+      this.$router.push('/readBook')
     },
   },
   mounted() {
@@ -499,5 +530,41 @@ button:hover {
   margin-top: 10px;
   font-size: 18px;
   font-weight: bold;
+}
+
+/*modal样式*/
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  z-index: 1000;
+}
+
+.modal-content {
+  text-align: center;
+}
+
+.modal-content p {
+  margin: 10px 0;
+}
+
+.modal-content button {
+  padding: 8px 16px;
+  font-size: 14px;
+  color: #fff;
+  background-color: #007BFF;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.modal-content button:hover {
+  background-color: #0056b3;
 }
 </style>

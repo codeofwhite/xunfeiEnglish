@@ -22,6 +22,7 @@
 <script>
 import NavigationBar from "@/components/NavigationBar.vue";
 import {ref, onMounted, onUnmounted} from "vue";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   components: {NavigationBar},
@@ -37,6 +38,7 @@ export default {
     };
 
     onMounted(() => {
+      document.body.removeChild(document.getElementById('Loading')) // 加载页面完后移除加载动画
       window.addEventListener("scroll", handleScroll);
     });
 
@@ -48,6 +50,20 @@ export default {
       showScrollButton,
       scrollToTop,
     };
+  },
+  computed: {
+    ...mapGetters(['loginDays']),
+  },
+  methods: {
+    ...mapActions(['fetchLoginDays', 'incrementLoginDays']),
+    checkLogin() {
+      const userEmail = this.$store.state.userEmail; // 假设用户邮箱存储在Vuex状态中
+      this.fetchLoginDays(userEmail);
+      this.incrementLoginDays(userEmail);
+    },
+  },
+  mounted() {
+    this.checkLogin();
   },
 };
 </script>

@@ -31,7 +31,7 @@ onMounted(async () => {
       method: 'post',
       url: '/api/word/selectMastered',
       params: {
-        user_email: userEmail // 替换为实际的用户邮箱
+        user_email: userEmail.value // 替换为实际的用户邮箱
       }
     });
     masteredWords.value = response.data; // 假设后端返回的是一个单词数组
