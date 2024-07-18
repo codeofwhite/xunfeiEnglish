@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import engteach.api.day.MainApplication;
 
 import java.io.File;
 import java.io.IOException;
@@ -63,6 +64,18 @@ public class xunfeiController {
             Map<String, String> errorMap = new HashMap<>();
             errorMap.put("error", "Error occurred: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMap);
+        }
+    }
+
+    @PostMapping(value = "/generateImage", produces = MediaType.IMAGE_PNG_VALUE)
+    public ResponseEntity<byte[]> generateImage(@RequestBody Map<String, String> request) {
+        try {
+            String text = request.get("text");
+            byte[] imageBytes = MainApplication.generateImage(text);
+            return ResponseEntity.ok().body(imageBytes);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 }

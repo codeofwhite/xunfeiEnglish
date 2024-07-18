@@ -24,4 +24,6 @@ public interface UserMapper {
 
     @Select("SELECT * FROM user_info WHERE user_email = #{userEmail}")
     User findByEmail(String userEmail);
+
+    void updateAvatarByEmail(@Param("userEmail") String userEmail, @Param("userAvatar") String userAvatar);
 }

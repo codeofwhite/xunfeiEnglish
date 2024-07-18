@@ -11,5 +11,11 @@
         FROM user_mastered
         WHERE user_email = #{user_email}
     </select>
+    <select id="countMastered" resultType="int">
+        SELECT COUNT(*)
+        FROM user_mastered
+        WHERE user_email = #{user_email}
+          AND word_name = #{word_name}
+    </select>
 </mapper>
 

@@ -26,5 +26,6 @@ public class UserTalk {
 
     private Date createTime;
 
+    private String talkType; // 新增字段，记录对话类型（例如，语音对话）
     // Getters and setters
 }

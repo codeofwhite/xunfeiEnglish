@@ -19,7 +19,9 @@ public class WordBookRepositoryImpl implements WordBookRepository {
 
     @Override
     public void insertUnknown(String user_email, String word_name) {
-        wordBookMapper.insertUnknown(user_email, word_name);
+        if (wordBookMapper.countUnknown(user_email, word_name) == 0) {
+            wordBookMapper.insertUnknown(user_email, word_name);
+        }
     }
 
     @Override
@@ -28,8 +30,15 @@ public class WordBookRepositoryImpl implements WordBookRepository {
     }
 
     @Override
+    public void removeUnknown(String userEmail, String wordName) {
+        wordBookMapper.removeUnknown(userEmail, wordName);
+    }
+
+    @Override
     public void insertMastered(String user_email, String word_name) {
-        wordBookMapper.insertMastered(user_email, word_name);
+        if (wordBookMapper.countMastered(user_email, word_name) == 0) {
+            wordBookMapper.insertMastered(user_email, word_name);
+        }
     }
 
     @Override

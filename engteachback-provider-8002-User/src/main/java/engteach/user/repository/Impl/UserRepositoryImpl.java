@@ -37,4 +37,9 @@ public class UserRepositoryImpl implements UserRepository {
     public User findByEmail(String userEmail) {
         return userMapper.findByEmail(userEmail);
     }
+
+    @Override
+    public void updateAvatarByEmail(String userEmail, String userAvatar) {
+        userMapper.updateAvatarByEmail(userEmail, userAvatar);
+    }
 }

@@ -16,7 +16,13 @@ public interface WordBookMapper {
 
     public List<String> selectUnknown(@Param("user_email") String user_email);
 
+    public void removeUnknown(@Param("userEmail") String userEmail, @Param("wordName") String wordName);
+
     public void insertMastered(@Param("user_email") String user_email, @Param("word_name") String word_name);
 
     public List<String> selectMastered(@Param("user_email") String user_email);
+
+    int countMastered(@Param("user_email") String user_email, @Param("word_name") String word_name);
+
+    int countUnknown(@Param("user_email") String user_email, @Param("word_name") String word_name);
 }

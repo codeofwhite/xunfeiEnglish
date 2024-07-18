@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="engteach.user.mapper.UserAchievementMapper">
+
+    <insert id="insertUserAchievement">
+        INSERT INTO user_achievement (user_email, user_achievement, create_date, update_date)
+        VALUES (#{userEmail}, #{userAchievement}, #{createDate}, #{updateDate})
+    </insert>
+
+    <select id="getUserAchievementsByEmail" resultType="engteach.user.entity.UserAchievement">
+        SELECT * FROM user_achievement WHERE user_email = #{userEmail}
+    </select>
+
+</mapper>

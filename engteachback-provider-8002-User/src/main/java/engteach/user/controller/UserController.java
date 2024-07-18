@@ -7,10 +7,14 @@ import engteach.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * @author codeofwhite
@@ -65,5 +69,35 @@ public class UserController {
     @PutMapping("/updateUsername")
     public String updateUsername(@RequestParam String userEmail, @RequestParam String newUsername) {
         return userService.updateUsername(userEmail, newUsername);
+    }
+
+    @PostMapping("/updateAvatar")
+    public String updateAvatar(@RequestParam("userEmail") String userEmail, @RequestParam("file") MultipartFile file) {
+        if (file.isEmpty()) {
+            return "文件为空";
+        }
+
+        // 获取文件名
+        String fileName = file.getOriginalFilename();
+        // 获取文件后缀
+        String suffixName = fileName.substring(fileName.lastIndexOf("."));
+        // 重新生成文件名
+        fileName = UUID.randomUUID() + suffixName;
+
+        // 文件存储路径
+        String filePath = "path/to/your/avatar/directory/";
+        File dest = new File(filePath + fileName);
+
+        try {
+            // 保存文件
+            file.transferTo(dest);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "文件上传失败";
+        }
+
+        // 更新用户头像路径
+        userRepository.updateAvatarByEmail(userEmail, filePath + fileName);
+        return "头像更新成功";
     }
 }

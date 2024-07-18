@@ -11,5 +11,17 @@
         FROM user_unknown
         WHERE user_email = #{user_email}
     </select>
+    <delete id="removeUnknown">
+        DELETE
+        FROM user_unknown
+        WHERE user_email = #{userEmail}
+          AND word_name = #{wordName}
+    </delete>
+    <select id="countUnknown" resultType="int">
+        SELECT COUNT(*)
+        FROM user_unknown
+        WHERE user_email = #{user_email}
+          AND word_name = #{word_name}
+    </select>
 </mapper>
 

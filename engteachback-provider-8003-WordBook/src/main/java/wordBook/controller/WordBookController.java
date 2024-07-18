@@ -32,6 +32,13 @@ public class WordBookController {
         return list;
     }
 
+    @PostMapping("/removeUnknown")
+    public String removeUnknown(@RequestParam("user_email") String user_email,
+                                @RequestParam("word_name") String word_name) {
+        wordBookService.removeUnknown(user_email, word_name);
+        return "success";
+    }
+
     @PostMapping("/insertMastered")
     public String insertMaster(@RequestParam("user_email") String user_email,
                                @RequestParam("word_name") String word_name) {

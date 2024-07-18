@@ -11,4 +11,9 @@
         from user_info
         where user_email = #{userEmail}
     </select>
+    <update id="updateAvatarByEmail">
+        UPDATE user_info
+        SET user_avatar = #{userAvatar}
+        WHERE user_email = #{userEmail}
+    </update>
 </mapper>
