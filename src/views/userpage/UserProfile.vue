@@ -63,9 +63,28 @@ const userGame = ref({});
 const experiencePercentage = ref(50); // 假设经验值为50%
 const onlineDays = ref(120); // 假设在线天数为120天
 
-function changeAvatar(event) {
-// Handle avatar change
-}
+// 更新用户头像
+const changeAvatar = async (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('userEmail', userEmail.value);
+
+  try {
+    const response = await axios.post('http://localhost:8002/api/user/updateAvatar', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    alert(response.data);
+    await fetchUserData(); // 更新用户数据
+  } catch (error) {
+    console.error('Error updating avatar:', error);
+    alert('更新头像失败');
+  }
+};
 
 const store = useStore();
 const isLoggedIn = computed(() => store.state.isLoggedIn);

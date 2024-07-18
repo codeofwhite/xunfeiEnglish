@@ -2,17 +2,35 @@
   <div class="achievement-container">
     <h2>我的成就</h2>
     <div class="achievement-grid">
-      <!-- 假设每个成就勋章是一个div元素 -->
-      <div class="achievement-badge">成就1</div>
-      <div class="achievement-badge">成就2</div>
-      <div class="achievement-badge">成就3</div>
-      <!-- 更多成就勋章 -->
+      <div v-for="achievement in achievements" :key="achievement.id" class="achievement-badge">
+        {{ achievement.user_achievement }}
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-// JavaScript逻辑（如果需要的话）
+import {ref, onMounted} from 'vue';
+import axios from 'axios';
+import {useStore} from "vuex";
+
+const store = useStore();
+
+const achievements = ref([]);
+const userEmail = store.state.userEmail; // 替换为实际用户的email
+
+const fetchAchievements = async () => {
+  try {
+    const response = await axios.get(`http://localhost:8002/api/user/achievements/${userEmail}`);
+    achievements.value = response.data;
+  } catch (error) {
+    console.error('Error fetching achievements:', error);
+  }
+};
+
+onMounted(() => {
+  fetchAchievements();
+});
 </script>
 
 <style scoped>

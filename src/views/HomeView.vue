@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <header class="app-header">
-      <h1>English Mastery</h1>
+      <h1>Mynah</h1>
       <p>Unlock the world with English</p>
     </header>
     <div class="main-content">
@@ -31,6 +31,7 @@
         </div>
         <div class="punch-in-count">
           <p>连续签到次数: {{ punchInCount }}</p>
+          <p class="encouragement">继续加油，你正在变得越来越棒！</p>
         </div>
       </section>
     </div>
@@ -58,8 +59,7 @@ export default {
   methods: {
     async signIn() {
       try {
-        const response = await axios.post('http://localhost:8002/userGameResource/punchIn',
-            {userEmail: this.getUserEmail});
+        const response = await axios.post('http://localhost:8002/userGameResource/punchIn', {userEmail: this.getUserEmail});
         alert(response.data);
         await this.getPunchInCount();
       } catch (error) {
@@ -68,8 +68,7 @@ export default {
     },
     async getPunchInCount() {
       try {
-        const response = await axios.get('http://localhost:8002/userGameResource/getPunchInCount',
-            {params: {userEmail: this.getUserEmail}});
+        const response = await axios.get('http://localhost:8002/userGameResource/getPunchInCount', {params: {userEmail: this.getUserEmail}});
         this.punchInCount = response.data.punchInCount;
       } catch (error) {
         console.error('获取连续签到次数失败:', error);
@@ -88,12 +87,12 @@ export default {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  background-color: #f9f9f9;
+  background-color: #e0f7fa; /* 柔和的蓝绿色背景 */
   padding: 20px;
 }
 
 .app-header {
-  background-color: #4CAF50;
+  background-color: #00796b; /* 深绿色背景 */
   color: white;
   padding: 2rem;
   width: 100%;
@@ -102,10 +101,12 @@ export default {
 
 .app-header h1 {
   animation: fadeInDown 2s ease;
+  font-family: 'Comic Sans MS', 'Comic Neue', cursive; /* 使用卡通字体 */
 }
 
 .app-header p {
   animation: fadeInUp 2s ease;
+  font-family: 'Comic Sans MS', 'Comic Neue', cursive; /* 使用卡通字体 */
 }
 
 .main-content {
@@ -116,7 +117,7 @@ export default {
 
 .sidebar {
   flex: 1;
-  background-color: #fff;
+  background-color: #ffffff;
   padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   margin-right: 20px;
@@ -124,7 +125,7 @@ export default {
 
 .sidebar h2 {
   margin-bottom: 10px;
-  color: #333;
+  color: #00796b; /* 深绿色 */
 }
 
 .sidebar ul {
@@ -138,24 +139,24 @@ export default {
 
 .sidebar ul li a {
   text-decoration: none;
-  color: #4CAF50;
+  color: #00796b; /* 深绿色 */
   transition: color 0.3s ease;
 }
 
 .sidebar ul li a:hover {
-  color: #333;
+  color: #004d40; /* 更深的绿色 */
 }
 
 .hot-info {
   flex: 2;
-  background-color: #fff;
+  background-color: #ffffff;
   padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .hot-info h2 {
   margin-bottom: 20px;
-  color: #333;
+  color: #00796b; /* 深绿色 */
 }
 
 .info-item {
@@ -164,7 +165,7 @@ export default {
 
 .info-item h3 {
   margin-bottom: 10px;
-  color: #4CAF50;
+  color: #00796b; /* 深绿色 */
 }
 
 .info-item p {
@@ -176,23 +177,30 @@ export default {
 }
 
 .sign-in button {
-  background-color: #4CAF50;
+  background-color: #00796b; /* 深绿色 */
   color: white;
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
+  animation: pulse 1s infinite;
 }
 
 .sign-in button:hover {
-  background-color: #45a049;
+  background-color: #004d40; /* 更深的绿色 */
   transform: scale(1.05);
 }
 
 .punch-in-count {
   margin-top: 20px;
-  color: #333;
+  color: #00796b; /* 深绿色 */
+}
+
+.encouragement {
+  color: #ff9800; /* 橙色 */
+  font-weight: bold;
+  animation: fadeInUp 1s ease;
 }
 
 @keyframes fadeInDown {
@@ -217,8 +225,26 @@ export default {
   }
 }
 
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 .swiper {
   height: 500px;
   width: 800px;
+}
+
+.encouragement {
+  color: #ff9800; /* 橙色 */
+  font-weight: bold;
+  animation: fadeInUp 1s ease;
 }
 </style>

@@ -6,8 +6,8 @@
     </svg>
     <div class="grid-container">
       <div class="level" v-for="(level, index) in levels" :key="level.id" :class="'level-' + (index % 5)">
-        <router-link :to="{ name: 'WordList', params: { categoryId: route.params.categoryId,
-        chapterId: route.params.chapterId, levelId: level.id } }">
+        <router-link
+            :to="{ name: 'WordList', params: { categoryId: route.params.categoryId, chapterId: route.params.chapterId, levelId: level.id }, query: {majorId: route.query.majorId }}">
           <div class="circle">
             <div class="title">{{ level.name }}</div>
             <div class="word-count">{{ level.words.length }} words</div>
@@ -36,9 +36,22 @@ const fetchLevels = async () => {
     const data = JSON.parse(text);
     const category = data.find(cat => cat.id === parseInt(route.params.categoryId));
     if (category) {
-      const chapter = category.chapters.find(ch => ch.id === parseInt(route.params.chapterId));
-      if (chapter) {
-        levels.value = chapter.levels;
+      const majorId = route.query.majorId;
+      console.log('majorId:', majorId); // 调试输出
+      if (route.params.categoryId === '1' && majorId) {
+        const major = category.majors.find(m => m.id === majorId);
+        console.log(major);
+        if (major) {
+          const chapter = major.chapters.find(ch => ch.id === parseInt(route.params.chapterId));
+          if (chapter) {
+            levels.value = chapter.levels;
+          }
+        }
+      } else {
+        const chapter = category.chapters.find(ch => ch.id === parseInt(route.params.chapterId));
+        if (chapter) {
+          levels.value = chapter.levels;
+        }
       }
     }
   } catch (error) {

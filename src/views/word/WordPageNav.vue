@@ -40,26 +40,23 @@ export default {
 
 .vertical-nav {
   width: 200px;
-  height: 105vh;
-  background-color: rgba(0, 161, 91, 0.64);
+  background: linear-gradient(135deg, rgba(0, 161, 91, 0.64), rgba(0, 161, 91, 0.8)); /* 渐变效果 */
   color: white;
-  position: absolute;
-  left: 1vh;
-  top: 25%;
-  /* 其他样式保持不变 */
-}
-
-.content-container {
-  margin-left: 200px; /* 与侧边导航栏的宽度相同 */
-  width: calc(100% - 200px); /* 减去侧边导航栏的宽度 */
-  min-height: 100vh;
-  padding: 20px; /* 或者根据您的设计需要调整 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
 }
 
 .vertical-nav ul {
   list-style: none;
   padding: 0;
   margin: 0;
+  width: 100%;
+}
+
+.vertical-nav li {
+  width: 100%;
 }
 
 .vertical-nav li a {
@@ -67,10 +64,23 @@ export default {
   padding: 15px 20px;
   color: #f9eeff;
   text-decoration: none;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, transform 0.3s;
 }
 
 .vertical-nav li a:hover {
-  background-color: #555;
+  background-color: #004d40; /* 更深的绿色 */
+  transform: scale(1.05);
+}
+
+.content-container {
+  flex: 1; /* 使内容容器占据剩余空间 */
+  padding: 20px; /* 或者根据您的设计需要调整 */
+  background-color: rgba(255, 255, 255, 0.8); /* 半透明背景 */
+  backdrop-filter: blur(10px); /* 背景模糊效果 */
+  transition: opacity 0.5s ease;
+}
+
+.content-container:hover {
+  opacity: 0.9;
 }
 </style>

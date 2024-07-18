@@ -14,6 +14,12 @@ import TtsRecorder from "../../assets/js/speechSynthesis/audio.js";
 
 const ttsRecorder = new TtsRecorder();
 export default {
+  props: {
+    accent: {
+      type: String,
+      default: 'henry' // 默认美音
+    }
+  },
   data() {
     return {
       text: "你好，世界", // 默认文本
@@ -29,7 +35,7 @@ export default {
         // 文本内容
         text: text, // 传入的文本
         // 角色
-        // voiceName: '',
+        voiceName: this.accent, // 使用传递的发音人参数
         // 语速
         speed: 50,
         // 音量

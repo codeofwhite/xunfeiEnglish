@@ -4,7 +4,7 @@
       <router-link :to="{ name: 'ChapterList', params: { categoryId: category.id } }">
         <div class="cover">
           <div class="title">{{ category.name }}</div>
-          <div class="chapter-count">{{ category.chapters.length }} chapters</div>
+          <div v-if="category.id !== 1" class="chapter-count">{{ category.chapters.length }} chapters</div>
         </div>
       </router-link>
     </div>

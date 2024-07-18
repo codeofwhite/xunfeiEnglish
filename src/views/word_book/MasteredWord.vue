@@ -1,11 +1,13 @@
 <template>
   <div class="word-collection">
     <h1>已掌握的单词</h1>
+    <input v-model="searchQuery" placeholder="搜索单词..." class="search-input"/>
     <div class="word-list">
-      <div v-for="(words, letter) in sortedWords" :key="letter" class="letter-section">
+      <div v-for="(words, letter) in filteredWords" :key="letter" class="letter-section">
         <h2>{{ letter }}</h2>
         <div class="word-item" v-for="word in words" :key="word">
           <div class="word">{{ word }}</div>
+          <div class="definition">{{ getDefinition(word) }}</div>
         </div>
       </div>
     </div>
@@ -18,11 +20,13 @@ import axios from 'axios';
 import {useStore} from "vuex";
 
 const masteredWords = ref([]);
+const searchQuery = ref('');
 
 // 获取状态
 const store = useStore();
 
 const userEmail = computed(() => store.state.userEmail);
+const wordDefinitions = ref([]);
 
 // 在组件挂载时调用后端接口
 onMounted(async () => {
@@ -39,7 +43,21 @@ onMounted(async () => {
   } catch (error) {
     console.error('获取未掌握单词时出错:', error);
   }
+
+  // 加载单词释义
+  try {
+    const response = await axios.get('/allWords.json');
+    wordDefinitions.value = response.data;
+  } catch (error) {
+    console.error('加载单词释义时出错:', error);
+  }
 });
+
+// 获取单词释义
+const getDefinition = (word) => {
+  const definition = wordDefinitions.value.find(item => item.name === word);
+  return definition ? definition.trans.join('; ') : '无释义';
+};
 
 // 按字母顺序排序单词
 const sortedWords = computed(() => {
@@ -56,6 +74,22 @@ const sortedWords = computed(() => {
     return acc;
   }, {});
 });
+
+// 根据搜索查询过滤单词
+const filteredWords = computed(() => {
+  if (!searchQuery.value) {
+    return sortedWords.value;
+  }
+  const query = searchQuery.value.toLowerCase();
+  const filtered = {};
+  for (const letter in sortedWords.value) {
+    const words = sortedWords.value[letter].filter(word => word.toLowerCase().includes(query));
+    if (words.length) {
+      filtered[letter] = words;
+    }
+  }
+  return filtered;
+});
 </script>
 
 <style scoped>
@@ -71,6 +105,14 @@ const sortedWords = computed(() => {
 h1 {
   text-align: center;
   color: #333;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
 .word-list {

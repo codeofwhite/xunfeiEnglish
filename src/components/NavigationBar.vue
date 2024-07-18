@@ -39,10 +39,13 @@
       <RouterLink to="/login" class="user-link">
         <img src="@/assets/images/codeofwhite.jpg" alt="User" class="user-image"/>
       </RouterLink>
-      <div class="coin-spark">
-        <span>金币: {{ coin }}</span>
-        <br>
-        <span>火花: {{ spark }}</span>
+      <div>
+        <span>金币: </span>
+        <span class="coin">{{ coin }}</span>
+      </div>
+      <div>
+        <span>火花: </span>
+        <span class="spark">{{ spark }}</span>
       </div>
     </div>
   </div>
@@ -163,10 +166,16 @@ a {
   color: #1c1919;
 }
 
-.coin-spark {
-  margin-right: 20px;
-  font-size: 14px;
-  color: #1c1919;
+.coin {
+  color: gold;
+  font-weight: 800;
+  font-size: large;
+}
+
+.spark {
+  color: purple;
+  font-weight: 800;
+  font-size: large;
 }
 
 .coin-spark span {

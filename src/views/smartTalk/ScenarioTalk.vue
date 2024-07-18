@@ -1,6 +1,6 @@
 <template>
   <!-- 语音合成组件 -->
-  <SpeechSynthesis v-show="false" ref="speechSynthesis"></SpeechSynthesis>
+  <SpeechSynthesis v-show="false" ref="speechSynthesis" :accent="accent"></SpeechSynthesis>
   <div class="container">
     <div class="left-section">
       <!-- 输入和按钮区域 -->
@@ -55,6 +55,7 @@ export default {
       userInput: '',
       aiResponse: '',
       sceneDetails: null, // 初始化为null
+      accent: this.$route.query.accent || 'henry' // 默认美音
     };
   },
   created() {

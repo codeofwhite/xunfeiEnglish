@@ -1,69 +1,47 @@
 <template>
   <div>
-    <button @click="startRecording">开始录音</button>
-    <button @click="stopRecording">停止录音</button>
-    <button @click="saveAudio">保存音频</button>
+    <input v-model="text" placeholder="输入文本"/>
+    <button @click="generateImage">生成图片</button>
+    <div v-if="imageUrl">
+      <img :src="imageUrl" alt="生成的图片"/>
+    </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
-
 export default {
   data() {
     return {
-      audioContext: null,
-      mediaRecorder: null,
-      audioChunks: [],
-      audioBlob: null,
+      text: '',
+      imageUrl: null
     };
   },
   methods: {
-    async startRecording() {
-      const stream = await navigator.mediaDevices.getUserMedia({audio: true});
-      this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      const source = this.audioContext.createMediaStreamSource(stream);
-      const processor = this.audioContext.createScriptProcessor(4096, 1, 1);
+    async generateImage() {
+      try {
+        const response = await fetch('http://localhost:8001/xunfei/generateImage', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          // 初始的时候发参数有带双引号，会造成解析错误，最终修改了Controller，然后调用的参数也修改了
+          body: JSON.stringify({text: this.text}) // 确保传递的字符串格式正确
+        });
 
-      source.connect(processor);
-      processor.connect(this.audioContext.destination);
-
-      processor.onaudioprocess = (e) => {
-        const inputData = e.inputBuffer.getChannelData(0);
-        const buffer = new ArrayBuffer(inputData.length * 2);
-        const outputData = new DataView(buffer);
-        for (let i = 0; i < inputData.length; i++) {
-          const s = Math.max(-1, Math.min(1, inputData[i]));
-          outputData.setInt16(i * 2, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+        if (response.ok) {
+          const blob = await response.blob();
+          this.imageUrl = URL.createObjectURL(blob);
+        } else {
+          console.error('生成图片失败');
         }
-        this.audioChunks.push(buffer);
-      };
-
-      this.mediaRecorder = processor;
-    },
-    stopRecording() {
-      this.mediaRecorder.disconnect();
-      this.audioContext.close();
-      const audioBuffer = new Blob(this.audioChunks, {type: 'audio/pcm'});
-      this.audioBlob = audioBuffer;
-      this.audioChunks = [];
-    },
-    saveAudio() {
-      const url = URL.createObjectURL(this.audioBlob);
-      const a = document.createElement('a');
-      a.style.display = 'none';
-      a.href = url;
-      a.download = 'audio.pcm';
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-    },
-    async uploadAudio() {
-      const formData = new FormData();
-      formData.append('audio', this.audioBlob, 'audio.pcm');
-      const response = await axios.post('/api/upload', formData);
-      console.log('上传结果:', response.data);
-    },
-  },
+      } catch (error) {
+        console.error('请求出错', error);
+      }
+    }
+  }
 };
 </script>
+
+<style scoped>
+/* 添加一些样式 */
+</style>

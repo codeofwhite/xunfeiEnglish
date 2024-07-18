@@ -37,10 +37,15 @@ export default [
                 component: FavoriteWord,
                 props: true
             },
-            {path: '/', name: 'CategoryList', component: CategoryList},
-            {path: '/category/:categoryId', name: 'ChapterList', component: ChapterList},
-            {path: '/category/:categoryId/chapter/:chapterId', name: 'LevelList', component: LevelList},
-            {path: '/category/:categoryId/chapter/:chapterId/level/:levelId', name: 'WordList', component: WordList}
+            {path: '/', name: 'CategoryList', component: CategoryList, props: true},
+            {path: '/category/:categoryId', name: 'ChapterList', component: ChapterList, props: true},
+            {path: '/category/:categoryId/chapter/:chapterId', name: 'LevelList', component: LevelList, props: true},
+            {
+                path: '/category/:categoryId/chapter/:chapterId/level/:levelId',
+                name: 'WordList',
+                component: WordList,
+                props: true
+            }
         ]
     },
 

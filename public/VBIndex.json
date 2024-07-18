@@ -1,106 +1,172 @@
 [
   {
     "id": 1,
-    "name": "Category 1",
-    "chapters": [
+    "name": "专业领域",
+    "majors": [
       {
-        "id": 1,
-        "name": "Chapter 1",
-        "levels": [
+        "id": "1",
+        "name": "计算机科学",
+        "chapters": [
           {
-            "id": 1,
-            "name": "Level 1",
-            "words": [
-              "apple",
-              "banana",
-              "cherry"
+            "id": 11,
+            "name": "Chapter 1",
+            "levels": [
+              {
+                "id": 111,
+                "name": "Level 1",
+                "words": [
+                  "apple",
+                  "banana",
+                  "cherry"
+                ]
+              },
+              {
+                "id": 112,
+                "name": "Level 2",
+                "words": [
+                  "dog",
+                  "elephant",
+                  "frog"
+                ]
+              },
+              {
+                "id": 113,
+                "name": "Level 3",
+                "words": [
+                  "grape",
+                  "honey",
+                  "ice"
+                ]
+              },
+              {
+                "id": 114,
+                "name": "Level 4",
+                "words": [
+                  "jacket",
+                  "kite",
+                  "lemon"
+                ]
+              },
+              {
+                "id": 115,
+                "name": "Level 5",
+                "words": [
+                  "monkey",
+                  "nut",
+                  "orange"
+                ]
+              }
             ]
           },
           {
-            "id": 2,
-            "name": "Level 2",
-            "words": [
-              "dog",
-              "elephant",
-              "frog"
-            ]
-          },
-          {
-            "id": 3,
-            "name": "Level 3",
-            "words": [
-              "grape",
-              "honey",
-              "ice"
-            ]
-          },
-          {
-            "id": 4,
-            "name": "Level 4",
-            "words": [
-              "jacket",
-              "kite",
-              "lemon"
-            ]
-          },
-          {
-            "id": 5,
-            "name": "Level 5",
-            "words": [
-              "monkey",
-              "nut",
-              "orange"
+            "id": 12,
+            "name": "Chapter 2",
+            "levels": [
+              {
+                "id": 121,
+                "name": "Level 1",
+                "words": [
+                  "pencil",
+                  "queen",
+                  "rabbit"
+                ]
+              },
+              {
+                "id": 122,
+                "name": "Level 2",
+                "words": [
+                  "snake",
+                  "tiger",
+                  "umbrella"
+                ]
+              },
+              {
+                "id": 123,
+                "name": "Level 3",
+                "words": [
+                  "vase",
+                  "whale",
+                  "xylophone"
+                ]
+              },
+              {
+                "id": 124,
+                "name": "Level 4",
+                "words": [
+                  "yacht",
+                  "zebra",
+                  "ant"
+                ]
+              },
+              {
+                "id": 125,
+                "name": "Level 5",
+                "words": [
+                  "ball",
+                  "cat",
+                  "dolphin"
+                ]
+              }
             ]
           }
         ]
       },
       {
-        "id": 2,
-        "name": "Chapter 2",
-        "levels": [
+        "id": "2",
+        "name": "电子工程",
+        "chapters": [
           {
-            "id": 1,
-            "name": "Level 1",
-            "words": [
-              "pencil",
-              "queen",
-              "rabbit"
+            "id": 13,
+            "name": "Chapter 1",
+            "levels": [
+              {
+                "id": 131,
+                "name": "Level 1",
+                "words": [
+                  "resistor",
+                  "capacitor",
+                  "inductor"
+                ]
+              },
+              {
+                "id": 132,
+                "name": "Level 2",
+                "words": [
+                  "transistor",
+                  "diode",
+                  "led"
+                ]
+              }
             ]
-          },
+          }
+        ]
+      },
+      {
+        "id": "3",
+        "name": "机械工程",
+        "chapters": [
           {
-            "id": 2,
-            "name": "Level 2",
-            "words": [
-              "snake",
-              "tiger",
-              "umbrella"
-            ]
-          },
-          {
-            "id": 3,
-            "name": "Level 3",
-            "words": [
-              "vase",
-              "whale",
-              "xylophone"
-            ]
-          },
-          {
-            "id": 4,
-            "name": "Level 4",
-            "words": [
-              "yacht",
-              "zebra",
-              "ant"
-            ]
-          },
-          {
-            "id": 5,
-            "name": "Level 5",
-            "words": [
-              "ball",
-              "cat",
-              "dolphin"
+            "id": 14,
+            "name": "Chapter 1",
+            "levels": [
+              {
+                "id": 141,
+                "name": "Level 1",
+                "words": [
+                  "gear",
+                  "lever",
+                  "pulley"
+                ]
+              },
+              {
+                "id": 142,
+                "name": "Level 2",
+                "words": [
+                  "engine",
+                  "piston",
+                  "crankshaft"
+                ]
+              }
             ]
           }
         ]
@@ -109,14 +175,14 @@
   },
   {
     "id": 2,
-    "name": "Category 2",
+    "name": "AI与生活",
     "chapters": [
       {
-        "id": 1,
+        "id": 21,
         "name": "Chapter 1",
         "levels": [
           {
-            "id": 1,
+            "id": 211,
             "name": "Level 1",
             "words": [
               "apple",
@@ -125,7 +191,7 @@
             ]
           },
           {
-            "id": 2,
+            "id": 212,
             "name": "Level 2",
             "words": [
               "dog",
@@ -134,7 +200,7 @@
             ]
           },
           {
-            "id": 3,
+            "id": 213,
             "name": "Level 3",
             "words": [
               "grape",
@@ -143,7 +209,7 @@
             ]
           },
           {
-            "id": 4,
+            "id": 214,
             "name": "Level 4",
             "words": [
               "jacket",
@@ -152,7 +218,121 @@
             ]
           },
           {
-            "id": 5,
+            "id": 215,
+            "name": "Level 5",
+            "words": [
+              "monkey",
+              "nut",
+              "orange"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "体育竞技",
+    "chapters": [
+      {
+        "id": 31,
+        "name": "Chapter 1",
+        "levels": [
+          {
+            "id": 311,
+            "name": "Level 1",
+            "words": [
+              "apple",
+              "banana",
+              "cherry"
+            ]
+          },
+          {
+            "id": 312,
+            "name": "Level 2",
+            "words": [
+              "dog",
+              "elephant",
+              "frog"
+            ]
+          },
+          {
+            "id": 313,
+            "name": "Level 3",
+            "words": [
+              "grape",
+              "honey",
+              "ice"
+            ]
+          },
+          {
+            "id": 314,
+            "name": "Level 4",
+            "words": [
+              "jacket",
+              "kite",
+              "lemon"
+            ]
+          },
+          {
+            "id": 315,
+            "name": "Level 5",
+            "words": [
+              "monkey",
+              "nut",
+              "orange"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "影视音乐",
+    "chapters": [
+      {
+        "id": 41,
+        "name": "Chapter 1",
+        "levels": [
+          {
+            "id": 411,
+            "name": "Level 1",
+            "words": [
+              "apple",
+              "banana",
+              "cherry"
+            ]
+          },
+          {
+            "id": 412,
+            "name": "Level 2",
+            "words": [
+              "dog",
+              "elephant",
+              "frog"
+            ]
+          },
+          {
+            "id": 413,
+            "name": "Level 3",
+            "words": [
+              "grape",
+              "honey",
+              "ice"
+            ]
+          },
+          {
+            "id": 414,
+            "name": "Level 4",
+            "words": [
+              "jacket",
+              "kite",
+              "lemon"
+            ]
+          },
+          {
+            "id": 415,
             "name": "Level 5",
             "words": [
               "monkey",

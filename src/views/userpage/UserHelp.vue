@@ -4,27 +4,29 @@
       <h2>帮助中心</h2>
       <nav>
         <ul>
-          <li><a href="#introduction">介绍</a></li>
-          <li><a href="#setup">设置</a></li>
-          <li><a href="#faq">常见问题</a></li>
-          <!-- 更多导航项 -->
+          <li>
+            <router-link to="/userHelp/introduction">
+              介绍
+              <p class="description">了解应用的基本功能和特点。</p>
+            </router-link>
+          </li>
+          <li>
+            <router-link to="/userHelp/setup">
+              设置
+              <p class="description">学习如何配置和使用应用。</p>
+            </router-link>
+          </li>
+          <li>
+            <router-link to="/userHelp/faq">
+              常见问题
+              <p class="description">查找常见问题的解答。</p>
+            </router-link>
+          </li>
         </ul>
       </nav>
     </aside>
     <section class="content">
-      <article id="introduction">
-        <h3>介绍</h3>
-        <p>这里显示介绍的内容。</p>
-      </article>
-      <article id="setup">
-        <h3>设置</h3>
-        <p>这里显示设置的内容。</p>
-      </article>
-      <article id="faq">
-        <h3>常见问题</h3>
-        <p>这里显示常见问题的内容。</p>
-      </article>
-      <!-- 更多内容项 -->
+      <router-view></router-view>
     </section>
   </div>
 </template>
@@ -42,7 +44,7 @@
 }
 
 .sidebar {
-  flex: 0 0 200px;
+  flex: 0 0 250px; /* 增加侧边栏宽度 */
   border-right: 1px solid #ddd;
   padding: 20px;
   background-color: #fafafa; /* 侧边栏背景色 */
@@ -59,6 +61,10 @@
   padding: 0;
 }
 
+.sidebar nav ul li {
+  margin-bottom: 20px; /* 增加列表项间距 */
+}
+
 .sidebar nav ul li a {
   text-decoration: none;
   color: #333;
@@ -69,6 +75,12 @@
 
 .sidebar nav ul li a:hover {
   color: #90fff1; /* 鼠标悬停颜色 */
+}
+
+.sidebar .description {
+  font-size: 0.9em;
+  color: #666;
+  margin-top: 5px;
 }
 
 .content {

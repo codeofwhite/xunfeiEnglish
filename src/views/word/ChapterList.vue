@@ -1,30 +1,63 @@
 <template>
   <div class="game-chapters">
-    <div class="chapter" v-for="chapter in chapters" :key="chapter.id">
-      <router-link :to="{ name: 'LevelList', params: { categoryId: route.params.categoryId, chapterId: chapter.id } }">
-        <div class="chapter-cover">
-          <div class="chapter-title">{{ chapter.name }}</div>
-          <div class="chapter-levels">{{ chapter.levels.length }} levels</div>
-        </div>
-      </router-link>
+    <div v-if="route.params.categoryId === '1'">
+      <label for="major-select">选择专业:</label>
+      <select id="major-select" v-model="selectedMajor" @change="fetchChapters">
+        <option value="" disabled selected>请选择专业</option>
+        <option v-for="major in majors" :key="major.id" :value="major.id">{{ major.name }}</option>
+      </select>
+    </div>
+    <div v-else>
+      <div class="chapter" v-for="chapter in chapters" :key="chapter.id">
+        <router-link
+            :to="{ name: 'LevelList', params: { categoryId: route.params.categoryId, chapterId: chapter.id } }">
+          <div class="chapter-cover">
+            <div class="chapter-title">{{ chapter.name }}</div>
+            <div class="chapter-levels">{{ chapter.levels.length }} levels</div>
+          </div>
+        </router-link>
+      </div>
+    </div>
+    <div v-if="route.params.categoryId === '1' && selectedMajor">
+      <div class="chapter" v-for="chapter in chapters" :key="chapter.id">
+        <router-link
+            :to="{ name: 'LevelList', params: { categoryId: route.params.categoryId, chapterId: chapter.id}, query: { majorId: selectedMajor } }">
+          <div class="chapter-cover">
+            <div class="chapter-title">{{ chapter.name }}</div>
+            <div class="chapter-levels">{{ chapter.levels.length }} levels</div>
+          </div>
+        </router-link>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import {ref, onMounted} from 'vue';
+import {ref, onMounted, watch} from 'vue';
 import {useRoute} from 'vue-router';
 
 const route = useRoute();
 const chapters = ref([]);
+const selectedMajor = ref('');
+const majors = ref([
+  {id: '1', name: '计算机科学'},
+  {id: '2', name: '电子工程'},
+  {id: '3', name: '机械工程'}
+]);
 
 const fetchChapters = async () => {
   try {
     const response = await fetch('/VBIndex.json');
     const data = await response.json();
     const category = data.find(cat => cat.id === parseInt(route.params.categoryId));
+    console.log(selectedMajor.value)
     if (category) {
-      chapters.value = category.chapters;
+      if (route.params.categoryId === '1' && selectedMajor.value) {
+        const major = category.majors.find(m => m.id === selectedMajor.value);
+        chapters.value = major ? major.chapters : [];
+      } else {
+        chapters.value = category.chapters;
+      }
     }
   } catch (error) {
     console.error('读取章节文件时出错:', error);
@@ -33,6 +66,12 @@ const fetchChapters = async () => {
 
 onMounted(() => {
   fetchChapters();
+});
+
+watch(selectedMajor, () => {
+  if (route.params.categoryId === '1') {
+    fetchChapters();
+  }
 });
 </script>
 

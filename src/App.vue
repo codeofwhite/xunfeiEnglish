@@ -14,7 +14,7 @@
         <router-link to="/ourMission">关于我们</router-link>
       </footer>
 
-      <button @click="scrollToTop" class="scroll-to-top" v-show="showScrollButton">⬆️</button>
+      <button @click="scrollToTop" class="scroll-to-top" v-show="showScrollButton">⬆</button>
     </div>
   </div>
 </template>
@@ -90,10 +90,11 @@ header {
 }
 
 .scroll-to-top {
+  width: 40px;
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background-color: #4CAF50;
+  background-color: #1bffc4;
   color: white;
   border: none;
   padding: 10px;
@@ -104,6 +105,6 @@ header {
 }
 
 .scroll-to-top:hover {
-  background-color: #45a049;
+  background-color: #09b46a;
 }
 </style>

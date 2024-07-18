@@ -20,18 +20,21 @@
           <button @click="showNextWord">显示下一个</button>
           <button @click="showForwardWord">显示前一个</button>
           <button @click="addToUnknown(word)">加入未掌握词库</button>
+          <button @click="addToMastered(wordsList[currentIndex])">加入已掌握词库</button>
           <button @click="sendMessage(wordsList[currentIndex].name)">请教AI</button>
+          <button @click="generateImage(wordsList[currentIndex].name)">生成记忆图片</button>
         </div>
       </div>
       <div v-else>
         <p>正在加载单词...</p>
       </div>
+      <div v-if="imageUrl">
+        <img :src="imageUrl" alt="生成的图片" class="generated-image"/>
+      </div>
     </div>
     <div class="chat-container">
-      <!-- AI文字对话窗口的内容 -->
       <div class="messages-container">
-        <div v-for="message in messages" :key="message.id"
-             class="message">
+        <div v-for="message in messages" :key="message.id" class="message">
           <p>AI词汇解释：{{ message.text }}</p>
         </div>
       </div>
@@ -39,7 +42,6 @@
     <button @click="completeLevel">完成关卡</button>
     <p>当前分数: {{ score }}</p>
   </div>
-  <!--  调用AI接口，ref提供给AI的参数，handleResult提供结果返回    -->
   <FreeTalkAI v-show="false" ref="aiComponent" @result-received="handleResult"></FreeTalkAI>
   <modal class="modal" v-if="showModal" @close="showModal = false">
     <h3 slot="header">关卡完成</h3>
@@ -53,7 +55,7 @@
 </template>
 
 <script>
-import {computed, onMounted, ref} from 'vue';
+import {computed, onMounted, onUnmounted, ref} from 'vue';
 import {useRoute} from 'vue-router';
 import axios from 'axios';
 import FreeTalkAI from "@/components/freeTalk/FreeTalkAI.vue";
@@ -63,6 +65,57 @@ import {useStore} from "vuex";
 export default {
   components: {
     FreeTalkAI
+  },
+  data() {
+    return {
+      messages: [
+        {
+          text: '你好呀！',
+        },
+      ], // 显示的消息
+      imgText: '',
+      imageUrl: null
+    };
+  },
+  methods: {
+    // 生成词汇图片
+    async generateImage(currentWord) {
+      console.log(currentWord);
+      try {
+        const response = await fetch('http://localhost:8001/xunfei/generateImage', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          // 初始的时候发参数有带双引号，会造成解析错误，最终修改了Controller，然后调用的参数也修改了
+          body: JSON.stringify({text: "生成有关这个单词的语境辅助记忆图片——" + currentWord}) // 确保传递的字符串格式正确
+        });
+
+        if (response.ok) {
+          const blob = await response.blob();
+          this.imageUrl = URL.createObjectURL(blob);
+        } else {
+          console.error('生成图片失败');
+        }
+      } catch (error) {
+        console.error('请求出错', error);
+      }
+    },
+    // 输入用户input
+    sendMessage(text) {
+      // this.$refs.speechSynthesis.play(this.userInput);
+      this.$refs.aiComponent.startWithText('解释这个单词的意思：' + text);
+      // 此处省略AI回复实现代码，可根据实际情况添加
+    },
+    handleResult(result) {
+      // 在这里处理结果，例如将其显示在界面上
+      console.log('AI结果:', result);
+      this.messages.push({
+        id: Date.now(), // 使用时间戳作为唯一ID
+        from: 'ai',
+        text: result.ai // 假设result对象有一个ai属性，包含AI的回复文本
+      });
+    },
   },
   setup() {
     const route = useRoute();
@@ -102,10 +155,6 @@ export default {
         console.error('Error updating user coin:', error);
         // alert('更新金币失败');
       }
-
-      showModal.value = true;
-      setTimeout(goToChapterList, 5000); // 5秒后自动跳转
-      startCountdown(); // 开始计时
     };
 
 
@@ -117,15 +166,22 @@ export default {
       }
     };
 
-    // 这个之后可能要改路由
+    // 这个之后可能要改路由，定位到level选择那边
     const goToChapterList = () => {
       showModal.value = false;
-      router.push(`/category/${route.params.categoryId}/chapter/${route.params.chapterId}`);
+      clearInterval(interval);
+      if (route.params.categoryId === '1') {
+        router.push(`/category/${route.params.categoryId}/chapter/${route.params.chapterId}?majorId=${route.query.majorId}`);
+      } else {
+        router.push(`/category/${route.params.categoryId}/chapter/${route.params.chapterId}`);
+      }
     };
+
+    let interval;
 
     // modal结束倒计时，跳转
     const startCountdown = () => {
-      const interval = setInterval(() => {
+      interval = setInterval(() => {
         if (countdown.value > 0) {
           countdown.value--;
         } else {
@@ -135,10 +191,14 @@ export default {
       }, 1000);
     };
 
+    onUnmounted(() => {
+      clearInterval(interval);
+    });
+
     // 得到单词
     const fetchWords = async () => {
       try {
-        const response = await fetch(`/book/${levelId}.json`);
+        const response = await fetch(`/book/category/${route.params.categoryId}/${levelId}.json`);
         wordsList.value = await response.json();
       } catch (error) {
         console.error('读取单词文件时出错:', error);
@@ -182,6 +242,32 @@ export default {
       }
     };
 
+    // 加入已掌握的词库
+    const addToMastered = async (word) => {
+      // 加入已掌握单词，就不是unknown单词
+      const response = await axios.post('http://localhost:8003/word/removeUnknown', null, {
+        params: {
+          user_email: userEmail.value,
+          word_name: word.name,
+        }
+      });
+      try {
+        const response = await axios.post('http://localhost:8003/word/insertMastered', null, {
+          params: {
+            user_email: userEmail.value,
+            word_name: word.name,
+          }
+        });
+        if (response.data === "success") {
+          console.log('单词已成功加入已掌握词库');
+        } else {
+          console.error('加入已掌握词库失败');
+        }
+      } catch (error) {
+        console.error('请求接口时出错:', error);
+      }
+    };
+
     const playVoice = (text, lang) => {
       const msg = new SpeechSynthesisUtterance(text);
       const voice = voices.value.find(v => v.lang === lang);
@@ -211,45 +297,24 @@ export default {
       goToChapterList,
       countdown,
       score,
+      addToMastered
     };
-  },
-  data() {
-    return {
-      messages: [
-        {
-          text: '你好呀！'
-        },
-      ], // 显示的消息
-    };
-  },
-  methods: {
-    // 输入用户input
-    sendMessage(text) {
-      // this.$refs.speechSynthesis.play(this.userInput);
-      this.$refs.aiComponent.startWithText('解释这个单词的意思：' + text);
-      // 此处省略AI回复实现代码，可根据实际情况添加
-    },
-    handleResult(result) {
-      // 在这里处理结果，例如将其显示在界面上
-      console.log('AI结果:', result);
-      this.messages.push({
-        id: Date.now(), // 使用时间戳作为唯一ID
-        from: 'ai',
-        text: result.ai // 假设result对象有一个ai属性，包含AI的回复文本
-      });
-    },
   },
 };
 </script>
 
 <style scoped>
 .main-container {
-  display: flex; /* 使用flex布局 */
-  flex-direction: row; /* 子元素横向排列 */
-  justify-content: center; /* 水平居中 */
-  align-items: flex-start; /* 子元素顶部对齐 */
-  gap: 20px; /* 子元素之间的间隙 */
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 20px;
   margin-top: 20px;
+  background-color: #f0f4f8;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .slide-fade-enter-active, .slide-fade-leave-active {
@@ -262,26 +327,22 @@ export default {
 }
 
 .word-container, .chat-container {
-  flex: 1; /* 子容器占据等量空间 */
-  max-width: 50%; /* 子容器最大宽度为父容器的一半 */
+  flex: 1;
+  max-width: 50%;
   display: flex;
-  flex-direction: row; /* 改为横向布局 */
+  flex-direction: column;
   justify-content: center;
-  align-items: flex-start; /* 顶部对齐 */
+  align-items: flex-start;
   padding: 20px;
-  gap: 20px; /* 窗口之间的间隙 */
+  gap: 20px;
   border: 1px solid #ddd;
-  border-radius: 8px;
-}
-
-.word-container {
-  max-width: 550px;
+  border-radius: 10px;
+  background-color: #fff;
 }
 
 .word-details, .messages-container {
   width: 100%;
-  max-width: 300px; /* 控制最大宽度 */
-  /* 其他样式保持不变 */
+  max-width: 300px;
 }
 
 .word-details h2 {
@@ -297,7 +358,7 @@ export default {
 }
 
 .translations li {
-  background-color: #e8f0fe; /* 浅蓝色背景的翻译列表项 */
+  background-color: #e8f0fe;
   margin: 5px 0;
   padding: 5px;
   border-radius: 5px;
@@ -316,7 +377,7 @@ button {
   margin: 0 5px;
   border: none;
   border-radius: 5px;
-  background-color: #1a73e8; /* 蓝色按钮 */
+  background-color: #1a73e8;
   color: white;
   font-weight: bold;
   cursor: pointer;
@@ -324,7 +385,7 @@ button {
 }
 
 button:hover {
-  background-color: #1669c7; /* 按钮悬停时的深蓝色 */
+  background-color: #1669c7;
   transform: translateY(-2px);
 }
 
@@ -386,5 +447,12 @@ p {
 .modal button:hover {
   background-color: #1669c7;
   transform: translateY(-2px);
+}
+
+.generated-image {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
 }
 </style>
