@@ -21,7 +21,7 @@ const userEmail = store.state.userEmail; // 替换为实际用户的email
 
 const fetchAchievements = async () => {
   try {
-    const response = await axios.get(`http://localhost:8002/api/user/achievements/${userEmail}`);
+    const response = await axios.get(`http://114.132.52.232:8002/api/user/achievements/${userEmail}`);
     achievements.value = response.data;
   } catch (error) {
     console.error('Error fetching achievements:', error);

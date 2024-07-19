@@ -23,6 +23,9 @@
           <button @click="addToMastered(wordsList[currentIndex])">加入已掌握词库</button>
           <button @click="sendMessage(wordsList[currentIndex].name)">请教AI</button>
           <button @click="generateImage(wordsList[currentIndex].name)">生成记忆图片</button>
+          <button @click="addToFavorites(wordsList[currentIndex].name)" style="background-color: yellow; color: red">
+            收藏
+          </button>
         </div>
       </div>
       <div v-else>
@@ -61,6 +64,7 @@ import axios from 'axios';
 import FreeTalkAI from "@/components/freeTalk/FreeTalkAI.vue";
 import router from "@/router/index.js";
 import {useStore} from "vuex";
+import {ElMessage} from "element-plus";
 
 export default {
   components: {
@@ -77,12 +81,17 @@ export default {
       imageUrl: null
     };
   },
+  computed: {
+    getUserEmail() {
+      return this.$store.state.userEmail;
+    },
+  },
   methods: {
     // 生成词汇图片
     async generateImage(currentWord) {
       console.log(currentWord);
       try {
-        const response = await fetch('http://localhost:8001/xunfei/generateImage', {
+        const response = await fetch('http://114.132.52.232:8001/xunfei/generateImage', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -106,6 +115,34 @@ export default {
       // this.$refs.speechSynthesis.play(this.userInput);
       this.$refs.aiComponent.startWithText('解释这个单词的意思：' + text);
       // 此处省略AI回复实现代码，可根据实际情况添加
+    },
+    // 加入收藏
+    async addToFavorites(word) {
+      try {
+        const response = await axios.post('http://114.132.52.232:8002/userFavor/add', {
+          user_email: this.getUserEmail, // 替换为实际用户邮箱
+          user_favor: word
+        });
+        if (response.status === 200 && response.data === "success") {
+          console.log('单词已成功收藏');
+          ElMessage({
+            message: '单词已成功收藏',
+            type: 'success',
+          });
+        } else {
+          console.error('收藏失败');
+          ElMessage({
+            message: '收藏失败',
+            type: 'error',
+          });
+        }
+      } catch (error) {
+        console.error('请求出错:', error);
+        ElMessage({
+          message: '收藏失败',
+          type: 'error',
+        });
+      }
     },
     handleResult(result) {
       // 在这里处理结果，例如将其显示在界面上
@@ -144,7 +181,7 @@ export default {
       setTimeout(goToChapterList, 5000); // 5秒后自动跳转
       startCountdown(); // 开始计时
       try {
-        const response = await axios.put('http://localhost:8002/userGameResource/updateUserCoin', null, {
+        const response = await axios.put('http://114.132.52.232:8002/userGameResource/updateUserCoin', null, {
           params: {
             userEmail: userEmail.value,
             userCoinChange: 50 // 这里传递奖励分数
@@ -226,33 +263,45 @@ export default {
     const addToUnknown = async () => {
       const currentWord = wordsList.value[currentIndex.value];
       try {
-        const response = await axios.post('http://localhost:8001/word/insertUnknown', null, {
+        const response = await axios.post('http://114.132.52.232:8003/word/insertUnknown', null, {
           params: {
-            user_email: '99gelanjingling@gmail.com',
+            user_email: userEmail.value,
             word_name: currentWord.name,
           }
         });
         if (response.data === "success") {
           console.log('单词已成功加入未掌握词库');
+          ElMessage({
+            message: '单词已成功加入未掌握词库',
+            type: 'success',
+          });
         } else {
           console.error('加入未掌握词库失败');
+          ElMessage({
+            message: '加入未掌握词库失败',
+            type: 'error',
+          });
         }
       } catch (error) {
         console.error('请求接口时出错:', error);
+        ElMessage({
+          message: '请求接口时出错',
+          type: 'error',
+        });
       }
     };
 
     // 加入已掌握的词库
     const addToMastered = async (word) => {
       // 加入已掌握单词，就不是unknown单词
-      const response = await axios.post('http://localhost:8003/word/removeUnknown', null, {
+      const response = await axios.post('http://114.132.52.232:8003/word/removeUnknown', null, {
         params: {
           user_email: userEmail.value,
           word_name: word.name,
         }
       });
       try {
-        const response = await axios.post('http://localhost:8003/word/insertMastered', null, {
+        const response = await axios.post('http://114.132.52.232:8003/word/insertMastered', null, {
           params: {
             user_email: userEmail.value,
             word_name: word.name,
@@ -260,19 +309,34 @@ export default {
         });
         if (response.data === "success") {
           console.log('单词已成功加入已掌握词库');
+          ElMessage({
+            message: '单词已成功加入已掌握词库',
+            type: 'success',
+          });
         } else {
           console.error('加入已掌握词库失败');
+          ElMessage({
+            message: '加入已掌握词库失败',
+            type: 'error',
+          });
         }
       } catch (error) {
         console.error('请求接口时出错:', error);
+        ElMessage({
+          message: '请求接口时出错',
+          type: 'error',
+        });
       }
     };
 
     const playVoice = (text, lang) => {
       const msg = new SpeechSynthesisUtterance(text);
       const voice = voices.value.find(v => v.lang === lang);
+      console.log('Selected voice:', voice); // 添加日志
       if (voice) {
         msg.voice = voice;
+      } else {
+        console.warn('Voice not found for lang:', lang); // 添加警告日志
       }
       msg.volume = 1;
       msg.rate = 1;
@@ -282,6 +346,9 @@ export default {
 
     onMounted(() => {
       fetchWords();
+      synth.onvoiceschanged = () => {
+        voices.value = synth.getVoices();
+      };
     });
 
     return {
@@ -297,7 +364,8 @@ export default {
       goToChapterList,
       countdown,
       score,
-      addToMastered
+      addToMastered,
+      userEmail
     };
   },
 };

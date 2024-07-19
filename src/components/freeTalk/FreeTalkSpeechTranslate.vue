@@ -349,7 +349,7 @@ async function uploadAudio() {
   formData.append('audioFile', audioBlob.value, 'audio.pcm');
   formData.append('text', resultText.value);
   try {
-    const response = await axios.post('http://localhost:8001/xunfei/score', formData, {
+    const response = await axios.post('http://114.132.52.232:8001/xunfei/score', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
@@ -386,7 +386,7 @@ const endConversation = async () => {
   coin.value = Math.floor(averageScore.value * 100);
 
   // 调用更新user_coin的接口
-  const response = await axios.put('http://localhost:8002/userGameResource/updateUserCoin', null, {
+  const response = await axios.put('http://114.132.52.232:8002/userGameResource/updateUserCoin', null, {
     params: {
       userEmail: userEmail.value,
       userCoinChange: coin.value
@@ -394,7 +394,7 @@ const endConversation = async () => {
   });
 
   try {
-    const response = await axios.post('http://localhost:8004/api/talk', {
+    const response = await axios.post('http://114.132.52.232:8004/api/talk', {
       userEmail: userEmail.value,
       accuracy: accuracyScores.value,
       fluency: fluencyScores.value,

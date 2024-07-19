@@ -82,24 +82,15 @@ import axios from "axios";
 import {ref} from "vue";
 import {useStore} from "vuex";
 
-function loadBookContentById(id) {
-  // 从服务器加载书籍内容
-  //下面是一个假设的固定数据
-  const books = {
-    1: {
-      id: 1,
-      title: 'Book 1',
-      bookContent: 'what can i say? man! mamba out. I out, you out, we out!'
-    },
-    2: {
-      id: 2,
-      title: 'Book 2',
-      bookContent: '这是第二本书的第一句. 这是第二本书的第二句. 这是第二本书的第三句. 这是第二本书的第四句. 这是第二本书的第五句. 这是第二本书的第六句. 这是第二本书的第七句. 这是第二本书的第八句.'
-    }
-    // ...可以添加更多书籍数据
-  };
-
-  return books[id] || null;
+async function loadBookContentById(id) {
+  try {
+    const response = await axios.get('/readBook/books.json');
+    const books = response.data; // 假设JSON文件的结构是一个数组
+    return books.find(book => book.id == id) || null;
+  } catch (error) {
+    console.error('获取书本内容失败:', error);
+    return null;
+  }
 }
 
 export default {
@@ -107,6 +98,10 @@ export default {
   computed: {
     // 使用计算属性来基于bookId计算其他数据
     getBookId() {
+      // 假设有一个方法可以根据bookId获取书籍详情
+      return this.$route.params.bookId;
+    },
+    getChapterId() {
       // 假设有一个方法可以根据bookId获取书籍详情
       return this.$route.params.chapterId;
     },
@@ -172,11 +167,13 @@ export default {
       this.currentSentenceIndex = index;
       this.playbackProgress = index;
     },
-    loadBook() {
-      const bookId = this.getBookId; // 从导航栏获取到查看的是哪本书籍 （bookId）
-      this.book = loadBookContentById(bookId);
+    async loadBook() {
+      const bookId = this.getBookId;
+      const chapterId = this.getChapterId;
+      console.log(chapterId)
+      this.book = await loadBookContentById(bookId);
       if (this.book) {
-        this.bookContent = this.book.bookContent;
+        this.bookContent = this.book.chapters[chapterId - 1].content; // 假设书籍内容按章节存储
         this.splitSentences();
       } else {
         alert('未找到书籍内容！');

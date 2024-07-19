@@ -28,16 +28,12 @@
           <RouterLink to="/readBook" class="nav-link"><span class="nav-title">有声阅读</span><span class="nav-subtitle">CENTER</span>
           </RouterLink>
         </li>
-        <li>
-          <RouterLink to="/test" class="nav-link"><span class="nav-title">测试</span><span
-              class="nav-subtitle">CENTER</span></RouterLink>
-        </li>
       </ul>
     </nav>
     <!-- ...其他代码... -->
     <div class="user">
       <RouterLink to="/login" class="user-link">
-        <img src="@/assets/images/codeofwhite.jpg" alt="User" class="user-image"/>
+        <img src="@/assets/images/UserDefault.jpg" alt="User" class="user-image"/>
       </RouterLink>
       <div>
         <span>金币: </span>
@@ -67,7 +63,7 @@ const spark = ref(0);
 
 const fetchUserResources = async () => {
   try {
-    const response = await axios.get('http://localhost:8002/userGameResource/get', {
+    const response = await axios.get('http://114.132.52.232:8002/userGameResource/get', {
       params: {
         userEmail: userEmail.value
       }

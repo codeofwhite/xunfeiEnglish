@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "title": "Book Title 1",
+    "author": "Author A",
+    "description": "Description of Book 1",
+    "category": "热门推荐",
+    "image": "/images/readBookImg/img.png",
+    "chapters": [
+      {
+        "id": 1,
+        "title": "Chapter 1",
+        "content": "Book 1 This is the content of Chapter 1."
+      },
+      {
+        "id": 2,
+        "title": "Chapter 2",
+        "content": "Book 1 This is the content of Chapter 2."
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Book Title 2",
+    "author": "Author B",
+    "description": "Description of Book 2",
+    "category": "经典名著",
+    "image": "/images/readBookImg/img_1.png",
+    "chapters": [
+      {
+        "id": 1,
+        "title": "Chapter 1",
+        "content": "Book 2 This is the content of Chapter 1."
+      },
+      {
+        "id": 2,
+        "title": "Chapter 2",
+        "content": "Book 2 This is the content of Chapter 2."
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Book Title 3",
+    "author": "Author C",
+    "description": "Description of Book 3",
+    "category": "寓言故事",
+    "image": "/images/readBookImg/img_2.png",
+    "chapters": [
+      {
+        "id": 1,
+        "title": "Chapter 1",
+        "content": "Book 3 This is the content of Chapter 1."
+      },
+      {
+        "id": 2,
+        "title": "Chapter 2",
+        "content": "Book 3 This is the content of Chapter 2."
+      }
+    ]
+  }
+]

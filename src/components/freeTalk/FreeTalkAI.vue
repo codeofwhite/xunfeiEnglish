@@ -170,19 +170,12 @@ export default {
       }
       if (jsonData.header.code === 0 && jsonData.header.status === 2) {
         // AI回复完毕，将回复内容传递给SpeechSynthesis组件
-        // this.$refs.speechSynthesis.play(this.aiContentRequest);
+        this.$refs.speechSynthesis.play(this.aiContentRequest);
+
         this.ttsWS.close();
         this.setStatus('init');
       }
     },
-    // handleRecognitionComplete(recognizedText) {
-    //   // 在这里处理识别结果，例如将其存储在data属性中或传递给其他组件
-    //   console.log('识别的文本:', recognizedText);
-    //   // 例如，如果您有一个聊天组件，您可以这样做：
-    //   this.userInput = recognizedText;
-    //   // 传给AI
-    //   // this.start();
-    // },
     startWithText(text) {
       this.userInput = text;
       this.start();

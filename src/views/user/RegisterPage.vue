@@ -79,7 +79,7 @@ const sendVerificationCode = async () => {
     return;
   }
   try {
-    const response = await axios.post('http://localhost:8002/user/sendVerificationCode', {
+    const response = await axios.post('http://114.132.52.232:8002/user/sendVerificationCode', {
       email: form.email
     });
     if (response.data.success) {
@@ -100,7 +100,7 @@ const submitForm = async () => {
   formRef.value.validate(async (valid) => {
     if (valid) {
       try {
-        const verifyResponse = await axios.post('http://localhost:8002/user/verifyCode', {
+        const verifyResponse = await axios.post('http://114.132.52.232:8002/user/verifyCode', {
           email: form.email,
           code: form.verificationCode
         });
@@ -110,7 +110,7 @@ const submitForm = async () => {
             type: 'success'
           });
           // 调用注册接口
-          const registerResponse = await axios.post('http://localhost:8002/user/register', {
+          const registerResponse = await axios.post('http://114.132.52.232:8002/user/register', {
             userName: form.email.split('@')[0], // 假设用户名是邮箱的前缀
             userEmail: form.email,
             userPassword: form.password
@@ -121,7 +121,7 @@ const submitForm = async () => {
               type: 'success'
             });
             // 调用插入 user_game_resource 的接口
-            await axios.post('http://localhost:8002/userGameResource/insert', {
+            await axios.post('http://114.132.52.232:8002/userGameResource/insert', {
               user_email: form.email,
               user_coin: 0,
               user_spark: 0,

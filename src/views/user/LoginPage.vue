@@ -100,7 +100,7 @@ const onLogin = async () => {
         // 发送登录请求到后端
         const response = await axios({
           method: 'post',
-          url: 'http://localhost:8002/user/login',
+          url: 'http://114.132.52.232:8002/user/login',
           data: loginData,
           headers: {'Content-Type': 'application/json'}
         });

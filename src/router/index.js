@@ -36,13 +36,13 @@ const router = createRouter({
 const whiteList = ['/login', '/', '/readBook', '/vbIndex', '/smartTalk', '/register']; // 不需要登录即可访问的路由
 
 // 添加导航守卫
-router.beforeEach((to, from, next) => {
-    if (!store.state.isLoggedIn && !whiteList.includes(to.path)) {
-        alert('请登录')
-        next('/login'); // 未登录且不在白名单中，则重定向到登录页面
-    } else {
-        next(); // 已登录则继续导航
-    }
-});
+// router.beforeEach((to, from, next) => {
+//     if (!store.state.isLoggedIn && !whiteList.includes(to.path)) {
+//         alert('请登录')
+//         next('/login'); // 未登录且不在白名单中，则重定向到登录页面
+//     } else {
+//         next(); // 已登录则继续导航
+//     }
+// });
 
 export default router

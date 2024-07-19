@@ -4,13 +4,13 @@
       :modules="modules"
       :space-between="30"
       effect="fade"
-      :navigation="true"
+      :navigation="false"
       :pagination="{ clickable: true }"
       :autoplay="{ delay: 3000, disableOnInteraction: false }"
   >
     <swiper-slide class="slide" v-for="index in 5" :key="index">
       <router-link to="/freeTalk">
-        <img :src="`src/assets/images/swiper-img/${index}.jpg`" alt=""/>
+        <img :src="`/images/swiper-img/${index}.jpg`" alt=""/>
       </router-link>
     </swiper-slide>
   </swiper>

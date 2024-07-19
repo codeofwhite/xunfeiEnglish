@@ -21,6 +21,7 @@
             <h2 class="book-title">{{ book.title }}</h2>
             <p class="book-author">作者: {{ book.author }}</p>
             <p class="book-description">{{ book.description }}</p>
+            <p class="book-description">{{ book.category }}</p>
             <div class="book-actions">
               <button @click="goToBookChapter(book.id)" class="details-button">查看详情</button>
               <button @click="addToFavorites(book)" class="favorites-button">添加到收藏夹</button>
@@ -36,6 +37,7 @@
             <img :src="favBook.image" alt="Book Cover" class="book-image">
             <p class="favorites-book-author">作者: {{ favBook.author }}</p>
             <p class="book-description">{{ favBook.description }}</p>
+            <p class="book-description">{{ favBook.category }}</p>
             <div class="favorites-actions">
               <button @click="goToBookChapter(favBook.id)" class="details-button">查看详情</button>
               <button @click="removeFromFavorites(favBook)" class="remove-button">从收藏夹移除</button>
@@ -81,7 +83,7 @@ export default {
     // 获取收藏夹里面的书
     async fetchFavorites() {
       try {
-        const response = await axios.get('http://localhost:8005/favorites/list', {
+        const response = await axios.get('http://114.132.52.232:8005/favorites/list', {
           params: {
             userEmail: 'user@example.com' // 替换为实际用户邮箱
           }
@@ -101,7 +103,7 @@ export default {
     // 添加到收藏夹
     async addToFavorites(book) {
       try {
-        const response = await axios.post('http://localhost:8005/favorites/add', {
+        const response = await axios.post('http://114.132.52.232:8005/favorites/add', {
           bookId: book.id,
           userEmail: 'user@example.com', // 替换为实际用户邮箱
           createTime: new Date()
@@ -116,7 +118,7 @@ export default {
     },
     async removeFromFavorites(favBook) {
       try {
-        await axios.delete('http://localhost:8005/favorites/remove', {
+        await axios.delete('http://114.132.52.232:8005/favorites/remove', {
           params: {
             bookId: favBook.id,
             userEmail: 'user@example.com' // 替换为实际用户邮箱
@@ -129,36 +131,14 @@ export default {
       }
     },
     // 获得书本
-    fetchBooks() {
-      // 来自 JSON 文件或 API 调用的模拟数据
-      // 这里使用固定数据作为示例
-      this.books = [
-        {
-          id: 1,
-          title: 'Book Title 1',
-          author: 'Author A',
-          description: 'Description of Book 1',
-          category: '热门推荐',
-          image: 'src/assets/images/codeofwhite.jpg'
-        },
-        {
-          id: 2,
-          title: 'Book Title 2',
-          author: 'Author B',
-          description: 'Description of Book 2',
-          category: '经典名著',
-          image: 'src/assets/images/codeofwhite.jpg'
-        },
-        {
-          id: 3,
-          title: 'Book Title 3',
-          author: 'Author C',
-          description: 'Description of Book 3',
-          category: '寓言故事',
-          image: 'src/assets/images/codeofwhite.jpg'
-        }
-      ];
-    }
+    async fetchBooks() {
+      try {
+        const response = await axios.get('/readBook/books.json');
+        this.books = response.data;
+      } catch (error) {
+        console.error('获取书籍数据失败:', error);
+      }
+    },
   },
   computed: {
     // 搜索和分类过滤

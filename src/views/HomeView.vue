@@ -6,7 +6,7 @@
     </header>
     <div class="main-content">
       <aside class="sidebar">
-        <h2>滚动栏</h2>
+        <h2>最新动态</h2>
         <ul>
           <swiper-components class="swiper"></swiper-components>
         </ul>

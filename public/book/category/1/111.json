@@ -1,32 +1,29 @@
 [
   {
-    "name": "hello",
+    "name": "apple",
     "trans": [
-      "prep.（表示位置）在，在（某时间或时刻），以，达， 向，朝",
-      "n.阿特（老挝辅币单位，100 阿特 = 1 基普）"
+      "n. 苹果",
+      "n. 苹果树"
     ],
-    "ukphone": "ət",
-    "usphone": "æt,ət"
+    "ukphone": "ˈæpl",
+    "usphone": "ˈæpl"
   },
   {
-    "name": "cet4test",
+    "name": "book",
     "trans": [
-      "conj.但是，而是，除了，只因为",
-      "prep.除…以外",
-      "adv.只，不过，只是，另一方面",
-      "n.借口，推辞，但是，反对",
-      "pron.关系代词，意义相当于 who…not， which…not",
-      "vt.对…说“但是”"
+      "n. 书，书籍",
+      "v. 预订，预约"
     ],
-    "ukphone": "bət",
-    "usphone": "bʌt,bət"
+    "ukphone": "bʊk",
+    "usphone": "bʊk"
   },
   {
-    "name": "cet4test",
+    "name": "cat",
     "trans": [
-      "pron.我们，咱们，笔者，本人，朕，人们"
+      "n. 猫",
+      "n. 猫科动物"
     ],
-    "ukphone": "wi",
-    "usphone": "wi"
+    "ukphone": "kæt",
+    "usphone": "kæt"
   }
 ]

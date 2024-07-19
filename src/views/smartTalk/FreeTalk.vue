@@ -66,6 +66,8 @@ export default {
   },
   mounted() {
     const scene = new URLSearchParams(window.location.search).get('freeScene');
+    // 这个先不调用先，使用次数都没了就不好了
+    this.sceneStart("和我开始一段英语对话，你先开始，主题为：" + scene)
   },
   methods: {
     goBack() {
@@ -80,9 +82,9 @@ export default {
       });
     },
     translate(text) {
-      axios.post('YOUR_TRANSLATION_API_ENDPOINT', {text})
+      axios.post('http://114.132.52.232:8001/xunfei/translate', {text})
           .then(response => {
-            alert('翻译: ' + response.data.translatedText);
+            alert('翻译: ' + response.data);
           })
           .catch(error => {
             alert('翻译失败: ' + error);
@@ -111,6 +113,10 @@ export default {
       } else {
         alert('请输入消息或说话');
       }
+    },
+    // 输入给AI场景
+    sceneStart(scene) {
+      this.$refs.aiComponent.startWithText(scene);
     },
     handleRecognitionComplete(recognizedText) {
       console.log('识别的文本:', recognizedText);

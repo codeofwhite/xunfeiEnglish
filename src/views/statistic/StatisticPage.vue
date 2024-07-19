@@ -78,18 +78,18 @@ export default {
     },
     async fetchAndCreateCharts() {
       try {
-        const accuracyResponse = await axios.get(`http://localhost:8004/api/talk/averageAccuracy/${this.getUserEmail}`);
-        const fluencyResponse = await axios.get(`http://localhost:8004/api/talk/averageFluency/${this.getUserEmail}`);
-        const integrityResponse = await axios.get(`http://localhost:8004/api/talk/averageIntegrity/${this.getUserEmail}`);
+        const accuracyResponse = await axios.get(`http://114.132.52.232:8004/api/talk/averageAccuracy/${this.getUserEmail}`);
+        const fluencyResponse = await axios.get(`http://114.132.52.232:8004/api/talk/averageFluency/${this.getUserEmail}`);
+        const integrityResponse = await axios.get(`http://114.132.52.232:8004/api/talk/averageIntegrity/${this.getUserEmail}`);
 
-        const accuracyBookResponse = await axios.get(`http://localhost:8005/api/bookTalk/averageAccuracy/${this.getUserEmail}`);
-        const fluencyBookResponse = await axios.get(`http://localhost:8005/api/bookTalk/averageFluency/${this.getUserEmail}`);
-        const integrityBookResponse = await axios.get(`http://localhost:8005/api/bookTalk/averageIntegrity/${this.getUserEmail}`);
-        const accuracyTrendResponse = await axios.get(`http://localhost:8005/api/bookTalk/accuracyTrend/${this.getUserEmail}`);
+        const accuracyBookResponse = await axios.get(`http://114.132.52.232:8005/api/bookTalk/averageAccuracy/${this.getUserEmail}`);
+        const fluencyBookResponse = await axios.get(`http://114.132.52.232:8005/api/bookTalk/averageFluency/${this.getUserEmail}`);
+        const integrityBookResponse = await axios.get(`http://114.132.52.232:8005/api/bookTalk/averageIntegrity/${this.getUserEmail}`);
+        const accuracyTrendResponse = await axios.get(`http://114.132.52.232:8005/api/bookTalk/accuracyTrend/${this.getUserEmail}`);
 
-        const unknownResponse = await axios.get(`http://localhost:8003/learning/unknownWords/${this.getUserEmail}`);
-        const masteredResponse = await axios.get(`http://localhost:8003/learning/masteredWords/${this.getUserEmail}`);
-        const progressResponse = await axios.get(`http://localhost:8003/learning/progress/${this.getUserEmail}`);
+        const unknownResponse = await axios.get(`http://114.132.52.232:8003/learning/unknownWords/${this.getUserEmail}`);
+        const masteredResponse = await axios.get(`http://114.132.52.232:8003/learning/masteredWords/${this.getUserEmail}`);
+        const progressResponse = await axios.get(`http://114.132.52.232:8003/learning/progress/${this.getUserEmail}`);
 
         const accuracy = accuracyResponse.data;
         const fluency = fluencyResponse.data;

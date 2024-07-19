@@ -12,6 +12,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   props: {
     bookId: {
@@ -28,39 +30,21 @@ export default {
     };
   },
   methods: {
-    fetchBookDetails() {
-      // 模拟获取书本详情
-      const books = [
-        {
-          id: 1,
-          title: 'Book Title 1',
-          chapters: [
-            {id: 1, title: 'Chapter 1'},
-            {id: 2, title: 'Chapter 2'}
-          ]
-        },
-        {
-          id: 2,
-          title: 'Book Title 2',
-          chapters: [
-            {id: 3, title: 'Chapter 1'},
-            {id: 4, title: 'Chapter 2'}
-          ]
-        },
-        {
-          id: 3,
-          title: 'Book Title 3',
-          chapters: [
-            {id: 5, title: 'Chapter 1'},
-            {id: 6, title: 'Chapter 2'}
-          ]
-        }
-      ];
-      // 找到对应的书本
-      this.book = books.find(book => book.id == this.bookId) || {title: '', chapters: []};
+    async fetchBookDetails() {
+      try {
+        console.log(this.bookId)
+        // 从JSON文件中获取书本详情
+        const response = await axios.get('/readBook/books.json');
+        const books = response.data; // 假设JSON文件的结构是一个数组
+        console.log(books)
+        this.book = books.find(book => book.id == this.bookId) || {title: '', chapters: []};
+        console.log('Selected book:', this.book);
+      } catch (error) {
+        console.error('获取书本详情失败:', error);
+      }
     },
     goToChapterDetail(chapterId) {
-      this.$router.push({name: 'ReadBookComponent', params: {chapterId: chapterId}});
+      this.$router.push({name: 'ReadBookComponent', params: {chapterId: chapterId, bookId: this.bookId}});
     }
   },
   mounted() {

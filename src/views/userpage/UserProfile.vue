@@ -3,7 +3,7 @@
     <h2 class="profile-title">个人资料</h2>
     <div class="profile-section">
       <label for="avatar-upload" class="profile-label">头像：</label>
-      <img :src="user.userAvatar" alt="Avatar" class="avatar">
+      <img :src="user.user_avatar" alt="Avatar" class="avatar">
       <input type="file" id="avatar-upload" @change="changeAvatar" class="avatar-upload-input">
       <label for="avatar-upload" class="avatar-upload-btn">
         <i class="fas fa-upload"></i> 更改头像
@@ -73,7 +73,7 @@ const changeAvatar = async (event) => {
   formData.append('userEmail', userEmail.value);
 
   try {
-    const response = await axios.post('http://localhost:8002/api/user/updateAvatar', formData, {
+    const response = await axios.post('http://114.132.52.232:8002/api/user/updateAvatar', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
@@ -108,7 +108,7 @@ const onLogout = () => {
 // 获取用户的基本资料
 const fetchUserData = async () => {
   try {
-    const response = await axios.post('http://localhost:8002/user/getUserByEmail', {}, {
+    const response = await axios.post('http://114.132.52.232:8002/user/getUserByEmail', {}, {
       params: {userEmail: userEmail.value}
     });
     // 打印
@@ -122,7 +122,7 @@ const fetchUserData = async () => {
 // 拿到用户的游戏元素资料
 const fetchUserGameData = async () => {
   try {
-    const response = await axios.get('http://localhost:8002/userGameResource/get', {
+    const response = await axios.get('http://114.132.52.232:8002/userGameResource/get', {
       params: {userEmail: userEmail.value}
     });
     // 打印
@@ -142,7 +142,7 @@ onMounted(() => {
 function changeUsername() {
   const newUsername = prompt("请输入新的用户名：");
   if (newUsername) {
-    axios.put('http://localhost:8002/user/updateUsername', null, {
+    axios.put('http://114.132.52.232:8002/user/updateUsername', null, {
       params: {
         userEmail: userEmail.value,
         newUsername: newUsername
