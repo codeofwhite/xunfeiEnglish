@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/engteachback-provider-8002-User/src/main/java/engteach/user/mapper/UserFavorMapper.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/engteachback-provider-8002-User/src/main/java/engteach/user/mapper/UserGameResourceMapper.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/engteachback-provider-8002-User/src/main/java/engteach/user/mapper/UserMapper.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/engteachback-provider-8002-User/src/main/resources/mapper/UserGameResourceMapper.xml" dialect="GenericSQL" />

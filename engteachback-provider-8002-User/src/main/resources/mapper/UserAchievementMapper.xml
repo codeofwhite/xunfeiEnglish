@@ -11,7 +11,9 @@
     </insert>
 
     <select id="getUserAchievementsByEmail" resultType="engteach.user.entity.UserAchievement">
-        SELECT * FROM user_achievement WHERE user_email = #{userEmail}
+        SELECT *
+        FROM user_achievement
+        WHERE user_email = #{userEmail}
     </select>
 
 </mapper>

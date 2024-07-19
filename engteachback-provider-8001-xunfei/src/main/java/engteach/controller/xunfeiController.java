@@ -36,7 +36,7 @@ public class xunfeiController {
     @Autowired
     private IseDemo iseDemo;
 
-    @PostMapping("/translate")
+    @PostMapping("/htt")
     public ResponseEntity<String> translate(@RequestBody String textToTranslate) {
         try {
             String translatedText = translationService.translateText(textToTranslate);
